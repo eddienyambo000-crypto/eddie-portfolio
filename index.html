@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eddie Nyambo — AI Automation Engineer & Web Developer</title>
+  <meta name="description" content="Eddie Nyambo — AI Automation Engineer & Web Developer based in Kigali, Rwanda. I build automation systems, AI chatbots, and web applications that make businesses run on autopilot.">
+  <meta name="keywords" content="AI automation engineer Rwanda, web developer Kigali, n8n automation, WhatsApp chatbot, AI integration Africa">
+  <meta property="og:title" content="Eddie Nyambo — AI Automation Engineer">
+  <meta property="og:description" content="I build AI automation systems and web apps that make businesses run on autopilot. Kigali, Rwanda.">
+  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#030A06">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#00E87A',
+            secondary: '#7C3AED',
+            bg: '#030A06',
+          },
+          fontFamily: {
+            heading: ['Space Grotesk', 'sans-serif'],
+            body: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    :root {
+      --primary: #00E87A;
+      --secondary: #7C3AED;
+      --accent: #00D4FF;
+      --bg: #030A06;
+      --bg-secondary: #071008;
+      --bg-surface: #0C1A0F;
+      --text: #F8FAFC;
+      --text-body: #CBD5E1;
+      --text-muted: #64748B;
+      --border: rgba(0, 232, 122, 0.15);
+      --glow: rgba(0, 232, 122, 0.08);
+      --glow-strong: rgba(0, 232, 122, 0.25);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: radial-gradient(circle, rgba(0, 232, 122, 0.07) 1px, transparent 1px);
+      background-size: 32px 32px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(100px);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .orb-1 {
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(0, 232, 122, 0.1) 0%, transparent 70%);
+      top: -150px; left: -150px;
+      animation: float1 22s ease-in-out infinite;
+    }
+    .orb-2 {
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(124, 58, 237, 0.12) 0%, transparent 70%);
+      bottom: 100px; right: -150px;
+      animation: float2 28s ease-in-out infinite;
+    }
+    .orb-3 {
+      width: 350px; height: 350px;
+      background: radial-gradient(circle, rgba(0, 212, 255, 0.07) 0%, transparent 70%);
+      top: 40%; left: 40%;
+      animation: float3 18s ease-in-out infinite;
+    }
+
+    @keyframes float1 { 0%, 100% { transform: translate(0,0); } 50% { transform: translate(80px, 60px); } }
+    @keyframes float2 { 0%, 100% { transform: translate(0,0); } 50% { transform: translate(-60px, -80px); } }
+    @keyframes float3 { 0%, 100% { transform: translate(-50%,-50%); } 50% { transform: translate(-50%, calc(-50% + 50px)); } }
+
+    .content { position: relative; z-index: 1; }
+
+    .nav-glass {
+      background: rgba(3, 10, 6, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--primary);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; }
+
+    h1 {
+      font-size: clamp(3.5rem, 9vw, 7rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1;
+    }
+
+    h2 {
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+    }
+
+    .name-gradient {
+      background: linear-gradient(130deg, #ffffff 0%, #00FF87 40%, #00E87A 65%, #00D4FF 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 32px rgba(0, 232, 122, 0.3));
+    }
+
+    .typing-cursor {
+      display: inline-block;
+      width: 3px;
+      height: 1.1em;
+      background: var(--primary);
+      margin-left: 2px;
+      vertical-align: middle;
+      animation: blink 1s step-end infinite;
+    }
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 32px;
+      background: var(--primary);
+      color: #030A06;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+      letter-spacing: 0.02em;
+      border-radius: 8px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 0 24px rgba(0, 232, 122, 0.35), 0 4px 16px rgba(0, 232, 122, 0.2);
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 0 48px rgba(0, 232, 122, 0.5), 0 8px 28px rgba(0, 232, 122, 0.3);
+    }
+    .btn-primary:active { transform: translateY(0) scale(0.98); }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 32px;
+      background: transparent;
+      color: var(--text);
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 600;
+      font-size: 0.95rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      text-decoration: none;
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.2s ease, background 0.2s ease;
+    }
+    .btn-secondary:hover {
+      transform: translateY(-2px);
+      border-color: var(--primary);
+      background: rgba(0, 232, 122, 0.06);
+    }
+    .btn-secondary:active { transform: translateY(0); }
+
+    .glass {
+      background: rgba(12, 26, 15, 0.6);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+    }
+    .glass:hover {
+      transform: translateY(-4px);
+      border-color: rgba(0, 232, 122, 0.3);
+      box-shadow: 0 8px 40px rgba(0, 232, 122, 0.1), 0 2px 8px rgba(0, 0, 0, 0.4);
+    }
+
+    .photo-ring {
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      padding: 4px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+      box-shadow: 0 0 60px rgba(0, 232, 122, 0.2), 0 0 120px rgba(124, 58, 237, 0.12);
+      flex-shrink: 0;
+    }
+    .photo-ring img, .photo-ring .photo-inner {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--bg);
+    }
+    .photo-placeholder {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #0C1A0F, #071008);
+      border: 3px solid var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 3.5rem;
+      font-weight: 800;
+      color: var(--primary);
+      letter-spacing: -0.02em;
+    }
+
+    .skill-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      border-radius: 100px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.76rem;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      border: 1px solid;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .skill-pill:hover { transform: translateY(-2px); }
+    .skill-pill.green {
+      background: rgba(0, 232, 122, 0.08);
+      border-color: rgba(0, 232, 122, 0.25);
+      color: var(--primary);
+    }
+    .skill-pill.green:hover { box-shadow: 0 4px 16px rgba(0, 232, 122, 0.2); }
+    .skill-pill.purple {
+      background: rgba(124, 58, 237, 0.08);
+      border-color: rgba(124, 58, 237, 0.25);
+      color: #A78BFA;
+    }
+    .skill-pill.purple:hover { box-shadow: 0 4px 16px rgba(124, 58, 237, 0.2); }
+    .skill-pill.cyan {
+      background: rgba(0, 212, 255, 0.08);
+      border-color: rgba(0, 212, 255, 0.25);
+      color: #67E8F9;
+    }
+    .skill-pill.cyan:hover { box-shadow: 0 4px 16px rgba(0, 212, 255, 0.2); }
+
+    .project-card {
+      background: rgba(12, 26, 15, 0.6);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+    }
+    .project-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(0, 232, 122, 0.35);
+      box-shadow: 0 16px 48px rgba(0, 232, 122, 0.1), 0 4px 16px rgba(0, 0, 0, 0.4);
+    }
+
+    .service-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+      font-size: 1.4rem;
+    }
+
+    .stat-num {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2.4rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 13px 18px;
+      background: rgba(7, 16, 8, 0.8);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .form-input::placeholder { color: var(--text-muted); }
+    .form-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(0, 232, 122, 0.1);
+    }
+
+    section { padding: 96px 0; }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .nav-link {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.2s ease;
+      position: relative;
+    }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--primary);
+      transition: width 0.3s ease;
+    }
+    .nav-link:hover { color: var(--text); }
+    .nav-link:hover::after { width: 100%; }
+
+    .tag {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 5px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .fade-up {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+    #mobile-menu {
+      display: none;
+      background: rgba(3, 10, 6, 0.97);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 1.5rem 1.5rem;
+    }
+    #mobile-menu.open { display: block; }
+
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: rgba(0, 232, 122, 0.3); border-radius: 3px; }
+    ::selection { background: rgba(0, 232, 122, 0.2); color: var(--text); }
+    :focus-visible { outline: 2px solid var(--primary); outline-offset: 4px; }
+
+    @media (max-width: 768px) {
+      section { padding: 72px 0; }
+      .photo-ring { width: 180px; height: 180px; }
+      .hero-grid { flex-direction: column-reverse; align-items: center; text-align: center; }
+      .hero-grid .social-row { justify-content: center; }
+      .hero-grid .cta-row { justify-content: center; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <!-- NAV -->
+  <nav class="nav-glass sticky top-0 z-50 content">
+    <div class="container">
+      <div style="display:flex;align-items:center;justify-content:space-between;height:64px;">
+        <a href="#" style="font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:1.15rem;color:var(--primary);text-decoration:none;letter-spacing:-0.02em;">
+          EN<span style="color:var(--text);">.</span>
+        </a>
+        <div style="display:flex;align-items:center;gap:32px;" class="hidden md:flex">
+          <a href="#about" class="nav-link">About</a>
+          <a href="#skills" class="nav-link">Skills</a>
+          <a href="#projects" class="nav-link">Projects</a>
+          <a href="#services" class="nav-link">Services</a>
+          <a href="#contact" class="btn-primary" style="padding:10px 22px;font-size:0.875rem;">Hire Me →</a>
+        </div>
+        <button class="md:hidden" style="background:none;border:none;cursor:pointer;padding:8px;color:var(--text);" onclick="document.getElementById('mobile-menu').classList.toggle('open')">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div id="mobile-menu">
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <a href="#about" class="nav-link" onclick="document.getElementById('mobile-menu').classList.remove('open')">About</a>
+        <a href="#skills" class="nav-link" onclick="document.getElementById('mobile-menu').classList.remove('open')">Skills</a>
+        <a href="#projects" class="nav-link" onclick="document.getElementById('mobile-menu').classList.remove('open')">Projects</a>
+        <a href="#services" class="nav-link" onclick="document.getElementById('mobile-menu').classList.remove('open')">Services</a>
+        <a href="#contact" class="btn-primary" style="text-align:center;justify-content:center;" onclick="document.getElementById('mobile-menu').classList.remove('open')">Hire Me →</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section id="home" style="min-height:calc(100vh - 64px);display:flex;align-items:center;padding-top:32px;padding-bottom:32px;" class="content">
+    <div class="container" style="width:100%;">
+      <div class="hero-grid" style="display:flex;align-items:center;justify-content:space-between;gap:56px;flex-wrap:wrap;">
+
+        <!-- Text -->
+        <div style="flex:1;min-width:300px;">
+          <div class="section-label" style="margin-bottom:20px;">
+            <span style="display:inline-flex;align-items:center;gap:8px;">
+              <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--primary);box-shadow:0 0 8px var(--primary);animation:blink 2s ease-in-out infinite;"></span>
+              Available for hire &nbsp;·&nbsp; Kigali, Rwanda 🇷🇼
+            </span>
+          </div>
+
+          <h1 style="margin-bottom:20px;">
+            <span class="name-gradient">Eddie</span><br>
+            <span class="name-gradient">Nyambo</span>
+          </h1>
+
+          <div style="font-family:'Space Grotesk',sans-serif;font-size:clamp(1rem,2.5vw,1.35rem);font-weight:600;color:var(--text-body);margin-bottom:24px;line-height:1.4;min-height:2em;">
+            <span id="typed-text"></span><span class="typing-cursor"></span>
+          </div>
+
+          <p style="font-size:1.05rem;color:var(--text-muted);max-width:480px;margin-bottom:40px;line-height:1.8;">
+            I build AI automation systems and web applications that make businesses run on autopilot. Based in Kigali — working with clients across Africa and beyond.
+          </p>
+
+          <div class="cta-row" style="display:flex;flex-wrap:wrap;gap:12px;margin-bottom:40px;">
+            <a href="#contact" class="btn-primary">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              Hire Me
+            </a>
+            <a href="#projects" class="btn-secondary">
+              View My Work
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+          </div>
+
+          <div class="social-row" style="display:flex;gap:20px;align-items:center;flex-wrap:wrap;">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--text-muted);letter-spacing:0.12em;">FIND ME ON</span>
+            <a href="https://www.linkedin.com/company/ai7-optivaro/?viewAsMember=true" target="_blank" rel="noopener" title="LinkedIn" style="color:var(--text-muted);transition:color 0.2s ease;" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='var(--text-muted)'">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            </a>
+            <a href="https://wa.me/250783282759" target="_blank" rel="noopener" title="WhatsApp" style="color:var(--text-muted);transition:color 0.2s ease;" onmouseover="this.style.color='#25D366'" onmouseout="this.style.color='var(--text-muted)'">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+            </a>
+            <a href="https://github.com/eddienyambo000-crypto" target="_blank" rel="noopener" title="GitHub" style="color:var(--text-muted);transition:color 0.2s ease;" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='var(--text-muted)'">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0 0 22 12.017C22 6.484 17.522 2 12 2z"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Right: Photo + Terminal -->
+        <div style="display:flex;flex-direction:column;align-items:center;gap:20px;">
+          <div class="photo-ring">
+            <div class="photo-placeholder">EN</div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.55);border:1px solid rgba(0,232,122,0.15);border-radius:12px;padding:16px 20px;font-family:'JetBrains Mono',monospace;font-size:0.73rem;line-height:1.9;max-width:280px;width:100%;">
+            <div style="display:flex;gap:6px;margin-bottom:12px;">
+              <span style="width:10px;height:10px;border-radius:50%;background:#FF5F57;display:block;"></span>
+              <span style="width:10px;height:10px;border-radius:50%;background:#FFBD2E;display:block;"></span>
+              <span style="width:10px;height:10px;border-radius:50%;background:#28C840;display:block;"></span>
+            </div>
+            <div><span style="color:var(--text-muted);">$</span> <span style="color:var(--primary);">whoami</span></div>
+            <div style="color:var(--text-body);">eddie_nyambo</div>
+            <div style="margin-top:2px;"><span style="color:var(--text-muted);">$</span> <span style="color:var(--primary);">cat role.txt</span></div>
+            <div style="color:var(--text-body);">AI Automation Engineer</div>
+            <div style="color:var(--text-body);">Web Developer</div>
+            <div style="margin-top:2px;"><span style="color:var(--text-muted);">$</span> <span style="color:var(--primary);">echo $location</span></div>
+            <div style="color:var(--text-body);">Kigali, Rwanda 🇷🇼</div>
+            <div style="margin-top:2px;"><span style="color:var(--text-muted);">$</span> <span style="color:var(--primary);">echo $status</span></div>
+            <div style="color:#00E87A;font-weight:700;">✓ open to work</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="content">
+    <div class="container">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:32px;align-items:center;">
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+          <div class="glass fade-up" style="padding:28px;text-align:center;">
+            <div class="stat-num">3+</div>
+            <div style="font-size:0.82rem;color:var(--text-muted);margin-top:6px;font-family:'JetBrains Mono',monospace;">Live Projects</div>
+          </div>
+          <div class="glass fade-up" style="padding:28px;text-align:center;" data-delay="100">
+            <div class="stat-num">100%</div>
+            <div style="font-size:0.82rem;color:var(--text-muted);margin-top:6px;font-family:'JetBrains Mono',monospace;">Client Rate</div>
+          </div>
+          <div class="glass fade-up" style="padding:28px;text-align:center;" data-delay="200">
+            <div class="stat-num">2+</div>
+            <div style="font-size:0.82rem;color:var(--text-muted);margin-top:6px;font-family:'JetBrains Mono',monospace;">Yrs Building</div>
+          </div>
+          <div class="glass fade-up" style="padding:28px;text-align:center;" data-delay="300">
+            <div class="stat-num">∞</div>
+            <div style="font-size:0.82rem;color:var(--text-muted);margin-top:6px;font-family:'JetBrains Mono',monospace;">Hrs Automated</div>
+          </div>
+        </div>
+
+        <div class="fade-up">
+          <div class="section-label">// about me</div>
+          <h2 style="margin-bottom:20px;">I make businesses run on <span style="color:var(--primary);">autopilot.</span></h2>
+          <p style="color:var(--text-body);margin-bottom:16px;font-size:1rem;">
+            I'm Eddie Nyambo — an AI Automation Engineer and Web Developer based in Kigali, Rwanda. I build systems that cut manual work, eliminate costly errors, and free up your team to focus on what matters.
+          </p>
+          <p style="color:var(--text-body);margin-bottom:28px;font-size:1rem;">
+            From intelligent WhatsApp chatbots to full n8n workflow pipelines and premium web builds — I deliver real, working solutions, not demos.
+          </p>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;">
+            <span class="tag" style="background:rgba(0,232,122,0.1);color:var(--primary);border:1px solid rgba(0,232,122,0.2);">AI Automation</span>
+            <span class="tag" style="background:rgba(124,58,237,0.1);color:#A78BFA;border:1px solid rgba(124,58,237,0.2);">Web Dev</span>
+            <span class="tag" style="background:rgba(0,212,255,0.1);color:#67E8F9;border:1px solid rgba(0,212,255,0.2);">Chatbots</span>
+            <span class="tag" style="background:rgba(0,232,122,0.1);color:var(--primary);border:1px solid rgba(0,232,122,0.2);">n8n</span>
+            <span class="tag" style="background:rgba(124,58,237,0.1);color:#A78BFA;border:1px solid rgba(124,58,237,0.2);">LLM APIs</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills" class="content">
+    <div class="container">
+      <div style="text-align:center;margin-bottom:56px;" class="fade-up">
+        <div class="section-label">// my toolkit</div>
+        <h2>Skills & Tools</h2>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:24px;">
+
+        <div class="glass fade-up" style="padding:32px;">
+          <div style="display:flex;align-items:center;gap:14px;margin-bottom:24px;">
+            <div style="width:48px;height:48px;border-radius:12px;background:rgba(0,232,122,0.1);border:1px solid rgba(0,232,122,0.2);display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;">🤖</div>
+            <div>
+              <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.05rem;">AI Automation</div>
+              <div style="font-size:0.78rem;color:var(--primary);font-family:'JetBrains Mono',monospace;">Primary zone</div>
+            </div>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;">
+            <span class="skill-pill green">n8n</span>
+            <span class="skill-pill green">OpenAI API</span>
+            <span class="skill-pill green">Claude API</span>
+            <span class="skill-pill green">Gemini API</span>
+            <span class="skill-pill green">WhatsApp Automation</span>
+            <span class="skill-pill green">RAG Systems</span>
+            <span class="skill-pill green">AI Chatbots</span>
+            <span class="skill-pill green">Webhook Integration</span>
+            <span class="skill-pill green">Process Automation</span>
+          </div>
+        </div>
+
+        <div class="glass fade-up" style="padding:32px;" data-delay="100">
+          <div style="display:flex;align-items:center;gap:14px;margin-bottom:24px;">
+            <div style="width:48px;height:48px;border-radius:12px;background:rgba(124,58,237,0.1);border:1px solid rgba(124,58,237,0.2);display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;">💻</div>
+            <div>
+              <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.05rem;">Web Development</div>
+              <div style="font-size:0.78rem;color:#A78BFA;font-family:'JetBrains Mono',monospace;">Frontend & deployment</div>
+            </div>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;">
+            <span class="skill-pill purple">HTML / CSS</span>
+            <span class="skill-pill purple">JavaScript</span>
+            <span class="skill-pill purple">Tailwind CSS</span>
+            <span class="skill-pill purple">Three.js</span>
+            <span class="skill-pill purple">Responsive Design</span>
+            <span class="skill-pill purple">Animations</span>
+            <span class="skill-pill purple">SEO & Schema</span>
+            <span class="skill-pill purple">Git & GitHub</span>
+          </div>
+        </div>
+
+        <div class="glass fade-up" style="padding:32px;" data-delay="200">
+          <div style="display:flex;align-items:center;gap:14px;margin-bottom:24px;">
+            <div style="width:48px;height:48px;border-radius:12px;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.2);display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;">⚙️</div>
+            <div>
+              <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.05rem;">Infrastructure</div>
+              <div style="font-size:0.78rem;color:#67E8F9;font-family:'JetBrains Mono',monospace;">Deployment & ops</div>
+            </div>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;">
+            <span class="skill-pill cyan">Vercel</span>
+            <span class="skill-pill cyan">Google Analytics</span>
+            <span class="skill-pill cyan">Search Console</span>
+            <span class="skill-pill cyan">DNS & Email Routing</span>
+            <span class="skill-pill cyan">ImprovMX</span>
+            <span class="skill-pill cyan">Spline 3D</span>
+            <span class="skill-pill cyan">Formspree</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects" class="content">
+    <div class="container">
+      <div style="text-align:center;margin-bottom:56px;" class="fade-up">
+        <div class="section-label">// my work</div>
+        <h2>Projects</h2>
+        <p style="color:var(--text-muted);margin-top:12px;max-width:480px;margin-inline:auto;">Real things I built. Real results they deliver.</p>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px;">
+
+        <!-- Ai7 OPTIVARO -->
+        <div class="project-card fade-up">
+          <div style="height:6px;background:linear-gradient(90deg,var(--primary),var(--accent));"></div>
+          <div style="padding:28px;">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;">
+              <span class="tag" style="background:rgba(0,232,122,0.1);color:var(--primary);border:1px solid rgba(0,232,122,0.2);">Web + AI</span>
+              <a href="https://ai7optivaro.com" target="_blank" rel="noopener" style="color:var(--text-muted);transition:color 0.2s ease;" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='var(--text-muted)'" title="Live site">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </a>
+            </div>
+            <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.15rem;margin-bottom:10px;">Ai7 OPTIVARO</h3>
+            <p style="color:var(--text-body);font-size:0.88rem;line-height:1.65;margin-bottom:20px;">
+              Full agency website for an AI automation firm in Kigali. Three.js particle animations, AI chatbot embed, admin panel, contact automation, full SEO with schema markup.
+            </p>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px;">
+              <span style="font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--text-muted);background:rgba(255,255,255,0.05);padding:3px 8px;border-radius:4px;">HTML/CSS/JS</span>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--text-muted);background:rgba(255,255,255,0.05);padding:3px 8px;border-radius:4px;">Three.js</span>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--text-muted);background:rgba(255,255,255,0.05);padding:3px 8px;border-radius:4px;">Vercel</span>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--text-muted);background:rgba(255,255,255,0.05);padding:3px 8px;border-radius:4px;">n8n</span>
+            </div>
+            <a href="https://ai7optivaro.com" target="_blank" rel="noopener" class="btn-secondary" style="padding:10px 20px;font-size:0.85rem;width:100%;justify-content:center;">
+              View Live Site →
+            </a>
+          </div>
+        </div>
+
+        <!-- FarmGate RW -->
+        <div class="project-card fade-up" data-delay="100">
+          <div style="height:6px;background:linear-gradient(90deg,#10B981,#34D399);"></div>
+          <div style="padding:28px;">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;">
+              <span class="tag" style="background:rgba(16,185,129,0.1);color:#34D399;border:1px solid rgba(16,185,129,0.2);">Marketplace</span>
+              <a href="https://farmgate-rw.vercel.app" target="_blank" rel="noopener" style="color:var(--text-muted);transition:color 0.2s ease;" onmouseover="this.style.color='#34D399'" onmouseout="this.style.color='var(--text-muted)'" title="Live site">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </a>
+            </div>
+            <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.15rem;margin-bottom:10px;">FarmGate RW</h3>
+            <p style="color:var(--text-body);font-size:0.88rem;line-height:1.65;margin-bottom:20px;">
+              Agricultural livestock marketplace connecting farmers and buyers across Rwanda. Mobile-first with live listing system and WhatsApp-integrated contact flow.
+            </p>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px;">
+              <span style="font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--text-muted);background:rgba(255,255,255,0.05);padding:3px 8px;border-radius:4px;">HTML/CSS/JS</span>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--text-muted);background:rgba(255,255,255,0.05);padding:3px 8px;border-radius:4px;">Tailwind</span>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--text-muted);background:rgba(255,255,255,0.05);padding:3px 8px;border-radius:4px;">Vercel</span>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--text-muted);background:rgba(255,255,255,0.05);padding:3px 8px;border-radius:4px;">WhatsApp</span>
+            </div>
+            <a href="https://farmgate-rw.vercel.app" target="_blank" rel="noopener" class="btn-secondary" style="padding:10px 20px;font-size:0.85rem;width:100%;justify-content:center;border-color:rgba(16,185,129,0.25);" onmouseover="this.style.borderColor='#10B981';this.style.background='rgba(16,185,129,0.06)'" onmouseout="this.style.borderColor='rgba(16,185,129,0.25)';this.style.background='transparent'">
+              View Live Site →
+            </a>
+          </div>
+        </div>
+
+        <!-- StepIn Automation -->
+        <div class="project-card fade-up" data-delay="200">
+          <div style="height:6px;background:linear-gradient(90deg,var(--secondary),#A78BFA);"></div>
+          <div style="padding:28px;">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;">
+              <span class="tag" style="background:rgba(124,58,237,0.1);color:#A78BFA;border:1px solid rgba(124,58,237,0.2);">AI Automation</span>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:#4ADE80;background:rgba(74,222,128,0.1);padding:4px 10px;border-radius:100px;border:1px solid rgba(74,222,128,0.2);">● Live</span>
+            </div>
+            <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.15rem;margin-bottom:10px;">StepIn Automation</h3>
+            <p style="color:var(--text-body);font-size:0.88rem;line-height:1.65;margin-bottom:20px;">
+              End-to-end WhatsApp automation system for a hospitality business. Customers get instant AI responses, information, and booking support — zero manual effort.
+            </p>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px;">
+              <span style="font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--text-muted);background:rgba(255,255,255,0.05);padding:3px 8px;border-radius:4px;">n8n</span>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--text-muted);background:rgba(255,255,255,0.05);padding:3px 8px;border-radius:4px;">WhatsApp API</span>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--text-muted);background:rgba(255,255,255,0.05);padding:3px 8px;border-radius:4px;">AI Responses</span>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--text-muted);background:rgba(255,255,255,0.05);padding:3px 8px;border-radius:4px;">Workflow</span>
+            </div>
+            <a href="https://wa.me/250793154804" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 20px;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:0.85rem;background:rgba(37,211,102,0.1);border:1px solid rgba(37,211,102,0.3);border-radius:8px;color:#25D366;text-decoration:none;transition:all 0.2s ease;width:100%;" onmouseover="this.style.background='rgba(37,211,102,0.18)';this.style.transform='translateY(-2px)'" onmouseout="this.style.background='rgba(37,211,102,0.1)';this.style.transform='translateY(0)'">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+              Chat the Bot — See it live
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services" class="content">
+    <div class="container">
+      <div style="text-align:center;margin-bottom:56px;" class="fade-up">
+        <div class="section-label">// what i offer</div>
+        <h2>Services</h2>
+        <p style="color:var(--text-muted);margin-top:12px;max-width:480px;margin-inline:auto;">What you can hire me to build for your business.</p>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:20px;">
+
+        <div class="glass fade-up" style="padding:28px;">
+          <div class="service-icon" style="background:rgba(0,232,122,0.1);border:1px solid rgba(0,232,122,0.2);">🤖</div>
+          <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1rem;margin-bottom:10px;">AI Chatbot Development</h3>
+          <p style="color:var(--text-muted);font-size:0.87rem;line-height:1.65;">Intelligent chatbots for WhatsApp, websites, or any platform — powered by GPT, Claude, or Gemini. 24/7 automated responses.</p>
+        </div>
+
+        <div class="glass fade-up" style="padding:28px;" data-delay="100">
+          <div class="service-icon" style="background:rgba(0,232,122,0.1);border:1px solid rgba(0,232,122,0.2);">⚡</div>
+          <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1rem;margin-bottom:10px;">Workflow Automation</h3>
+          <p style="color:var(--text-muted);font-size:0.87rem;line-height:1.65;">Connect your apps, automate repetitive tasks with n8n pipelines that run 24/7 without any human input.</p>
+        </div>
+
+        <div class="glass fade-up" style="padding:28px;" data-delay="200">
+          <div class="service-icon" style="background:rgba(124,58,237,0.1);border:1px solid rgba(124,58,237,0.2);">🌐</div>
+          <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1rem;margin-bottom:10px;">Web Development</h3>
+          <p style="color:var(--text-muted);font-size:0.87rem;line-height:1.65;">Fast, beautiful, mobile-first websites and web apps. Built clean, SEO-optimized, and deployed in days not months.</p>
+        </div>
+
+        <div class="glass fade-up" style="padding:28px;" data-delay="300">
+          <div class="service-icon" style="background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.2);">🔗</div>
+          <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1rem;margin-bottom:10px;">AI Integration</h3>
+          <p style="color:var(--text-muted);font-size:0.87rem;line-height:1.65;">Plug AI capabilities directly into your existing tools, CRMs, or business systems. Make your current stack work smarter.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="content">
+    <div class="container">
+      <div style="max-width:660px;margin:0 auto;">
+        <div style="text-align:center;margin-bottom:48px;" class="fade-up">
+          <div class="section-label">// get in touch</div>
+          <h2>Let's Work Together</h2>
+          <p style="color:var(--text-muted);margin-top:12px;font-size:1rem;">
+            Have a project? Drop me a message — I respond fast.
+          </p>
+        </div>
+
+        <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:36px;" class="fade-up">
+          <a href="mailto:ai7group25@gmail.com" style="display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border:1px solid var(--border);border-radius:100px;color:var(--text-body);text-decoration:none;font-size:0.85rem;transition:all 0.2s ease;" onmouseover="this.style.borderColor='var(--primary)';this.style.color='var(--primary)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-body)'">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            ai7group25@gmail.com
+          </a>
+          <a href="https://wa.me/250783282759" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border:1px solid var(--border);border-radius:100px;color:var(--text-body);text-decoration:none;font-size:0.85rem;transition:all 0.2s ease;" onmouseover="this.style.borderColor='#25D366';this.style.color='#25D366'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-body)'">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+            +250 783 282 759
+          </a>
+        </div>
+
+        <div class="glass fade-up" style="padding:36px;">
+          <form action="https://formspree.io/f/xyknykdz" method="POST">
+            <input type="hidden" name="_subject" value="Portfolio inquiry — Eddie Nyambo">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+              <div>
+                <label style="display:block;font-size:0.75rem;color:var(--text-muted);font-family:'JetBrains Mono',monospace;letter-spacing:0.08em;margin-bottom:7px;">NAME</label>
+                <input name="name" type="text" placeholder="Your name" class="form-input" required>
+              </div>
+              <div>
+                <label style="display:block;font-size:0.75rem;color:var(--text-muted);font-family:'JetBrains Mono',monospace;letter-spacing:0.08em;margin-bottom:7px;">EMAIL</label>
+                <input name="email" type="email" placeholder="your@email.com" class="form-input" required>
+              </div>
+            </div>
+            <div style="margin-bottom:16px;">
+              <label style="display:block;font-size:0.75rem;color:var(--text-muted);font-family:'JetBrains Mono',monospace;letter-spacing:0.08em;margin-bottom:7px;">SUBJECT</label>
+              <input name="subject" type="text" placeholder="What do you need built?" class="form-input" required>
+            </div>
+            <div style="margin-bottom:24px;">
+              <label style="display:block;font-size:0.75rem;color:var(--text-muted);font-family:'JetBrains Mono',monospace;letter-spacing:0.08em;margin-bottom:7px;">MESSAGE</label>
+              <textarea name="message" rows="4" placeholder="Tell me about your project..." class="form-input" required style="resize:vertical;min-height:120px;"></textarea>
+            </div>
+            <button type="submit" class="btn-primary" style="width:100%;justify-content:center;">
+              Send Message
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22,2 15,22 11,13 2,9 22,2"/></svg>
+            </button>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="content" style="border-top:1px solid var(--border);padding:28px 0;">
+    <div class="container">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--text-muted);">
+          © 2026 Eddie Nyambo &nbsp;·&nbsp; Kigali, Rwanda 🇷🇼
+        </div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--text-muted);">
+          Built by <span style="color:var(--primary);font-weight:700;">Eddie Nyambo</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Typing animation
+    const phrases = [
+      'AI Automation Engineer.',
+      'Web Developer.',
+      'I build systems that work while you sleep.',
+      "Rwanda's AI guy.",
+    ];
+    let pi = 0, ci = 0, deleting = false;
+    const el = document.getElementById('typed-text');
+
+    function type() {
+      const cur = phrases[pi];
+      el.textContent = deleting ? cur.slice(0, ci - 1) : cur.slice(0, ci + 1);
+      if (!deleting) ci++;
+      else ci--;
+
+      if (!deleting && ci === cur.length) {
+        deleting = true;
+        setTimeout(type, 2200);
+        return;
+      }
+      if (deleting && ci === 0) {
+        deleting = false;
+        pi = (pi + 1) % phrases.length;
+      }
+      setTimeout(type, deleting ? 38 : 68);
+    }
+    type();
+
+    // Reveal on scroll — large rootMargin ensures off-screen elements fire for screenshots too
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const d = parseInt(e.target.dataset.delay || 0);
+          setTimeout(() => e.target.classList.add('visible'), d);
+          obs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0, rootMargin: '0px 0px 99999px 0px' });
+    document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+  </script>
+</body>
+</html>
