@@ -9,7 +9,7 @@
   <meta property="og:title" content="Eddie Nyambo — AI Automation Engineer">
   <meta property="og:description" content="I build AI automation systems and web apps that make businesses run on autopilot. Kigali, Rwanda.">
   <meta property="og:type" content="website">
-  <meta name="theme-color" content="#040812">
+  <meta name="theme-color" content="#080601">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,700;12..96,800&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
@@ -18,7 +18,7 @@
     tailwind.config = {
       theme: {
         extend: {
-          colors: { primary: '#0057FF', accent: '#00D4FF', bg: '#040812' },
+          colors: { primary: '#FF6B00', accent: '#FFB300', bg: '#080601' },
           fontFamily: {
             heading: ['Bricolage Grotesque', 'sans-serif'],
             body: ['DM Sans', 'sans-serif'],
@@ -31,18 +31,18 @@
 
   <style>
     :root {
-      --primary: #0057FF;
-      --accent: #00D4FF;
-      --purple: #7C3AED;
-      --bg: #040812;
-      --bg-secondary: #060C1A;
-      --bg-surface: #0A1628;
-      --text: #F0F4FF;
-      --text-body: #94A3B8;
-      --text-muted: #4A5568;
-      --border: rgba(0, 87, 255, 0.15);
-      --glow: rgba(0, 87, 255, 0.08);
-      --glow-strong: rgba(0, 87, 255, 0.28);
+      --primary: #FF6B00;
+      --accent: #FFB300;
+      --purple: #C2410C;
+      --bg: #080601;
+      --bg-secondary: #100A02;
+      --bg-surface: #1A1006;
+      --text: #FFFFFF;
+      --text-body: #F5EDD8;
+      --text-muted: #9E8A6E;
+      --border: rgba(255, 107, 0, 0.18);
+      --glow: rgba(255, 107, 0, 0.08);
+      --glow-strong: rgba(255, 107, 0, 0.3);
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -56,16 +56,18 @@
       overflow-x: hidden;
     }
 
+    /* Warm dot grid */
     body::before {
       content: '';
       position: fixed;
       inset: 0;
-      background-image: radial-gradient(circle, rgba(0, 87, 255, 0.07) 1px, transparent 1px);
+      background-image: radial-gradient(circle, rgba(255, 107, 0, 0.07) 1px, transparent 1px);
       background-size: 32px 32px;
       pointer-events: none;
       z-index: 0;
     }
 
+    /* Grain */
     body::after {
       content: '';
       position: fixed;
@@ -73,31 +75,31 @@
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
       pointer-events: none;
       z-index: 0;
-      opacity: 0.35;
+      opacity: 0.3;
     }
 
     .orb {
       position: fixed;
       border-radius: 50%;
-      filter: blur(100px);
+      filter: blur(110px);
       pointer-events: none;
       z-index: 0;
     }
     .orb-1 {
-      width: 600px; height: 600px;
-      background: radial-gradient(circle, rgba(0, 87, 255, 0.13) 0%, transparent 70%);
-      top: -150px; left: -150px;
+      width: 650px; height: 650px;
+      background: radial-gradient(circle, rgba(255, 107, 0, 0.14) 0%, transparent 70%);
+      top: -180px; left: -180px;
       animation: float1 22s ease-in-out infinite;
     }
     .orb-2 {
       width: 500px; height: 500px;
-      background: radial-gradient(circle, rgba(124, 58, 237, 0.11) 0%, transparent 70%);
-      bottom: 100px; right: -150px;
+      background: radial-gradient(circle, rgba(255, 179, 0, 0.1) 0%, transparent 70%);
+      bottom: 80px; right: -150px;
       animation: float2 28s ease-in-out infinite;
     }
     .orb-3 {
-      width: 350px; height: 350px;
-      background: radial-gradient(circle, rgba(0, 212, 255, 0.08) 0%, transparent 70%);
+      width: 380px; height: 380px;
+      background: radial-gradient(circle, rgba(255, 107, 0, 0.07) 0%, transparent 70%);
       top: 40%; left: 40%;
       animation: float3 18s ease-in-out infinite;
     }
@@ -109,7 +111,7 @@
     .content { position: relative; z-index: 1; }
 
     .nav-glass {
-      background: rgba(4, 8, 18, 0.88);
+      background: rgba(8, 6, 1, 0.88);
       backdrop-filter: blur(24px);
       -webkit-backdrop-filter: blur(24px);
       border-bottom: 1px solid var(--border);
@@ -141,10 +143,11 @@
     }
 
     .name-gradient {
-      background: linear-gradient(130deg, #ffffff 0%, #80AAFF 35%, #0057FF 65%, #00D4FF 100%);
+      background: linear-gradient(130deg, #ffffff 0%, #FFD080 30%, #FF6B00 65%, #FFB300 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
+      filter: drop-shadow(0 0 40px rgba(255, 107, 0, 0.25));
     }
 
     .typing-cursor {
@@ -173,12 +176,12 @@
       text-decoration: none;
       border: none;
       cursor: pointer;
-      box-shadow: 0 0 28px rgba(0, 87, 255, 0.4), 0 4px 16px rgba(0, 87, 255, 0.25);
+      box-shadow: 0 0 28px rgba(255, 107, 0, 0.45), 0 4px 16px rgba(255, 107, 0, 0.3);
       transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
     }
     .btn-primary:hover {
       transform: translateY(-2px) scale(1.02);
-      box-shadow: 0 0 52px rgba(0, 87, 255, 0.55), 0 8px 28px rgba(0, 87, 255, 0.35);
+      box-shadow: 0 0 52px rgba(255, 107, 0, 0.6), 0 8px 28px rgba(255, 107, 0, 0.4);
     }
     .btn-primary:active { transform: translateY(0) scale(0.98); }
 
@@ -188,7 +191,7 @@
       gap: 8px;
       padding: 14px 32px;
       background: transparent;
-      color: var(--text);
+      color: var(--text-body);
       font-family: 'Bricolage Grotesque', sans-serif;
       font-weight: 600;
       font-size: 0.95rem;
@@ -200,12 +203,12 @@
     .btn-secondary:hover {
       transform: translateY(-2px);
       border-color: var(--primary);
-      background: rgba(0, 87, 255, 0.06);
+      background: rgba(255, 107, 0, 0.07);
     }
     .btn-secondary:active { transform: translateY(0); }
 
     .glass {
-      background: rgba(10, 22, 40, 0.6);
+      background: rgba(26, 16, 6, 0.65);
       border: 1px solid var(--border);
       border-radius: 16px;
       backdrop-filter: blur(12px);
@@ -214,23 +217,28 @@
     }
     .glass:hover {
       transform: translateY(-4px);
-      border-color: rgba(0, 87, 255, 0.35);
-      box-shadow: 0 8px 40px rgba(0, 87, 255, 0.12), 0 2px 8px rgba(0, 0, 0, 0.4);
+      border-color: rgba(255, 107, 0, 0.4);
+      box-shadow: 0 8px 40px rgba(255, 107, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.5);
     }
 
     .photo-ring {
       width: 260px; height: 260px;
       border-radius: 50%;
       padding: 4px;
-      background: linear-gradient(135deg, var(--primary), var(--purple), var(--accent));
-      box-shadow: 0 0 60px rgba(0, 87, 255, 0.28), 0 0 120px rgba(124, 58, 237, 0.12);
+      background: linear-gradient(135deg, #FF6B00, #FFB300, #FF4400);
+      box-shadow: 0 0 60px rgba(255, 107, 0, 0.35), 0 0 120px rgba(255, 179, 0, 0.15);
       flex-shrink: 0;
     }
-    .photo-ring img, .photo-ring .photo-inner { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 3px solid var(--bg); }
+    .photo-ring img, .photo-ring .photo-inner {
+      width: 100%; height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--bg);
+    }
     .photo-placeholder {
       width: 100%; height: 100%;
       border-radius: 50%;
-      background: linear-gradient(135deg, #060C1A, #0A1628);
+      background: linear-gradient(135deg, #100A02, #1A1006);
       border: 3px solid var(--bg);
       display: flex; align-items: center; justify-content: center;
       font-family: 'Bricolage Grotesque', sans-serif;
@@ -248,23 +256,23 @@
       transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
     .skill-pill:hover { transform: translateY(-2px); }
-    .skill-pill.blue { background: rgba(0,87,255,0.08); border-color: rgba(0,87,255,0.25); color: #80AAFF; }
-    .skill-pill.blue:hover { box-shadow: 0 4px 16px rgba(0,87,255,0.2); }
-    .skill-pill.purple { background: rgba(124,58,237,0.08); border-color: rgba(124,58,237,0.25); color: #A78BFA; }
-    .skill-pill.purple:hover { box-shadow: 0 4px 16px rgba(124,58,237,0.2); }
-    .skill-pill.cyan { background: rgba(0,212,255,0.08); border-color: rgba(0,212,255,0.25); color: #67E8F9; }
-    .skill-pill.cyan:hover { box-shadow: 0 4px 16px rgba(0,212,255,0.2); }
+    .skill-pill.orange { background: rgba(255,107,0,0.09); border-color: rgba(255,107,0,0.28); color: #FFAA60; }
+    .skill-pill.orange:hover { box-shadow: 0 4px 16px rgba(255,107,0,0.22); }
+    .skill-pill.gold { background: rgba(255,179,0,0.09); border-color: rgba(255,179,0,0.28); color: #FFD060; }
+    .skill-pill.gold:hover { box-shadow: 0 4px 16px rgba(255,179,0,0.22); }
+    .skill-pill.warm { background: rgba(194,65,12,0.09); border-color: rgba(194,65,12,0.3); color: #F97316; }
+    .skill-pill.warm:hover { box-shadow: 0 4px 16px rgba(194,65,12,0.2); }
 
     .project-card {
-      background: rgba(10, 22, 40, 0.6);
+      background: rgba(26, 16, 6, 0.65);
       border: 1px solid var(--border);
       border-radius: 16px; overflow: hidden;
       transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, border-color 0.3s ease;
     }
     .project-card:hover {
       transform: translateY(-6px);
-      border-color: rgba(0, 87, 255, 0.4);
-      box-shadow: 0 16px 48px rgba(0, 87, 255, 0.12), 0 4px 16px rgba(0, 0, 0, 0.4);
+      border-color: rgba(255, 107, 0, 0.45);
+      box-shadow: 0 16px 48px rgba(255, 107, 0, 0.14), 0 4px 16px rgba(0, 0, 0, 0.5);
     }
 
     .service-icon {
@@ -285,7 +293,7 @@
 
     .form-input {
       width: 100%; padding: 13px 18px;
-      background: rgba(6, 12, 26, 0.8);
+      background: rgba(16, 10, 2, 0.9);
       border: 1px solid var(--border); border-radius: 10px;
       color: var(--text);
       font-family: 'DM Sans', sans-serif; font-size: 0.95rem;
@@ -293,15 +301,17 @@
       transition: border-color 0.2s ease, box-shadow 0.2s ease;
     }
     .form-input::placeholder { color: var(--text-muted); }
-    .form-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(0, 87, 255, 0.12); }
+    .form-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.14);
+    }
 
     section { padding: 96px 0; }
-
     .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
 
     .nav-link {
       font-family: 'DM Sans', sans-serif; font-size: 0.9rem;
-      color: var(--text-body); text-decoration: none;
+      color: var(--text-muted); text-decoration: none;
       transition: color 0.2s ease; position: relative;
     }
     .nav-link::after {
@@ -309,7 +319,7 @@
       width: 0; height: 2px; background: var(--primary);
       transition: width 0.3s ease;
     }
-    .nav-link:hover { color: var(--text); }
+    .nav-link:hover { color: var(--text-body); }
     .nav-link:hover::after { width: 100%; }
 
     .tag {
@@ -335,7 +345,7 @@
 
     #mobile-menu {
       display: none;
-      background: rgba(4, 8, 18, 0.97);
+      background: rgba(8, 6, 1, 0.97);
       border-bottom: 1px solid var(--border);
       padding: 1rem 1.5rem 1.5rem;
     }
@@ -343,8 +353,8 @@
 
     ::-webkit-scrollbar { width: 5px; }
     ::-webkit-scrollbar-track { background: var(--bg); }
-    ::-webkit-scrollbar-thumb { background: rgba(0, 87, 255, 0.35); border-radius: 3px; }
-    ::selection { background: rgba(0, 87, 255, 0.2); color: var(--text); }
+    ::-webkit-scrollbar-thumb { background: rgba(255, 107, 0, 0.4); border-radius: 3px; }
+    ::selection { background: rgba(255, 107, 0, 0.22); color: var(--text); }
     :focus-visible { outline: 2px solid var(--primary); outline-offset: 4px; }
 
     @media (max-width: 768px) {
@@ -353,8 +363,6 @@
       .hero-grid { flex-direction: column-reverse; align-items: center; text-align: center; }
       .hero-grid .social-row { justify-content: center; }
       .hero-grid .cta-row { justify-content: center; }
-      .contact-pills { flex-direction: column; align-items: stretch; }
-      .contact-pills a, .contact-pills div { justify-content: center; }
     }
   </style>
 </head>
@@ -369,7 +377,7 @@
     <div class="container">
       <div style="display:flex;align-items:center;justify-content:space-between;height:64px;">
         <a href="#" style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:1.15rem;color:var(--primary);text-decoration:none;letter-spacing:-0.02em;">
-          EN<span style="color:var(--text);">.</span>
+          EN<span style="color:var(--text-body);">.</span>
         </a>
         <div style="display:flex;align-items:center;gap:32px;" class="hidden md:flex">
           <a href="#about" class="nav-link">About</a>
@@ -378,7 +386,7 @@
           <a href="#services" class="nav-link">Services</a>
           <a href="#contact" class="btn-primary" style="padding:10px 22px;font-size:0.875rem;">Hire Me →</a>
         </div>
-        <button class="md:hidden" style="background:none;border:none;cursor:pointer;padding:8px;color:var(--text);" onclick="document.getElementById('mobile-menu').classList.toggle('open')" aria-label="Menu">
+        <button class="md:hidden" style="background:none;border:none;cursor:pointer;padding:8px;color:var(--text-body);" onclick="document.getElementById('mobile-menu').classList.toggle('open')" aria-label="Menu">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
           </svg>
@@ -402,9 +410,9 @@
       <div class="hero-grid" style="display:flex;align-items:center;justify-content:space-between;gap:56px;flex-wrap:wrap;">
 
         <div style="flex:1;min-width:300px;">
-          <div style="margin-bottom:20px;">
-            <span style="display:inline-flex;align-items:center;gap:8px;background:rgba(0,87,255,0.08);border:1px solid rgba(0,87,255,0.2);border-radius:100px;padding:6px 16px;font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--accent);letter-spacing:0.12em;">
-              <span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#00D4FF;box-shadow:0 0 8px #00D4FF;animation:blink 2s ease-in-out infinite;flex-shrink:0;"></span>
+          <div style="margin-bottom:24px;">
+            <span style="display:inline-flex;align-items:center;gap:8px;background:rgba(255,107,0,0.08);border:1px solid rgba(255,107,0,0.22);border-radius:100px;padding:6px 16px;font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--accent);letter-spacing:0.1em;">
+              <span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#FFB300;box-shadow:0 0 8px #FFB300;animation:blink 2s ease-in-out infinite;flex-shrink:0;"></span>
               AVAILABLE FOR HIRE &nbsp;·&nbsp; KIGALI, RWANDA 🇷🇼
             </span>
           </div>
@@ -444,7 +452,7 @@
             <a href="https://wa.me/250791811234" target="_blank" rel="noopener" title="WhatsApp" style="color:var(--text-muted);transition:color 0.2s ease;" onmouseover="this.style.color='#25D366'" onmouseout="this.style.color='var(--text-muted)'">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
             </a>
-            <a href="https://github.com/eddienyambo000-crypto" target="_blank" rel="noopener" title="GitHub" style="color:var(--text-muted);transition:color 0.2s ease;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text-muted)'">
+            <a href="https://github.com/eddienyambo000-crypto" target="_blank" rel="noopener" title="GitHub" style="color:var(--text-muted);transition:color 0.2s ease;" onmouseover="this.style.color='var(--text-body)'" onmouseout="this.style.color='var(--text-muted)'">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0 0 22 12.017C22 6.484 17.522 2 12 2z"/></svg>
             </a>
           </div>
@@ -456,7 +464,7 @@
             <div class="photo-placeholder">EN</div>
           </div>
 
-          <div style="background:rgba(0,0,0,0.5);border:1px solid rgba(0,87,255,0.15);border-radius:12px;padding:16px 20px;font-family:'JetBrains Mono',monospace;font-size:0.73rem;line-height:1.9;max-width:280px;width:100%;">
+          <div style="background:rgba(8,4,0,0.7);border:1px solid rgba(255,107,0,0.18);border-radius:12px;padding:16px 20px;font-family:'JetBrains Mono',monospace;font-size:0.73rem;line-height:1.9;max-width:280px;width:100%;">
             <div style="display:flex;gap:6px;margin-bottom:12px;">
               <span style="width:10px;height:10px;border-radius:50%;background:#FF5F57;display:block;"></span>
               <span style="width:10px;height:10px;border-radius:50%;background:#FFBD2E;display:block;"></span>
@@ -470,7 +478,7 @@
             <div style="margin-top:2px;"><span style="color:var(--text-muted);">$</span> <span style="color:var(--accent);">echo $location</span></div>
             <div style="color:var(--text-body);">Kibagabaga, Kigali 🇷🇼</div>
             <div style="margin-top:2px;"><span style="color:var(--text-muted);">$</span> <span style="color:var(--accent);">echo $status</span></div>
-            <div style="color:var(--accent);font-weight:700;">✓ open to work</div>
+            <div style="color:#FFB300;font-weight:700;">✓ open to work</div>
           </div>
         </div>
 
@@ -478,8 +486,8 @@
     </div>
   </section>
 
-  <!-- MARQUEE TICKER -->
-  <div class="content marquee-wrap" style="border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:rgba(0,87,255,0.04);padding:14px 0;">
+  <!-- MARQUEE -->
+  <div class="content marquee-wrap" style="border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:rgba(255,107,0,0.03);padding:14px 0;">
     <div class="marquee-track">
       <span style="display:inline-flex;align-items:center;white-space:nowrap;">
         <span style="font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--text-muted);padding:0 28px;">AI AUTOMATION</span>
@@ -558,11 +566,11 @@
             From intelligent WhatsApp chatbots to full n8n workflow pipelines and premium web builds — I deliver real, working solutions, not demos.
           </p>
           <div style="display:flex;flex-wrap:wrap;gap:8px;">
-            <span class="tag" style="background:rgba(0,87,255,0.1);color:#80AAFF;border:1px solid rgba(0,87,255,0.2);">AI Automation</span>
-            <span class="tag" style="background:rgba(124,58,237,0.1);color:#A78BFA;border:1px solid rgba(124,58,237,0.2);">Web Dev</span>
-            <span class="tag" style="background:rgba(0,212,255,0.1);color:#67E8F9;border:1px solid rgba(0,212,255,0.2);">Chatbots</span>
-            <span class="tag" style="background:rgba(0,87,255,0.1);color:#80AAFF;border:1px solid rgba(0,87,255,0.2);">n8n</span>
-            <span class="tag" style="background:rgba(124,58,237,0.1);color:#A78BFA;border:1px solid rgba(124,58,237,0.2);">LLM APIs</span>
+            <span class="tag" style="background:rgba(255,107,0,0.1);color:#FFAA60;border:1px solid rgba(255,107,0,0.22);">AI Automation</span>
+            <span class="tag" style="background:rgba(255,179,0,0.1);color:#FFD060;border:1px solid rgba(255,179,0,0.22);">Web Dev</span>
+            <span class="tag" style="background:rgba(194,65,12,0.1);color:#F97316;border:1px solid rgba(194,65,12,0.22);">Chatbots</span>
+            <span class="tag" style="background:rgba(255,107,0,0.1);color:#FFAA60;border:1px solid rgba(255,107,0,0.22);">n8n</span>
+            <span class="tag" style="background:rgba(255,179,0,0.1);color:#FFD060;border:1px solid rgba(255,179,0,0.22);">LLM APIs</span>
           </div>
         </div>
 
@@ -582,61 +590,61 @@
 
         <div class="glass fade-up" style="padding:32px;">
           <div style="display:flex;align-items:center;gap:14px;margin-bottom:24px;">
-            <div style="width:48px;height:48px;border-radius:12px;background:rgba(0,87,255,0.1);border:1px solid rgba(0,87,255,0.2);display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;">🤖</div>
+            <div style="width:48px;height:48px;border-radius:12px;background:rgba(255,107,0,0.1);border:1px solid rgba(255,107,0,0.22);display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;">🤖</div>
             <div>
               <div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:1.05rem;">AI Automation</div>
               <div style="font-size:0.78rem;color:var(--primary);font-family:'JetBrains Mono',monospace;">Primary zone</div>
             </div>
           </div>
           <div style="display:flex;flex-wrap:wrap;gap:8px;">
-            <span class="skill-pill blue">n8n</span>
-            <span class="skill-pill blue">OpenAI API</span>
-            <span class="skill-pill blue">Claude API</span>
-            <span class="skill-pill blue">Gemini API</span>
-            <span class="skill-pill blue">WhatsApp Automation</span>
-            <span class="skill-pill blue">RAG Systems</span>
-            <span class="skill-pill blue">AI Chatbots</span>
-            <span class="skill-pill blue">Webhook Integration</span>
-            <span class="skill-pill blue">Process Automation</span>
+            <span class="skill-pill orange">n8n</span>
+            <span class="skill-pill orange">OpenAI API</span>
+            <span class="skill-pill orange">Claude API</span>
+            <span class="skill-pill orange">Gemini API</span>
+            <span class="skill-pill orange">WhatsApp Automation</span>
+            <span class="skill-pill orange">RAG Systems</span>
+            <span class="skill-pill orange">AI Chatbots</span>
+            <span class="skill-pill orange">Webhook Integration</span>
+            <span class="skill-pill orange">Process Automation</span>
           </div>
         </div>
 
         <div class="glass fade-up" style="padding:32px;" data-delay="100">
           <div style="display:flex;align-items:center;gap:14px;margin-bottom:24px;">
-            <div style="width:48px;height:48px;border-radius:12px;background:rgba(124,58,237,0.1);border:1px solid rgba(124,58,237,0.2);display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;">💻</div>
+            <div style="width:48px;height:48px;border-radius:12px;background:rgba(194,65,12,0.1);border:1px solid rgba(194,65,12,0.22);display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;">💻</div>
             <div>
               <div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:1.05rem;">Web Development</div>
-              <div style="font-size:0.78rem;color:#A78BFA;font-family:'JetBrains Mono',monospace;">Frontend & deployment</div>
+              <div style="font-size:0.78rem;color:#F97316;font-family:'JetBrains Mono',monospace;">Frontend & deployment</div>
             </div>
           </div>
           <div style="display:flex;flex-wrap:wrap;gap:8px;">
-            <span class="skill-pill purple">HTML / CSS</span>
-            <span class="skill-pill purple">JavaScript</span>
-            <span class="skill-pill purple">Tailwind CSS</span>
-            <span class="skill-pill purple">Three.js</span>
-            <span class="skill-pill purple">Responsive Design</span>
-            <span class="skill-pill purple">Animations</span>
-            <span class="skill-pill purple">SEO & Schema</span>
-            <span class="skill-pill purple">Git & GitHub</span>
+            <span class="skill-pill warm">HTML / CSS</span>
+            <span class="skill-pill warm">JavaScript</span>
+            <span class="skill-pill warm">Tailwind CSS</span>
+            <span class="skill-pill warm">Three.js</span>
+            <span class="skill-pill warm">Responsive Design</span>
+            <span class="skill-pill warm">Animations</span>
+            <span class="skill-pill warm">SEO & Schema</span>
+            <span class="skill-pill warm">Git & GitHub</span>
           </div>
         </div>
 
         <div class="glass fade-up" style="padding:32px;" data-delay="200">
           <div style="display:flex;align-items:center;gap:14px;margin-bottom:24px;">
-            <div style="width:48px;height:48px;border-radius:12px;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.2);display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;">⚙️</div>
+            <div style="width:48px;height:48px;border-radius:12px;background:rgba(255,179,0,0.1);border:1px solid rgba(255,179,0,0.22);display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;">⚙️</div>
             <div>
               <div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:1.05rem;">Infrastructure</div>
-              <div style="font-size:0.78rem;color:#67E8F9;font-family:'JetBrains Mono',monospace;">Deployment & ops</div>
+              <div style="font-size:0.78rem;color:var(--accent);font-family:'JetBrains Mono',monospace;">Deployment & ops</div>
             </div>
           </div>
           <div style="display:flex;flex-wrap:wrap;gap:8px;">
-            <span class="skill-pill cyan">Vercel</span>
-            <span class="skill-pill cyan">Google Analytics</span>
-            <span class="skill-pill cyan">Search Console</span>
-            <span class="skill-pill cyan">DNS & Email Routing</span>
-            <span class="skill-pill cyan">ImprovMX</span>
-            <span class="skill-pill cyan">Spline 3D</span>
-            <span class="skill-pill cyan">Formspree</span>
+            <span class="skill-pill gold">Vercel</span>
+            <span class="skill-pill gold">Google Analytics</span>
+            <span class="skill-pill gold">Search Console</span>
+            <span class="skill-pill gold">DNS & Email Routing</span>
+            <span class="skill-pill gold">ImprovMX</span>
+            <span class="skill-pill gold">Spline 3D</span>
+            <span class="skill-pill gold">Formspree</span>
           </div>
         </div>
 
@@ -659,7 +667,7 @@
           <div style="height:6px;background:linear-gradient(90deg,var(--primary),var(--accent));"></div>
           <div style="padding:28px;">
             <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;">
-              <span class="tag" style="background:rgba(0,87,255,0.1);color:#80AAFF;border:1px solid rgba(0,87,255,0.2);">Web + AI</span>
+              <span class="tag" style="background:rgba(255,107,0,0.1);color:#FFAA60;border:1px solid rgba(255,107,0,0.22);">Web + AI</span>
               <a href="https://ai7optivaro.com" target="_blank" rel="noopener" style="color:var(--text-muted);transition:color 0.2s ease;" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='var(--text-muted)'" title="Live site">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
               </a>
@@ -702,10 +710,10 @@
         </div>
 
         <div class="project-card fade-up" data-delay="200">
-          <div style="height:6px;background:linear-gradient(90deg,var(--purple),#A78BFA);"></div>
+          <div style="height:6px;background:linear-gradient(90deg,#FF6B00,#FFB300);"></div>
           <div style="padding:28px;">
             <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;">
-              <span class="tag" style="background:rgba(124,58,237,0.1);color:#A78BFA;border:1px solid rgba(124,58,237,0.2);">AI Automation</span>
+              <span class="tag" style="background:rgba(255,107,0,0.1);color:#FFAA60;border:1px solid rgba(255,107,0,0.22);">AI Automation</span>
               <span style="font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:#4ADE80;background:rgba(74,222,128,0.1);padding:4px 10px;border-radius:100px;border:1px solid rgba(74,222,128,0.2);">● Live</span>
             </div>
             <h3 style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:1.15rem;margin-bottom:10px;">StepIn Automation</h3>
@@ -741,25 +749,25 @@
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:20px;">
 
         <div class="glass fade-up" style="padding:28px;">
-          <div class="service-icon" style="background:rgba(0,87,255,0.1);border:1px solid rgba(0,87,255,0.2);">🤖</div>
+          <div class="service-icon" style="background:rgba(255,107,0,0.1);border:1px solid rgba(255,107,0,0.22);">🤖</div>
           <h3 style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:1rem;margin-bottom:10px;">AI Chatbot Development</h3>
           <p style="color:var(--text-muted);font-size:0.87rem;line-height:1.65;">Intelligent chatbots for WhatsApp, websites, or any platform — powered by GPT, Claude, or Gemini. 24/7 automated responses.</p>
         </div>
 
         <div class="glass fade-up" style="padding:28px;" data-delay="100">
-          <div class="service-icon" style="background:rgba(0,87,255,0.1);border:1px solid rgba(0,87,255,0.2);">⚡</div>
+          <div class="service-icon" style="background:rgba(255,107,0,0.1);border:1px solid rgba(255,107,0,0.22);">⚡</div>
           <h3 style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:1rem;margin-bottom:10px;">Workflow Automation</h3>
           <p style="color:var(--text-muted);font-size:0.87rem;line-height:1.65;">Connect your apps, automate repetitive tasks with n8n pipelines that run 24/7 without any human input.</p>
         </div>
 
         <div class="glass fade-up" style="padding:28px;" data-delay="200">
-          <div class="service-icon" style="background:rgba(124,58,237,0.1);border:1px solid rgba(124,58,237,0.2);">🌐</div>
+          <div class="service-icon" style="background:rgba(194,65,12,0.1);border:1px solid rgba(194,65,12,0.22);">🌐</div>
           <h3 style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:1rem;margin-bottom:10px;">Web Development</h3>
           <p style="color:var(--text-muted);font-size:0.87rem;line-height:1.65;">Fast, beautiful, mobile-first websites and web apps. Built clean, SEO-optimized, and deployed in days not months.</p>
         </div>
 
         <div class="glass fade-up" style="padding:28px;" data-delay="300">
-          <div class="service-icon" style="background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.2);">🔗</div>
+          <div class="service-icon" style="background:rgba(255,179,0,0.1);border:1px solid rgba(255,179,0,0.22);">🔗</div>
           <h3 style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:1rem;margin-bottom:10px;">AI Integration</h3>
           <p style="color:var(--text-muted);font-size:0.87rem;line-height:1.65;">Plug AI capabilities directly into your existing tools, CRMs, or business systems. Make your current stack work smarter.</p>
         </div>
@@ -771,9 +779,9 @@
   <!-- CTA BANNER -->
   <section class="content" style="padding:64px 0;">
     <div class="container">
-      <div class="fade-up" style="background:linear-gradient(135deg,rgba(0,87,255,0.1) 0%,rgba(0,212,255,0.05) 100%);border:1px solid rgba(0,87,255,0.22);border-radius:20px;padding:56px 48px;text-align:center;position:relative;overflow:hidden;">
-        <div style="position:absolute;top:-80px;right:-80px;width:320px;height:320px;background:radial-gradient(circle,rgba(0,87,255,0.14) 0%,transparent 70%);pointer-events:none;"></div>
-        <div style="position:absolute;bottom:-60px;left:-60px;width:260px;height:260px;background:radial-gradient(circle,rgba(0,212,255,0.09) 0%,transparent 70%);pointer-events:none;"></div>
+      <div class="fade-up" style="background:linear-gradient(135deg,rgba(255,107,0,0.1) 0%,rgba(255,179,0,0.05) 100%);border:1px solid rgba(255,107,0,0.22);border-radius:20px;padding:56px 48px;text-align:center;position:relative;overflow:hidden;">
+        <div style="position:absolute;top:-80px;right:-80px;width:320px;height:320px;background:radial-gradient(circle,rgba(255,107,0,0.14) 0%,transparent 70%);pointer-events:none;"></div>
+        <div style="position:absolute;bottom:-60px;left:-60px;width:260px;height:260px;background:radial-gradient(circle,rgba(255,179,0,0.09) 0%,transparent 70%);pointer-events:none;"></div>
         <div class="section-label" style="margin-bottom:16px;">// ready to automate?</div>
         <h2 style="margin-bottom:16px;max-width:600px;margin-inline:auto;">Want results like these<br>for your business?</h2>
         <p style="color:var(--text-muted);margin-bottom:36px;max-width:480px;margin-inline:auto;">Let's talk about what systems you need. I'll tell you exactly what's possible and how fast I can build it.</p>
@@ -792,7 +800,7 @@
           <p style="color:var(--text-muted);margin-top:12px;font-size:1rem;">Have a project? Drop me a message — I respond fast.</p>
         </div>
 
-        <div class="contact-pills fade-up" style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:36px;">
+        <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:36px;" class="fade-up">
           <a href="mailto:eddienyambo000@gmail.com" style="display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border:1px solid var(--border);border-radius:100px;color:var(--text-body);text-decoration:none;font-size:0.85rem;transition:all 0.2s ease;" onmouseover="this.style.borderColor='var(--primary)';this.style.color='var(--primary)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-body)'">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
             eddienyambo000@gmail.com
@@ -857,7 +865,7 @@
           <a href="https://www.instagram.com/eddien_0/" target="_blank" rel="noopener" style="color:var(--text-muted);transition:color 0.2s ease;" onmouseover="this.style.color='#E1306C'" onmouseout="this.style.color='var(--text-muted)'">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
           </a>
-          <a href="https://github.com/eddienyambo000-crypto" target="_blank" rel="noopener" style="color:var(--text-muted);transition:color 0.2s ease;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text-muted)'">
+          <a href="https://github.com/eddienyambo000-crypto" target="_blank" rel="noopener" style="color:var(--text-muted);transition:color 0.2s ease;" onmouseover="this.style.color='var(--text-body)'" onmouseout="this.style.color='var(--text-muted)'">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0 0 22 12.017C22 6.484 17.522 2 12 2z"/></svg>
           </a>
           <a href="https://wa.me/250791811234" target="_blank" rel="noopener" style="color:var(--text-muted);transition:color 0.2s ease;" onmouseover="this.style.color='#25D366'" onmouseout="this.style.color='var(--text-muted)'">
@@ -877,7 +885,6 @@
     ];
     let pi = 0, ci = 0, deleting = false;
     const el = document.getElementById('typed-text');
-
     function type() {
       const cur = phrases[pi];
       el.textContent = deleting ? cur.slice(0, ci - 1) : cur.slice(0, ci + 1);
