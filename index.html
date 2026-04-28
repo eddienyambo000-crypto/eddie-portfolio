@@ -10,7 +10,7 @@
   <meta name="theme-color" content="#080601">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
 
   <style>
@@ -72,7 +72,7 @@
       height: 64px;
     }
     .logo {
-      font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800;
+      font-family: 'Space Grotesk', sans-serif; font-weight: 700;
       font-size: 1.2rem; color: var(--primary);
       text-decoration: none; letter-spacing: -0.02em;
     }
@@ -140,15 +140,19 @@
     }
 
     /* ─── TYPOGRAPHY ─── */
-    h1, h2, h3 { font-family: 'Plus Jakarta Sans', sans-serif; letter-spacing: -0.03em; }
-    h1 { font-size: clamp(3.2rem, 8vw, 7rem); font-weight: 800; line-height: 0.95; letter-spacing: -0.025em; }
-    h2 { font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; line-height: 1.05; }
-    h3 { font-size: 1.1rem; font-weight: 700; }
+    h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; letter-spacing: -0.03em; }
+    h1 { font-size: clamp(3.2rem, 8vw, 7rem); font-weight: 700; line-height: 0.95; letter-spacing: -0.03em; }
+    h2 { font-size: clamp(2rem, 4vw, 3rem); font-weight: 700; line-height: 1.05; }
+    h3 { font-size: 1.1rem; font-weight: 600; }
 
-    .name-white { color: #FFFFFF; }
-    .name-orange {
+    /* outlined first name, solid orange last name */
+    .name-outline {
+      -webkit-text-stroke: 2.5px #FFFFFF;
+      color: transparent;
+    }
+    .name-fill {
       color: var(--primary);
-      filter: drop-shadow(0 0 32px rgba(255,107,0,0.45));
+      filter: drop-shadow(0 0 40px rgba(255,107,0,0.5));
     }
 
     /* ─── TITLE REVEAL ─── */
@@ -555,8 +559,8 @@
         </div>
 
         <h1>
-          <span class="name-white">Eddie</span><br>
-          <span class="name-orange">Nyambo</span>
+          <span class="name-outline">Eddie</span><br>
+          <span class="name-fill">Nyambo</span>
         </h1>
 
         <div class="typed-line">
@@ -602,7 +606,7 @@
           <div class="orbit orbit-2"></div>
           <div class="orbit orbit-3"></div>
           <div class="avatar-core">
-            <img src="./eddie.jpg.jpeg" alt="Eddie Nyambo" class="avatar-photo">
+            <img src="./eddie.jpg" alt="Eddie Nyambo" class="avatar-photo">
           </div>
         </div>
 
