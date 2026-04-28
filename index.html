@@ -10,7 +10,7 @@
   <meta name="theme-color" content="#080601">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
 
   <style>
@@ -140,19 +140,76 @@
     }
 
     /* ─── TYPOGRAPHY ─── */
-    h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; letter-spacing: -0.03em; }
-    h1 { font-size: clamp(3.2rem, 8vw, 7rem); font-weight: 700; line-height: 0.95; letter-spacing: -0.03em; }
+    h2, h3 { font-family: 'Space Grotesk', sans-serif; letter-spacing: -0.03em; }
     h2 { font-size: clamp(2rem, 4vw, 3rem); font-weight: 700; line-height: 1.05; }
     h3 { font-size: 1.1rem; font-weight: 600; }
 
-    /* outlined first name, solid orange last name */
-    .name-outline {
-      -webkit-text-stroke: 2.5px #FFFFFF;
-      color: transparent;
+    /* ── HERO NAME ── */
+    .hero-name-block {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(4.8rem, 13vw, 10.5rem);
+      font-weight: 400;
+      line-height: 0.88;
+      letter-spacing: 0.05em;
+      margin-bottom: 22px;
     }
-    .name-fill {
+    .name-eddie {
+      display: block;
+      color: transparent;
+      -webkit-text-stroke: 2.5px rgba(255,255,255,0.92);
+    }
+    .name-nyambo {
+      display: block;
       color: var(--primary);
-      filter: drop-shadow(0 0 40px rgba(255,107,0,0.5));
+    }
+    .scramble-char { color: var(--accent); opacity: 0.9; }
+
+    /* glitch layer */
+    .name-glitch-wrap {
+      position: relative; display: inline-block; line-height: inherit;
+    }
+    .name-glitch-wrap::before,
+    .name-glitch-wrap::after {
+      content: attr(data-text);
+      position: absolute; top: 0; left: 0;
+      width: 100%; height: 100%;
+      color: var(--primary);
+      opacity: 0;
+    }
+    .name-glitch-wrap::before {
+      animation: glitch-a 9s 2s infinite;
+      color: #FFB300;
+      text-shadow: 3px 0 #FF6B00;
+    }
+    .name-glitch-wrap::after {
+      animation: glitch-b 9s 2s infinite;
+      color: #FF6B00;
+      text-shadow: -3px 0 #FFB300;
+    }
+    @keyframes glitch-a {
+      0%,89%,100% { opacity:0; transform:none; clip-path:none; }
+      90%          { opacity:1; transform:translateX(-4px) skewX(-1deg); clip-path:inset(20% 0 55% 0); }
+      91%          { opacity:1; transform:translateX(4px); clip-path:inset(65% 0 10% 0); }
+      92%          { opacity:0; }
+      95%          { opacity:1; transform:translateX(-2px); clip-path:inset(40% 0 40% 0); }
+      96%          { opacity:0; }
+    }
+    @keyframes glitch-b {
+      0%,89%,100% { opacity:0; transform:none; clip-path:none; }
+      90%          { opacity:1; transform:translateX(4px) skewX(1deg); clip-path:inset(55% 0 20% 0); }
+      91%          { opacity:1; transform:translateX(-3px); clip-path:inset(10% 0 65% 0); }
+      92%          { opacity:0; }
+      95%          { opacity:1; transform:translateX(2px); clip-path:inset(45% 0 35% 0); }
+      96%          { opacity:0; }
+    }
+
+    /* orange glow pulse after decode */
+    @keyframes glow-pulse {
+      0%,100% { text-shadow: 0 0 30px rgba(255,107,0,0.35), 0 0 60px rgba(255,107,0,0.15); }
+      50%      { text-shadow: 0 0 60px rgba(255,107,0,0.65), 0 0 120px rgba(255,107,0,0.3); }
+    }
+    .name-nyambo.decoded {
+      animation: glow-pulse 3.5s ease-in-out infinite;
     }
 
     /* ─── TITLE REVEAL ─── */
@@ -499,7 +556,7 @@
     }
     @media (max-width: 760px) {
       section { padding: 72px 0; }
-      h1 { font-size: clamp(2.8rem,10vw,5rem); }
+      .hero-name-block { font-size: clamp(3.6rem,14vw,6rem); }
       .hero-inner { flex-direction: column-reverse; align-items: center; text-align: center; }
       .hero-text { min-width: unset; }
       .cta-row, .social-row { justify-content: center; }
@@ -558,9 +615,9 @@
           AVAILABLE FOR HIRE &nbsp;·&nbsp; KIGALI, RWANDA 🇷🇼
         </div>
 
-        <h1>
-          <span class="name-outline">Eddie</span><br>
-          <span class="name-fill">Nyambo</span>
+        <h1 class="hero-name-block">
+          <span class="name-eddie" id="name-eddie"></span>
+          <span class="name-glitch-wrap name-nyambo" id="name-nyambo" data-text="NYAMBO"></span>
         </h1>
 
         <div class="typed-line">
@@ -986,6 +1043,46 @@
   </footer>
 
   <script>
+    /* ── NAME SCRAMBLE DECODE ── */
+    (function() {
+      const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%?&0123456789';
+      function scramble(el, finalText, delay, onDone) {
+        const len = finalText.length;
+        let frame = 0;
+        const totalFrames = len * 5 + 12;
+        const revealAt = i => Math.floor((i / len) * (totalFrames * 0.75));
+        const revealed = new Array(len).fill(false);
+        setTimeout(() => {
+          const id = setInterval(() => {
+            let out = '';
+            for (let i = 0; i < len; i++) {
+              if (revealed[i] || frame >= revealAt(i) + 6) {
+                revealed[i] = true;
+                out += `<span style="opacity:1;">${finalText[i]}</span>`;
+              } else if (frame >= revealAt(i)) {
+                out += `<span class="scramble-char">${CHARS[Math.floor(Math.random()*CHARS.length)]}</span>`;
+              } else {
+                out += `<span style="opacity:0.25;color:var(--muted);">${CHARS[Math.floor(Math.random()*CHARS.length)]}</span>`;
+              }
+            }
+            el.innerHTML = out;
+            frame++;
+            if (frame > totalFrames) {
+              clearInterval(id);
+              el.innerHTML = finalText;
+              if (onDone) onDone();
+            }
+          }, 40);
+        }, delay);
+      }
+      const eddie = document.getElementById('name-eddie');
+      const nyambo = document.getElementById('name-nyambo');
+      scramble(eddie, 'EDDIE', 200, null);
+      scramble(nyambo, 'NYAMBO', 600, () => {
+        nyambo.classList.add('decoded');
+      });
+    })();
+
     /* ── TYPING ANIMATION ── */
     const phrases = ['AI Automation Engineer.','Web Developer.','I build systems that work while you sleep.',"Rwanda's AI guy."];
     let pi=0,ci=0,del=false;
