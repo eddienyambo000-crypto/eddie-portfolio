@@ -10,7 +10,7 @@
   <meta name="theme-color" content="#080601">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
 
   <style>
@@ -72,7 +72,7 @@
       height: 64px;
     }
     .logo {
-      font-family: 'Syne', sans-serif; font-weight: 800;
+      font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800;
       font-size: 1.2rem; color: var(--primary);
       text-decoration: none; letter-spacing: -0.02em;
     }
@@ -140,16 +140,30 @@
     }
 
     /* ─── TYPOGRAPHY ─── */
-    h1, h2, h3 { font-family: 'Syne', sans-serif; letter-spacing: -0.03em; }
-    h1 { font-size: clamp(3.2rem, 8vw, 7rem); font-weight: 800; line-height: 0.93; }
+    h1, h2, h3 { font-family: 'Plus Jakarta Sans', sans-serif; letter-spacing: -0.03em; }
+    h1 { font-size: clamp(3.2rem, 8vw, 7rem); font-weight: 800; line-height: 0.95; letter-spacing: -0.025em; }
     h2 { font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; line-height: 1.05; }
     h3 { font-size: 1.1rem; font-weight: 700; }
 
-    .name-gradient {
-      background: linear-gradient(135deg, #fff 0%, #FFD080 25%, #FF6B00 60%, #FFB300 100%);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      background-clip: text;
-      filter: drop-shadow(0 0 48px rgba(255,107,0,0.3));
+    .name-white { color: #FFFFFF; }
+    .name-orange {
+      color: var(--primary);
+      filter: drop-shadow(0 0 32px rgba(255,107,0,0.45));
+    }
+
+    /* ─── TITLE REVEAL ─── */
+    .title-reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.75s cubic-bezier(0.16,1,0.3,1), transform 0.75s cubic-bezier(0.16,1,0.3,1);
+    }
+    .title-reveal.visible { opacity: 1; transform: translateY(0); }
+    .title-reveal-delay { transition-delay: 0.12s; }
+
+    /* Avatar photo */
+    .avatar-photo {
+      width: 100%; height: 100%;
+      object-fit: cover; border-radius: 50%;
     }
 
     /* ─── HERO ─── */
@@ -508,8 +522,8 @@
       <a href="#" class="logo">EN<span>.</span></a>
       <div class="nav-links">
         <a href="#about" class="nav-link">About</a>
-        <a href="#skills" class="nav-link">Skills</a>
         <a href="#projects" class="nav-link">Projects</a>
+        <a href="#skills" class="nav-link">Skills</a>
         <a href="#services" class="nav-link">Services</a>
         <a href="#contact" class="btn btn-primary" style="padding:10px 22px;font-size:0.875rem;">Hire Me →</a>
       </div>
@@ -521,8 +535,8 @@
     </div>
     <div id="mobile-nav">
       <a href="#about" class="nav-link" onclick="document.getElementById('mobile-nav').classList.remove('open')">About</a>
-      <a href="#skills" class="nav-link" onclick="document.getElementById('mobile-nav').classList.remove('open')">Skills</a>
       <a href="#projects" class="nav-link" onclick="document.getElementById('mobile-nav').classList.remove('open')">Projects</a>
+      <a href="#skills" class="nav-link" onclick="document.getElementById('mobile-nav').classList.remove('open')">Skills</a>
       <a href="#services" class="nav-link" onclick="document.getElementById('mobile-nav').classList.remove('open')">Services</a>
       <a href="#contact" class="btn btn-primary" style="text-align:center;justify-content:center;" onclick="document.getElementById('mobile-nav').classList.remove('open')">Hire Me →</a>
     </div>
@@ -541,8 +555,8 @@
         </div>
 
         <h1>
-          <span class="name-gradient">Eddie</span><br>
-          <span class="name-gradient">Nyambo</span>
+          <span class="name-white">Eddie</span><br>
+          <span class="name-orange">Nyambo</span>
         </h1>
 
         <div class="typed-line">
@@ -588,7 +602,7 @@
           <div class="orbit orbit-2"></div>
           <div class="orbit orbit-3"></div>
           <div class="avatar-core">
-            <span class="avatar-initials">EN</span>
+            <img src="./eddie.jpg.jpeg" alt="Eddie Nyambo" class="avatar-photo">
           </div>
         </div>
 
@@ -668,7 +682,7 @@
 
         <div class="fade-up" data-delay="100">
           <div class="label">// about me</div>
-          <h2 style="margin-bottom:18px;">I make businesses run on <span style="color:var(--primary);">autopilot.</span></h2>
+          <h2 class="title-reveal" style="margin-bottom:18px;">I make businesses run on <span style="color:var(--primary);">autopilot.</span></h2>
           <p style="color:var(--body);margin-bottom:14px;">
             I'm Eddie Nyambo — AI Automation Engineer and Web Developer based in Kigali, Rwanda. I build systems that cut manual work, eliminate costly errors, and free up your team to focus on what matters.
           </p>
@@ -688,78 +702,13 @@
     </div>
   </section>
 
-  <!-- SKILLS -->
-  <section id="skills" class="content">
-    <div class="wrap">
-      <div style="text-align:center;margin-bottom:56px;" class="fade-up">
-        <div class="label">// my toolkit</div>
-        <h2>Skills & Tools</h2>
-      </div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:20px;">
-
-        <div class="tilt-card fade-up" data-tilt style="padding:32px;">
-          <div class="card-shine"></div>
-          <div style="display:flex;align-items:center;gap:14px;margin-bottom:24px;">
-            <div style="width:48px;height:48px;border-radius:12px;background:rgba(255,107,0,0.1);border:1px solid rgba(255,107,0,0.22);display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;">🤖</div>
-            <div>
-              <h3>AI Automation</h3>
-              <div style="font-size:0.76rem;color:var(--primary);font-family:'JetBrains Mono',monospace;">Primary zone</div>
-            </div>
-          </div>
-          <div style="display:flex;flex-wrap:wrap;gap:8px;">
-            <span class="pill pill-o">n8n</span><span class="pill pill-o">OpenAI API</span>
-            <span class="pill pill-o">Claude API</span><span class="pill pill-o">Gemini API</span>
-            <span class="pill pill-o">WhatsApp Automation</span><span class="pill pill-o">RAG Systems</span>
-            <span class="pill pill-o">AI Chatbots</span><span class="pill pill-o">Webhooks</span>
-            <span class="pill pill-o">Process Automation</span>
-          </div>
-        </div>
-
-        <div class="tilt-card fade-up" data-tilt data-delay="100" style="padding:32px;">
-          <div class="card-shine"></div>
-          <div style="display:flex;align-items:center;gap:14px;margin-bottom:24px;">
-            <div style="width:48px;height:48px;border-radius:12px;background:rgba(194,65,12,0.1);border:1px solid rgba(194,65,12,0.22);display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;">💻</div>
-            <div>
-              <h3>Web Development</h3>
-              <div style="font-size:0.76rem;color:#F97316;font-family:'JetBrains Mono',monospace;">Frontend & deployment</div>
-            </div>
-          </div>
-          <div style="display:flex;flex-wrap:wrap;gap:8px;">
-            <span class="pill pill-w">HTML / CSS</span><span class="pill pill-w">JavaScript</span>
-            <span class="pill pill-w">Tailwind CSS</span><span class="pill pill-w">Three.js</span>
-            <span class="pill pill-w">Responsive Design</span><span class="pill pill-w">Animations</span>
-            <span class="pill pill-w">SEO & Schema</span><span class="pill pill-w">Git & GitHub</span>
-          </div>
-        </div>
-
-        <div class="tilt-card fade-up" data-tilt data-delay="200" style="padding:32px;">
-          <div class="card-shine"></div>
-          <div style="display:flex;align-items:center;gap:14px;margin-bottom:24px;">
-            <div style="width:48px;height:48px;border-radius:12px;background:rgba(255,179,0,0.1);border:1px solid rgba(255,179,0,0.22);display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;">⚙️</div>
-            <div>
-              <h3>Infrastructure</h3>
-              <div style="font-size:0.76rem;color:var(--accent);font-family:'JetBrains Mono',monospace;">Deployment & ops</div>
-            </div>
-          </div>
-          <div style="display:flex;flex-wrap:wrap;gap:8px;">
-            <span class="pill pill-g">Vercel</span><span class="pill pill-g">Google Analytics</span>
-            <span class="pill pill-g">Search Console</span><span class="pill pill-g">DNS & Email</span>
-            <span class="pill pill-g">ImprovMX</span><span class="pill pill-g">Spline 3D</span>
-            <span class="pill pill-g">Formspree</span>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
   <!-- PROJECTS -->
   <section id="projects" class="content">
     <div class="wrap">
       <div style="text-align:center;margin-bottom:56px;" class="fade-up">
         <div class="label">// my work</div>
-        <h2>Projects</h2>
-        <p style="color:var(--muted);margin-top:10px;max-width:420px;margin-inline:auto;">Real things built. Real results delivered.</p>
+        <h2 class="title-reveal">Projects</h2>
+        <p style="color:var(--muted);margin-top:10px;max-width:420px;margin-inline:auto;" class="title-reveal title-reveal-delay">Real things built. Real results delivered.</p>
       </div>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:24px;">
 
@@ -832,13 +781,78 @@
     </div>
   </section>
 
+  <!-- SKILLS -->
+  <section id="skills" class="content">
+    <div class="wrap">
+      <div style="text-align:center;margin-bottom:56px;" class="fade-up">
+        <div class="label">// my toolkit</div>
+        <h2 class="title-reveal">Skills & Tools</h2>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:20px;">
+
+        <div class="tilt-card fade-up" data-tilt style="padding:32px;">
+          <div class="card-shine"></div>
+          <div style="display:flex;align-items:center;gap:14px;margin-bottom:24px;">
+            <div style="width:48px;height:48px;border-radius:12px;background:rgba(255,107,0,0.1);border:1px solid rgba(255,107,0,0.22);display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;">🤖</div>
+            <div>
+              <h3>AI Automation</h3>
+              <div style="font-size:0.76rem;color:var(--primary);font-family:'JetBrains Mono',monospace;">Primary zone</div>
+            </div>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;">
+            <span class="pill pill-o">n8n</span><span class="pill pill-o">OpenAI API</span>
+            <span class="pill pill-o">Claude API</span><span class="pill pill-o">Gemini API</span>
+            <span class="pill pill-o">WhatsApp Automation</span><span class="pill pill-o">RAG Systems</span>
+            <span class="pill pill-o">AI Chatbots</span><span class="pill pill-o">Webhooks</span>
+            <span class="pill pill-o">Process Automation</span>
+          </div>
+        </div>
+
+        <div class="tilt-card fade-up" data-tilt data-delay="100" style="padding:32px;">
+          <div class="card-shine"></div>
+          <div style="display:flex;align-items:center;gap:14px;margin-bottom:24px;">
+            <div style="width:48px;height:48px;border-radius:12px;background:rgba(194,65,12,0.1);border:1px solid rgba(194,65,12,0.22);display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;">💻</div>
+            <div>
+              <h3>Web Development</h3>
+              <div style="font-size:0.76rem;color:#F97316;font-family:'JetBrains Mono',monospace;">Frontend & deployment</div>
+            </div>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;">
+            <span class="pill pill-w">HTML / CSS</span><span class="pill pill-w">JavaScript</span>
+            <span class="pill pill-w">Tailwind CSS</span><span class="pill pill-w">Three.js</span>
+            <span class="pill pill-w">Responsive Design</span><span class="pill pill-w">Animations</span>
+            <span class="pill pill-w">SEO & Schema</span><span class="pill pill-w">Git & GitHub</span>
+          </div>
+        </div>
+
+        <div class="tilt-card fade-up" data-tilt data-delay="200" style="padding:32px;">
+          <div class="card-shine"></div>
+          <div style="display:flex;align-items:center;gap:14px;margin-bottom:24px;">
+            <div style="width:48px;height:48px;border-radius:12px;background:rgba(255,179,0,0.1);border:1px solid rgba(255,179,0,0.22);display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;">⚙️</div>
+            <div>
+              <h3>Infrastructure</h3>
+              <div style="font-size:0.76rem;color:var(--accent);font-family:'JetBrains Mono',monospace;">Deployment & ops</div>
+            </div>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;">
+            <span class="pill pill-g">Vercel</span><span class="pill pill-g">Google Analytics</span>
+            <span class="pill pill-g">Search Console</span><span class="pill pill-g">DNS & Email</span>
+            <span class="pill pill-g">ImprovMX</span><span class="pill pill-g">Spline 3D</span>
+            <span class="pill pill-g">Formspree</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
   <!-- SERVICES -->
   <section id="services" class="content">
     <div class="wrap">
       <div style="text-align:center;margin-bottom:56px;" class="fade-up">
         <div class="label">// what i offer</div>
-        <h2>Services</h2>
-        <p style="color:var(--muted);margin-top:10px;max-width:420px;margin-inline:auto;">What you can hire me to build.</p>
+        <h2 class="title-reveal">Services</h2>
+        <p style="color:var(--muted);margin-top:10px;max-width:420px;margin-inline:auto;" class="title-reveal title-reveal-delay">What you can hire me to build.</p>
       </div>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:20px;">
 
@@ -882,7 +896,7 @@
           <div style="position:absolute;top:-80px;right:-80px;width:300px;height:300px;background:radial-gradient(circle,rgba(255,107,0,0.15),transparent 70%);pointer-events:none;"></div>
           <div style="position:absolute;bottom:-60px;left:-60px;width:250px;height:250px;background:radial-gradient(circle,rgba(255,179,0,0.1),transparent 70%);pointer-events:none;"></div>
           <div class="label" style="margin-bottom:14px;">// ready to automate?</div>
-          <h2 style="margin-bottom:14px;">Want results like these<br>for your business?</h2>
+          <h2 class="title-reveal" style="margin-bottom:14px;">Want results like these<br>for your business?</h2>
           <p style="color:var(--muted);margin-bottom:32px;max-width:440px;margin-inline:auto;">Tell me what you need. I'll tell you what's possible and how fast I can deliver it.</p>
           <a href="#contact" class="btn btn-primary" style="font-size:1rem;padding:15px 40px;">Book a Free Call →</a>
         </div>
@@ -896,7 +910,7 @@
       <div style="max-width:640px;margin:0 auto;">
         <div style="text-align:center;margin-bottom:44px;" class="fade-up">
           <div class="label">// get in touch</div>
-          <h2>Let's Work Together</h2>
+          <h2 class="title-reveal">Let's Work Together</h2>
           <p style="color:var(--muted);margin-top:10px;">Have a project? Drop me a message — I respond fast.</p>
         </div>
 
@@ -993,6 +1007,17 @@
       });
     },{threshold:0,rootMargin:'0px 0px 99999px 0px'});
     document.querySelectorAll('.fade-up').forEach(el=>obs.observe(el));
+
+    /* ── TITLE REVEAL ── */
+    const titleObs=new IntersectionObserver(entries=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting){
+          e.target.classList.add('visible');
+          titleObs.unobserve(e.target);
+        }
+      });
+    },{threshold:0.15});
+    document.querySelectorAll('.title-reveal').forEach(el=>titleObs.observe(el));
 
     /* ── THREE.JS HERO PARTICLES ── */
     (function(){
