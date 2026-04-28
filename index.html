@@ -3,567 +3,677 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Eddie Nyambo — AI Automation Engineer & Web Developer</title>
-  <meta name="description" content="Eddie Nyambo — AI Automation Engineer & Web Developer based in Kigali, Rwanda. I build automation systems, AI chatbots, and web applications that make businesses run on autopilot.">
-  <meta name="keywords" content="AI automation engineer Rwanda, web developer Kigali, n8n automation, WhatsApp chatbot, AI integration Africa">
+  <title>Eddie Nyambo — AI Automation Engineer</title>
+  <meta name="description" content="Eddie Nyambo — AI Automation Engineer & Web Developer. Kigali, Rwanda.">
   <meta property="og:title" content="Eddie Nyambo — AI Automation Engineer">
-  <meta property="og:description" content="I build AI automation systems and web apps that make businesses run on autopilot. Kigali, Rwanda.">
   <meta property="og:type" content="website">
   <meta name="theme-color" content="#080601">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,700;12..96,800&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: { primary: '#FF6B00', accent: '#FFB300', bg: '#080601' },
-          fontFamily: {
-            heading: ['Bricolage Grotesque', 'sans-serif'],
-            body: ['DM Sans', 'sans-serif'],
-            mono: ['JetBrains Mono', 'monospace'],
-          }
-        }
-      }
-    }
-  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
 
   <style>
     :root {
       --primary: #FF6B00;
       --accent: #FFB300;
-      --purple: #C2410C;
       --bg: #080601;
-      --bg-secondary: #100A02;
-      --bg-surface: #1A1006;
+      --bg2: #100A02;
+      --bg3: #1A1006;
       --text: #FFFFFF;
-      --text-body: #F5EDD8;
-      --text-muted: #9E8A6E;
-      --border: rgba(255, 107, 0, 0.18);
-      --glow: rgba(255, 107, 0, 0.08);
-      --glow-strong: rgba(255, 107, 0, 0.3);
+      --body: #F5EDD8;
+      --muted: #9E8A6E;
+      --border: rgba(255,107,0,0.18);
+      --glow: rgba(255,107,0,0.25);
     }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
     html { scroll-behavior: smooth; }
 
     body {
-      background-color: var(--bg);
+      background: var(--bg);
       color: var(--text);
-      font-family: 'DM Sans', sans-serif;
+      font-family: 'Outfit', sans-serif;
       line-height: 1.7;
       overflow-x: hidden;
     }
 
-    /* Warm dot grid */
+    /* Dot grid */
     body::before {
       content: '';
-      position: fixed;
-      inset: 0;
-      background-image: radial-gradient(circle, rgba(255, 107, 0, 0.07) 1px, transparent 1px);
-      background-size: 32px 32px;
+      position: fixed; inset: 0;
+      background-image: radial-gradient(circle, rgba(255,107,0,0.06) 1px, transparent 1px);
+      background-size: 36px 36px;
+      pointer-events: none; z-index: 0;
+    }
+
+    /* Three.js canvas */
+    #hero-canvas {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
       pointer-events: none;
       z-index: 0;
     }
-
-    /* Grain */
-    body::after {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-      pointer-events: none;
-      z-index: 0;
-      opacity: 0.3;
-    }
-
-    .orb {
-      position: fixed;
-      border-radius: 50%;
-      filter: blur(110px);
-      pointer-events: none;
-      z-index: 0;
-    }
-    .orb-1 {
-      width: 650px; height: 650px;
-      background: radial-gradient(circle, rgba(255, 107, 0, 0.14) 0%, transparent 70%);
-      top: -180px; left: -180px;
-      animation: float1 22s ease-in-out infinite;
-    }
-    .orb-2 {
-      width: 500px; height: 500px;
-      background: radial-gradient(circle, rgba(255, 179, 0, 0.1) 0%, transparent 70%);
-      bottom: 80px; right: -150px;
-      animation: float2 28s ease-in-out infinite;
-    }
-    .orb-3 {
-      width: 380px; height: 380px;
-      background: radial-gradient(circle, rgba(255, 107, 0, 0.07) 0%, transparent 70%);
-      top: 40%; left: 40%;
-      animation: float3 18s ease-in-out infinite;
-    }
-
-    @keyframes float1 { 0%, 100% { transform: translate(0,0); } 50% { transform: translate(80px, 60px); } }
-    @keyframes float2 { 0%, 100% { transform: translate(0,0); } 50% { transform: translate(-60px, -80px); } }
-    @keyframes float3 { 0%, 100% { transform: translate(-50%,-50%); } 50% { transform: translate(-50%, calc(-50% + 50px)); } }
 
     .content { position: relative; z-index: 1; }
 
-    .nav-glass {
-      background: rgba(8, 6, 1, 0.88);
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
+    /* ─── NAV ─── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(8,6,1,0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--border);
     }
-
-    .section-label {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.72rem;
-      color: var(--accent);
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      margin-bottom: 0.5rem;
+    .nav-inner {
+      max-width: 1120px; margin: 0 auto; padding: 0 24px;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 64px;
     }
-
-    h1, h2, h3 { font-family: 'Bricolage Grotesque', sans-serif; }
-
-    h1 {
-      font-size: clamp(3.5rem, 9vw, 7.5rem);
-      font-weight: 800;
-      letter-spacing: -0.03em;
-      line-height: 0.95;
+    .logo {
+      font-family: 'Syne', sans-serif; font-weight: 800;
+      font-size: 1.2rem; color: var(--primary);
+      text-decoration: none; letter-spacing: -0.02em;
     }
-
-    h2 {
-      font-size: clamp(2rem, 4vw, 3rem);
-      font-weight: 800;
-      letter-spacing: -0.03em;
-      line-height: 1.05;
-    }
-
-    .name-gradient {
-      background: linear-gradient(130deg, #ffffff 0%, #FFD080 30%, #FF6B00 65%, #FFB300 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      filter: drop-shadow(0 0 40px rgba(255, 107, 0, 0.25));
-    }
-
-    .typing-cursor {
-      display: inline-block;
-      width: 3px;
-      height: 1.1em;
-      background: var(--primary);
-      margin-left: 2px;
-      vertical-align: middle;
-      animation: blink 1s step-end infinite;
-    }
-    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
-
-    .btn-primary {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 14px 32px;
-      background: var(--primary);
-      color: #fff;
-      font-family: 'Bricolage Grotesque', sans-serif;
-      font-weight: 700;
-      font-size: 0.95rem;
-      letter-spacing: 0.01em;
-      border-radius: 8px;
-      text-decoration: none;
-      border: none;
-      cursor: pointer;
-      box-shadow: 0 0 28px rgba(255, 107, 0, 0.45), 0 4px 16px rgba(255, 107, 0, 0.3);
-      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
-    }
-    .btn-primary:hover {
-      transform: translateY(-2px) scale(1.02);
-      box-shadow: 0 0 52px rgba(255, 107, 0, 0.6), 0 8px 28px rgba(255, 107, 0, 0.4);
-    }
-    .btn-primary:active { transform: translateY(0) scale(0.98); }
-
-    .btn-secondary {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 14px 32px;
-      background: transparent;
-      color: var(--text-body);
-      font-family: 'Bricolage Grotesque', sans-serif;
-      font-weight: 600;
-      font-size: 0.95rem;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      text-decoration: none;
-      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.2s ease, background 0.2s ease;
-    }
-    .btn-secondary:hover {
-      transform: translateY(-2px);
-      border-color: var(--primary);
-      background: rgba(255, 107, 0, 0.07);
-    }
-    .btn-secondary:active { transform: translateY(0); }
-
-    .glass {
-      background: rgba(26, 16, 6, 0.65);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, border-color 0.3s ease;
-    }
-    .glass:hover {
-      transform: translateY(-4px);
-      border-color: rgba(255, 107, 0, 0.4);
-      box-shadow: 0 8px 40px rgba(255, 107, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.5);
-    }
-
-    .photo-ring {
-      width: 260px; height: 260px;
-      border-radius: 50%;
-      padding: 4px;
-      background: linear-gradient(135deg, #FF6B00, #FFB300, #FF4400);
-      box-shadow: 0 0 60px rgba(255, 107, 0, 0.35), 0 0 120px rgba(255, 179, 0, 0.15);
-      flex-shrink: 0;
-    }
-    .photo-ring img, .photo-ring .photo-inner {
-      width: 100%; height: 100%;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 3px solid var(--bg);
-    }
-    .photo-placeholder {
-      width: 100%; height: 100%;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #100A02, #1A1006);
-      border: 3px solid var(--bg);
-      display: flex; align-items: center; justify-content: center;
-      font-family: 'Bricolage Grotesque', sans-serif;
-      font-size: 3.5rem; font-weight: 800;
-      color: var(--primary);
-      letter-spacing: -0.02em;
-    }
-
-    .skill-pill {
-      display: inline-flex; align-items: center; gap: 6px;
-      padding: 7px 14px; border-radius: 100px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.75rem; font-weight: 500; letter-spacing: 0.02em;
-      border: 1px solid;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-    .skill-pill:hover { transform: translateY(-2px); }
-    .skill-pill.orange { background: rgba(255,107,0,0.09); border-color: rgba(255,107,0,0.28); color: #FFAA60; }
-    .skill-pill.orange:hover { box-shadow: 0 4px 16px rgba(255,107,0,0.22); }
-    .skill-pill.gold { background: rgba(255,179,0,0.09); border-color: rgba(255,179,0,0.28); color: #FFD060; }
-    .skill-pill.gold:hover { box-shadow: 0 4px 16px rgba(255,179,0,0.22); }
-    .skill-pill.warm { background: rgba(194,65,12,0.09); border-color: rgba(194,65,12,0.3); color: #F97316; }
-    .skill-pill.warm:hover { box-shadow: 0 4px 16px rgba(194,65,12,0.2); }
-
-    .project-card {
-      background: rgba(26, 16, 6, 0.65);
-      border: 1px solid var(--border);
-      border-radius: 16px; overflow: hidden;
-      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, border-color 0.3s ease;
-    }
-    .project-card:hover {
-      transform: translateY(-6px);
-      border-color: rgba(255, 107, 0, 0.45);
-      box-shadow: 0 16px 48px rgba(255, 107, 0, 0.14), 0 4px 16px rgba(0, 0, 0, 0.5);
-    }
-
-    .service-icon {
-      width: 52px; height: 52px; border-radius: 12px;
-      display: flex; align-items: center; justify-content: center;
-      margin-bottom: 1rem; font-size: 1.4rem;
-    }
-
-    .stat-num {
-      font-family: 'Bricolage Grotesque', sans-serif;
-      font-size: 2.4rem; font-weight: 800;
-      background: linear-gradient(135deg, var(--primary), var(--accent));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      line-height: 1;
-    }
-
-    .form-input {
-      width: 100%; padding: 13px 18px;
-      background: rgba(16, 10, 2, 0.9);
-      border: 1px solid var(--border); border-radius: 10px;
-      color: var(--text);
-      font-family: 'DM Sans', sans-serif; font-size: 0.95rem;
-      outline: none;
-      transition: border-color 0.2s ease, box-shadow 0.2s ease;
-    }
-    .form-input::placeholder { color: var(--text-muted); }
-    .form-input:focus {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.14);
-    }
-
-    section { padding: 96px 0; }
-    .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
-
+    .logo span { color: var(--body); }
+    .nav-links { display: flex; align-items: center; gap: 32px; }
     .nav-link {
-      font-family: 'DM Sans', sans-serif; font-size: 0.9rem;
-      color: var(--text-muted); text-decoration: none;
-      transition: color 0.2s ease; position: relative;
+      font-family: 'Outfit', sans-serif; font-size: 0.9rem;
+      color: var(--muted); text-decoration: none;
+      transition: color 0.2s; position: relative;
     }
     .nav-link::after {
       content: ''; position: absolute; bottom: -4px; left: 0;
       width: 0; height: 2px; background: var(--primary);
       transition: width 0.3s ease;
     }
-    .nav-link:hover { color: var(--text-body); }
+    .nav-link:hover { color: var(--body); }
     .nav-link:hover::after { width: 100%; }
+    .hamburger {
+      display: none; background: none; border: none;
+      cursor: pointer; padding: 8px; color: var(--body);
+    }
+    #mobile-nav {
+      display: none;
+      background: rgba(8,6,1,0.97);
+      border-bottom: 1px solid var(--border);
+      padding: 20px 24px;
+      flex-direction: column; gap: 20px;
+    }
+    #mobile-nav.open { display: flex; }
 
+    /* ─── BUTTONS ─── */
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 13px 28px; border-radius: 10px;
+      font-family: 'Outfit', sans-serif; font-weight: 700;
+      font-size: 0.95rem; text-decoration: none;
+      border: none; cursor: pointer;
+      transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.2s ease;
+    }
+    .btn-primary {
+      background: var(--primary); color: #fff;
+      box-shadow: 0 0 24px rgba(255,107,0,0.45), 0 4px 16px rgba(255,107,0,0.25);
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 0 50px rgba(255,107,0,0.6), 0 8px 24px rgba(255,107,0,0.4);
+    }
+    .btn-ghost {
+      background: transparent; color: var(--body);
+      border: 1px solid var(--border);
+    }
+    .btn-ghost:hover {
+      transform: translateY(-2px);
+      border-color: var(--primary);
+      background: rgba(255,107,0,0.07);
+    }
+    .btn:active { transform: scale(0.97); }
+
+    /* ─── SECTION LABEL ─── */
+    .label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--accent);
+      margin-bottom: 10px;
+    }
+
+    /* ─── TYPOGRAPHY ─── */
+    h1, h2, h3 { font-family: 'Syne', sans-serif; letter-spacing: -0.03em; }
+    h1 { font-size: clamp(3.2rem, 8vw, 7rem); font-weight: 800; line-height: 0.93; }
+    h2 { font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; line-height: 1.05; }
+    h3 { font-size: 1.1rem; font-weight: 700; }
+
+    .name-gradient {
+      background: linear-gradient(135deg, #fff 0%, #FFD080 25%, #FF6B00 60%, #FFB300 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 48px rgba(255,107,0,0.3));
+    }
+
+    /* ─── HERO ─── */
+    #home {
+      position: relative;
+      min-height: calc(100vh - 64px);
+      display: flex; align-items: center;
+      padding: 48px 0;
+      overflow: hidden;
+    }
+    .hero-inner {
+      max-width: 1120px; margin: 0 auto; padding: 0 24px;
+      width: 100%;
+      display: flex; align-items: center;
+      justify-content: space-between; gap: 48px;
+      flex-wrap: wrap;
+    }
+    .hero-text { flex: 1; min-width: 280px; }
+
+    .status-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(255,107,0,0.08);
+      border: 1px solid rgba(255,107,0,0.22);
+      border-radius: 100px; padding: 6px 16px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem; letter-spacing: 0.1em;
+      color: var(--accent); margin-bottom: 24px;
+    }
+    .status-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 8px var(--accent);
+      animation: pulse-dot 2s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; box-shadow: 0 0 8px var(--accent); }
+      50% { opacity: 0.7; box-shadow: 0 0 16px var(--accent); }
+    }
+
+    .typed-line {
+      font-family: 'Outfit', sans-serif;
+      font-size: clamp(1.05rem, 2.5vw, 1.4rem);
+      font-weight: 600; color: var(--body);
+      margin: 18px 0 20px; min-height: 2em; line-height: 1.4;
+    }
+    .cursor {
+      display: inline-block; width: 3px; height: 1.1em;
+      background: var(--primary); margin-left: 2px;
+      vertical-align: middle;
+      animation: blink 1s step-end infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+    .hero-desc {
+      font-size: 1.05rem; color: var(--muted);
+      max-width: 460px; line-height: 1.85; margin-bottom: 36px;
+    }
+    .cta-row { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 40px; }
+    .social-row {
+      display: flex; align-items: center; gap: 18px; flex-wrap: wrap;
+    }
+    .social-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem; color: var(--muted); letter-spacing: 0.12em;
+    }
+    .social-link {
+      color: var(--muted);
+      transition: color 0.2s, transform 0.2s;
+    }
+    .social-link:hover { transform: translateY(-2px); }
+    .social-link.li:hover { color: #0A66C2; }
+    .social-link.ig:hover { color: #E1306C; }
+    .social-link.wa:hover { color: #25D366; }
+    .social-link.gh:hover { color: var(--body); }
+
+    /* ─── 3D ORBITAL AVATAR ─── */
+    .hero-visual {
+      display: flex; flex-direction: column;
+      align-items: center; gap: 20px;
+      flex-shrink: 0;
+    }
+    .avatar-wrap {
+      position: relative;
+      width: 270px; height: 270px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .orbit {
+      position: absolute;
+      border-radius: 50%;
+      border: 1.5px solid;
+      top: 50%; left: 50%;
+      transform-origin: center center;
+    }
+    .orbit-1 {
+      width: 100%; height: 100%;
+      margin: -50% 0 0 -50%;
+      border-color: rgba(255,107,0,0.5);
+      box-shadow: 0 0 12px rgba(255,107,0,0.15);
+      animation: spin1 9s linear infinite;
+    }
+    .orbit-1::before {
+      content: '';
+      position: absolute;
+      width: 10px; height: 10px; border-radius: 50%;
+      background: var(--primary);
+      box-shadow: 0 0 12px var(--primary), 0 0 24px rgba(255,107,0,0.5);
+      top: -5px; left: calc(50% - 5px);
+    }
+    .orbit-2 {
+      width: 78%; height: 78%;
+      margin: -39% 0 0 -39%;
+      border-color: rgba(255,179,0,0.4);
+      animation: spin2 14s linear infinite reverse;
+    }
+    .orbit-2::before {
+      content: '';
+      position: absolute;
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 10px var(--accent);
+      bottom: -4px; left: calc(50% - 4px);
+    }
+    .orbit-3 {
+      width: 122%; height: 122%;
+      margin: -61% 0 0 -61%;
+      border-color: rgba(255,107,0,0.2);
+      animation: spin3 22s linear infinite;
+    }
+    .orbit-3::before {
+      content: '';
+      position: absolute;
+      width: 6px; height: 6px; border-radius: 50%;
+      background: rgba(255,179,0,0.8);
+      box-shadow: 0 0 8px rgba(255,179,0,0.6);
+      top: -3px; right: 15%;
+    }
+    @keyframes spin1 {
+      from { transform: translate(-50%,-50%) rotateX(72deg) rotateZ(0deg); }
+      to   { transform: translate(-50%,-50%) rotateX(72deg) rotateZ(360deg); }
+    }
+    @keyframes spin2 {
+      from { transform: translate(-50%,-50%) rotateX(35deg) rotateY(50deg) rotateZ(0deg); }
+      to   { transform: translate(-50%,-50%) rotateX(35deg) rotateY(50deg) rotateZ(360deg); }
+    }
+    @keyframes spin3 {
+      from { transform: translate(-50%,-50%) rotateX(58deg) rotateY(-25deg) rotateZ(0deg); }
+      to   { transform: translate(-50%,-50%) rotateX(58deg) rotateY(-25deg) rotateZ(360deg); }
+    }
+    .avatar-core {
+      width: 168px; height: 168px; border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #2A1500 0%, #100A02 70%);
+      border: 2px solid rgba(255,107,0,0.4);
+      display: flex; align-items: center; justify-content: center;
+      position: relative; z-index: 2;
+      animation: core-pulse 4s ease-in-out infinite;
+    }
+    @keyframes core-pulse {
+      0%,100% { box-shadow: 0 0 30px rgba(255,107,0,0.25), 0 0 70px rgba(255,107,0,0.1), inset 0 0 25px rgba(255,107,0,0.05); }
+      50% { box-shadow: 0 0 55px rgba(255,107,0,0.45), 0 0 120px rgba(255,107,0,0.18), inset 0 0 45px rgba(255,107,0,0.1); }
+    }
+    .avatar-initials {
+      font-family: 'Syne', sans-serif; font-weight: 800;
+      font-size: 3.2rem; letter-spacing: -0.04em;
+      background: linear-gradient(135deg, #FF6B00, #FFB300);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Terminal card */
+    .terminal {
+      background: rgba(8,4,0,0.75);
+      border: 1px solid rgba(255,107,0,0.18);
+      border-radius: 14px;
+      padding: 16px 20px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem; line-height: 1.9;
+      width: 270px;
+      backdrop-filter: blur(8px);
+    }
+    .term-dots { display: flex; gap: 6px; margin-bottom: 12px; }
+    .term-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .term-cmd { color: var(--accent); }
+    .term-out { color: var(--body); }
+    .term-ok  { color: var(--primary); font-weight: 700; }
+
+    /* ─── MARQUEE ─── */
+    .marquee-wrap {
+      overflow: hidden;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background: rgba(255,107,0,0.03);
+      padding: 13px 0;
+    }
+    .marquee-track {
+      display: flex; width: max-content;
+      animation: marquee 32s linear infinite;
+    }
+    .marquee-track:hover { animation-play-state: paused; }
+    @keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+    .m-item {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.76rem; color: var(--muted);
+      padding: 0 28px; white-space: nowrap;
+    }
+    .m-dot { color: var(--primary); padding: 0 4px; }
+
+    /* ─── SECTION WRAPPER ─── */
+    section { padding: 96px 0; }
+    .wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+
+    /* ─── GLASS CARD ─── */
+    .glass {
+      background: rgba(26,16,6,0.6);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      position: relative; overflow: hidden;
+    }
+    .card-shine {
+      position: absolute; inset: 0; border-radius: 18px;
+      pointer-events: none; opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .glass:hover .card-shine { opacity: 1; }
+
+    /* ─── STATS ─── */
+    .stat-val {
+      font-family: 'Syne', sans-serif; font-weight: 800;
+      font-size: 2.4rem; letter-spacing: -0.04em; line-height: 1;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* ─── SKILL PILLS ─── */
+    .pill {
+      display: inline-flex; align-items: center;
+      padding: 6px 14px; border-radius: 100px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.74rem; font-weight: 500;
+      border: 1px solid; letter-spacing: 0.02em;
+      transition: transform 0.2s, box-shadow 0.2s;
+      cursor: default;
+    }
+    .pill:hover { transform: translateY(-2px); }
+    .pill-o { background:rgba(255,107,0,0.09); border-color:rgba(255,107,0,0.28); color:#FFAA60; }
+    .pill-o:hover { box-shadow: 0 4px 14px rgba(255,107,0,0.2); }
+    .pill-g { background:rgba(255,179,0,0.09); border-color:rgba(255,179,0,0.28); color:#FFD060; }
+    .pill-g:hover { box-shadow: 0 4px 14px rgba(255,179,0,0.2); }
+    .pill-w { background:rgba(194,65,12,0.09); border-color:rgba(194,65,12,0.28); color:#F97316; }
+    .pill-w:hover { box-shadow: 0 4px 14px rgba(194,65,12,0.2); }
+
+    /* ─── PROJECT / SKILL CARD ─── */
+    .tilt-card {
+      background: rgba(26,16,6,0.65);
+      border: 1px solid var(--border);
+      border-radius: 18px; overflow: hidden;
+      position: relative;
+      transition: border-color 0.3s, box-shadow 0.3s;
+      transform-style: preserve-3d;
+    }
+    .tilt-card:hover {
+      border-color: rgba(255,107,0,0.4);
+      box-shadow: 0 20px 60px rgba(255,107,0,0.13), 0 4px 16px rgba(0,0,0,0.5);
+    }
+    .tilt-card .card-shine {
+      position: absolute; inset: 0; border-radius: 18px;
+      pointer-events: none; opacity: 0; z-index: 10;
+    }
+
+    /* ─── TAG ─── */
     .tag {
       display: inline-block; padding: 4px 10px; border-radius: 5px;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.72rem; font-weight: 500;
+      font-size: 0.7rem; font-weight: 500;
       letter-spacing: 0.05em; text-transform: uppercase;
     }
 
+    /* ─── FORM ─── */
+    .form-field {
+      width: 100%; padding: 13px 18px;
+      background: rgba(16,10,2,0.9);
+      border: 1px solid var(--border); border-radius: 10px;
+      color: var(--text);
+      font-family: 'Outfit', sans-serif; font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .form-field::placeholder { color: var(--muted); }
+    .form-field:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(255,107,0,0.14);
+    }
+    .form-label {
+      display: block; font-size: 0.72rem; color: var(--muted);
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: 0.08em; margin-bottom: 7px;
+    }
+
+    /* ─── FADE ANIMATIONS ─── */
     .fade-up {
-      opacity: 0; transform: translateY(32px);
-      transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+      opacity: 0; transform: translateY(28px);
+      transition: opacity 0.65s ease, transform 0.65s cubic-bezier(0.34,1.56,0.64,1);
     }
-    .fade-up.visible { opacity: 1; transform: translateY(0); }
+    .fade-up.in { opacity: 1; transform: translateY(0); }
 
-    .marquee-wrap { overflow: hidden; }
-    .marquee-track {
-      display: flex; width: max-content;
-      animation: marquee 30s linear infinite;
+    /* ─── CONTACT PILL ─── */
+    .cpill {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 18px;
+      border: 1px solid var(--border); border-radius: 100px;
+      color: var(--body); text-decoration: none; font-size: 0.85rem;
+      transition: border-color 0.2s, color 0.2s;
     }
-    .marquee-track:hover { animation-play-state: paused; }
-    @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
-    #mobile-menu {
-      display: none;
-      background: rgba(8, 6, 1, 0.97);
-      border-bottom: 1px solid var(--border);
-      padding: 1rem 1.5rem 1.5rem;
-    }
-    #mobile-menu.open { display: block; }
-
+    /* ─── SCROLLBAR ─── */
     ::-webkit-scrollbar { width: 5px; }
     ::-webkit-scrollbar-track { background: var(--bg); }
-    ::-webkit-scrollbar-thumb { background: rgba(255, 107, 0, 0.4); border-radius: 3px; }
-    ::selection { background: rgba(255, 107, 0, 0.22); color: var(--text); }
+    ::-webkit-scrollbar-thumb { background: rgba(255,107,0,0.38); border-radius: 3px; }
+    ::selection { background: rgba(255,107,0,0.22); }
     :focus-visible { outline: 2px solid var(--primary); outline-offset: 4px; }
 
-    @media (max-width: 768px) {
+    /* ─── MOBILE ─── */
+    @media (max-width: 900px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+    }
+    @media (max-width: 760px) {
       section { padding: 72px 0; }
-      .photo-ring { width: 180px; height: 180px; }
-      .hero-grid { flex-direction: column-reverse; align-items: center; text-align: center; }
-      .hero-grid .social-row { justify-content: center; }
-      .hero-grid .cta-row { justify-content: center; }
+      h1 { font-size: clamp(2.8rem,10vw,5rem); }
+      .hero-inner { flex-direction: column-reverse; align-items: center; text-align: center; }
+      .hero-text { min-width: unset; }
+      .cta-row, .social-row { justify-content: center; }
+      .hero-desc { margin-inline: auto; }
+      .status-badge { font-size: 0.62rem; }
+      .avatar-wrap { width: 220px; height: 220px; }
+      .avatar-core { width: 136px; height: 136px; }
+      .avatar-initials { font-size: 2.6rem; }
+      .terminal { width: 100%; max-width: 320px; }
+      .form-grid { grid-template-columns: 1fr !important; }
+      .cta-inner { padding: 40px 24px !important; }
+    }
+    @media (max-width: 480px) {
+      .cpill { font-size: 0.78rem; padding: 8px 14px; }
     }
   </style>
 </head>
 
 <body>
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
-  <div class="orb orb-3"></div>
 
   <!-- NAV -->
-  <nav class="nav-glass sticky top-0 z-50 content">
-    <div class="container">
-      <div style="display:flex;align-items:center;justify-content:space-between;height:64px;">
-        <a href="#" style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:1.15rem;color:var(--primary);text-decoration:none;letter-spacing:-0.02em;">
-          EN<span style="color:var(--text-body);">.</span>
-        </a>
-        <div style="display:flex;align-items:center;gap:32px;" class="hidden md:flex">
-          <a href="#about" class="nav-link">About</a>
-          <a href="#skills" class="nav-link">Skills</a>
-          <a href="#projects" class="nav-link">Projects</a>
-          <a href="#services" class="nav-link">Services</a>
-          <a href="#contact" class="btn-primary" style="padding:10px 22px;font-size:0.875rem;">Hire Me →</a>
-        </div>
-        <button class="md:hidden" style="background:none;border:none;cursor:pointer;padding:8px;color:var(--text-body);" onclick="document.getElementById('mobile-menu').classList.toggle('open')" aria-label="Menu">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
-          </svg>
-        </button>
+  <nav class="content">
+    <div class="nav-inner">
+      <a href="#" class="logo">EN<span>.</span></a>
+      <div class="nav-links">
+        <a href="#about" class="nav-link">About</a>
+        <a href="#skills" class="nav-link">Skills</a>
+        <a href="#projects" class="nav-link">Projects</a>
+        <a href="#services" class="nav-link">Services</a>
+        <a href="#contact" class="btn btn-primary" style="padding:10px 22px;font-size:0.875rem;">Hire Me →</a>
       </div>
+      <button class="hamburger" onclick="document.getElementById('mobile-nav').classList.toggle('open')" aria-label="Menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
     </div>
-    <div id="mobile-menu">
-      <div style="display:flex;flex-direction:column;gap:16px;">
-        <a href="#about" class="nav-link" onclick="document.getElementById('mobile-menu').classList.remove('open')">About</a>
-        <a href="#skills" class="nav-link" onclick="document.getElementById('mobile-menu').classList.remove('open')">Skills</a>
-        <a href="#projects" class="nav-link" onclick="document.getElementById('mobile-menu').classList.remove('open')">Projects</a>
-        <a href="#services" class="nav-link" onclick="document.getElementById('mobile-menu').classList.remove('open')">Services</a>
-        <a href="#contact" class="btn-primary" style="text-align:center;justify-content:center;" onclick="document.getElementById('mobile-menu').classList.remove('open')">Hire Me →</a>
-      </div>
+    <div id="mobile-nav">
+      <a href="#about" class="nav-link" onclick="document.getElementById('mobile-nav').classList.remove('open')">About</a>
+      <a href="#skills" class="nav-link" onclick="document.getElementById('mobile-nav').classList.remove('open')">Skills</a>
+      <a href="#projects" class="nav-link" onclick="document.getElementById('mobile-nav').classList.remove('open')">Projects</a>
+      <a href="#services" class="nav-link" onclick="document.getElementById('mobile-nav').classList.remove('open')">Services</a>
+      <a href="#contact" class="btn btn-primary" style="text-align:center;justify-content:center;" onclick="document.getElementById('mobile-nav').classList.remove('open')">Hire Me →</a>
     </div>
   </nav>
 
   <!-- HERO -->
-  <section id="home" style="min-height:calc(100vh - 64px);display:flex;align-items:center;padding-top:32px;padding-bottom:32px;" class="content">
-    <div class="container" style="width:100%;">
-      <div class="hero-grid" style="display:flex;align-items:center;justify-content:space-between;gap:56px;flex-wrap:wrap;">
+  <section id="home" style="padding:0;">
+    <canvas id="hero-canvas"></canvas>
+    <div class="hero-inner content">
 
-        <div style="flex:1;min-width:300px;">
-          <div style="margin-bottom:24px;">
-            <span style="display:inline-flex;align-items:center;gap:8px;background:rgba(255,107,0,0.08);border:1px solid rgba(255,107,0,0.22);border-radius:100px;padding:6px 16px;font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--accent);letter-spacing:0.1em;">
-              <span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#FFB300;box-shadow:0 0 8px #FFB300;animation:blink 2s ease-in-out infinite;flex-shrink:0;"></span>
-              AVAILABLE FOR HIRE &nbsp;·&nbsp; KIGALI, RWANDA 🇷🇼
-            </span>
-          </div>
-
-          <h1 style="margin-bottom:20px;">
-            <span class="name-gradient">Eddie</span><br>
-            <span class="name-gradient">Nyambo</span>
-          </h1>
-
-          <div style="font-family:'Bricolage Grotesque',sans-serif;font-size:clamp(1rem,2.5vw,1.35rem);font-weight:600;color:var(--text-body);margin-bottom:24px;line-height:1.4;min-height:2em;">
-            <span id="typed-text"></span><span class="typing-cursor"></span>
-          </div>
-
-          <p style="font-size:1.05rem;color:var(--text-muted);max-width:480px;margin-bottom:40px;line-height:1.8;">
-            I build AI automation systems and web applications that make businesses run on autopilot. Based in Kigali — working with clients across Africa and beyond.
-          </p>
-
-          <div class="cta-row" style="display:flex;flex-wrap:wrap;gap:12px;margin-bottom:40px;">
-            <a href="#contact" class="btn-primary">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-              Hire Me
-            </a>
-            <a href="#projects" class="btn-secondary">
-              View My Work
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </a>
-          </div>
-
-          <div class="social-row" style="display:flex;gap:20px;align-items:center;flex-wrap:wrap;">
-            <span style="font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--text-muted);letter-spacing:0.12em;">FIND ME ON</span>
-            <a href="https://www.linkedin.com/in/eddie-nyambo-41a460345/" target="_blank" rel="noopener" title="LinkedIn" style="color:var(--text-muted);transition:color 0.2s ease;" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='var(--text-muted)'">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
-            </a>
-            <a href="https://www.instagram.com/eddien_0/" target="_blank" rel="noopener" title="Instagram" style="color:var(--text-muted);transition:color 0.2s ease;" onmouseover="this.style.color='#E1306C'" onmouseout="this.style.color='var(--text-muted)'">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
-            </a>
-            <a href="https://wa.me/250791811234" target="_blank" rel="noopener" title="WhatsApp" style="color:var(--text-muted);transition:color 0.2s ease;" onmouseover="this.style.color='#25D366'" onmouseout="this.style.color='var(--text-muted)'">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
-            </a>
-            <a href="https://github.com/eddienyambo000-crypto" target="_blank" rel="noopener" title="GitHub" style="color:var(--text-muted);transition:color 0.2s ease;" onmouseover="this.style.color='var(--text-body)'" onmouseout="this.style.color='var(--text-muted)'">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0 0 22 12.017C22 6.484 17.522 2 12 2z"/></svg>
-            </a>
-          </div>
+      <!-- Left: Text -->
+      <div class="hero-text">
+        <div class="status-badge">
+          <div class="status-dot"></div>
+          AVAILABLE FOR HIRE &nbsp;·&nbsp; KIGALI, RWANDA 🇷🇼
         </div>
 
-        <!-- Right: Photo + Terminal -->
-        <div style="display:flex;flex-direction:column;align-items:center;gap:20px;">
-          <div class="photo-ring">
-            <div class="photo-placeholder">EN</div>
-          </div>
+        <h1>
+          <span class="name-gradient">Eddie</span><br>
+          <span class="name-gradient">Nyambo</span>
+        </h1>
 
-          <div style="background:rgba(8,4,0,0.7);border:1px solid rgba(255,107,0,0.18);border-radius:12px;padding:16px 20px;font-family:'JetBrains Mono',monospace;font-size:0.73rem;line-height:1.9;max-width:280px;width:100%;">
-            <div style="display:flex;gap:6px;margin-bottom:12px;">
-              <span style="width:10px;height:10px;border-radius:50%;background:#FF5F57;display:block;"></span>
-              <span style="width:10px;height:10px;border-radius:50%;background:#FFBD2E;display:block;"></span>
-              <span style="width:10px;height:10px;border-radius:50%;background:#28C840;display:block;"></span>
-            </div>
-            <div><span style="color:var(--text-muted);">$</span> <span style="color:var(--accent);">whoami</span></div>
-            <div style="color:var(--text-body);">eddie_nyambo</div>
-            <div style="margin-top:2px;"><span style="color:var(--text-muted);">$</span> <span style="color:var(--accent);">cat role.txt</span></div>
-            <div style="color:var(--text-body);">AI Automation Engineer</div>
-            <div style="color:var(--text-body);">Web Developer</div>
-            <div style="margin-top:2px;"><span style="color:var(--text-muted);">$</span> <span style="color:var(--accent);">echo $location</span></div>
-            <div style="color:var(--text-body);">Kibagabaga, Kigali 🇷🇼</div>
-            <div style="margin-top:2px;"><span style="color:var(--text-muted);">$</span> <span style="color:var(--accent);">echo $status</span></div>
-            <div style="color:#FFB300;font-weight:700;">✓ open to work</div>
-          </div>
+        <div class="typed-line">
+          <span id="typed"></span><span class="cursor"></span>
         </div>
 
+        <p class="hero-desc">
+          I build AI automation systems and web applications that make businesses run on autopilot. Based in Kigali — delivering results across Africa and beyond.
+        </p>
+
+        <div class="cta-row">
+          <a href="#contact" class="btn btn-primary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            Hire Me
+          </a>
+          <a href="#projects" class="btn btn-ghost">
+            See My Work
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+
+        <div class="social-row">
+          <span class="social-label">FIND ME ON</span>
+          <a href="https://www.linkedin.com/in/eddie-nyambo-41a460345/" target="_blank" rel="noopener" class="social-link li" title="LinkedIn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          </a>
+          <a href="https://www.instagram.com/eddien_0/" target="_blank" rel="noopener" class="social-link ig" title="Instagram">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          </a>
+          <a href="https://wa.me/250791811234" target="_blank" rel="noopener" class="social-link wa" title="WhatsApp">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+          </a>
+          <a href="https://github.com/eddienyambo000-crypto" target="_blank" rel="noopener" class="social-link gh" title="GitHub">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0 0 22 12.017C22 6.484 17.522 2 12 2z"/></svg>
+          </a>
+        </div>
       </div>
+
+      <!-- Right: Avatar + Terminal -->
+      <div class="hero-visual">
+        <div class="avatar-wrap">
+          <div class="orbit orbit-1"></div>
+          <div class="orbit orbit-2"></div>
+          <div class="orbit orbit-3"></div>
+          <div class="avatar-core">
+            <span class="avatar-initials">EN</span>
+          </div>
+        </div>
+
+        <div class="terminal">
+          <div class="term-dots">
+            <div class="term-dot" style="background:#FF5F57;"></div>
+            <div class="term-dot" style="background:#FFBD2E;"></div>
+            <div class="term-dot" style="background:#28C840;"></div>
+          </div>
+          <div><span style="color:var(--muted);">$</span> <span class="term-cmd">whoami</span></div>
+          <div class="term-out">eddie_nyambo</div>
+          <div style="margin-top:2px;"><span style="color:var(--muted);">$</span> <span class="term-cmd">cat role.txt</span></div>
+          <div class="term-out">AI Automation Engineer</div>
+          <div class="term-out">Web Developer</div>
+          <div style="margin-top:2px;"><span style="color:var(--muted);">$</span> <span class="term-cmd">echo $location</span></div>
+          <div class="term-out">Kibagabaga, Kigali 🇷🇼</div>
+          <div style="margin-top:2px;"><span style="color:var(--muted);">$</span> <span class="term-cmd">echo $status</span></div>
+          <div class="term-ok">✓ open to work</div>
+        </div>
+      </div>
+
     </div>
   </section>
 
   <!-- MARQUEE -->
-  <div class="content marquee-wrap" style="border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:rgba(255,107,0,0.03);padding:14px 0;">
+  <div class="marquee-wrap content">
     <div class="marquee-track">
-      <span style="display:inline-flex;align-items:center;white-space:nowrap;">
-        <span style="font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--text-muted);padding:0 28px;">AI AUTOMATION</span>
-        <span style="color:var(--primary);padding:0 4px;">✦</span>
-        <span style="font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--text-muted);padding:0 28px;">n8n WORKFLOWS</span>
-        <span style="color:var(--primary);padding:0 4px;">✦</span>
-        <span style="font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--text-muted);padding:0 28px;">WHATSAPP BOTS</span>
-        <span style="color:var(--primary);padding:0 4px;">✦</span>
-        <span style="font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--text-muted);padding:0 28px;">WEB DEVELOPMENT</span>
-        <span style="color:var(--primary);padding:0 4px;">✦</span>
-        <span style="font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--text-muted);padding:0 28px;">CLAUDE API</span>
-        <span style="color:var(--primary);padding:0 4px;">✦</span>
-        <span style="font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--text-muted);padding:0 28px;">OPENAI</span>
-        <span style="color:var(--primary);padding:0 4px;">✦</span>
-        <span style="font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--text-muted);padding:0 28px;">RAG SYSTEMS</span>
-        <span style="color:var(--primary);padding:0 4px;">✦</span>
-        <span style="font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--text-muted);padding:0 28px;">KIGALI, RWANDA</span>
-        <span style="color:var(--primary);padding:0 4px;">✦</span>
-        <span style="font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--primary);font-weight:700;padding:0 28px;">RWANDA'S AI GUY</span>
-        <span style="color:var(--primary);padding:0 4px;">✦</span>
-      </span>
-      <span aria-hidden="true" style="display:inline-flex;align-items:center;white-space:nowrap;">
-        <span style="font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--text-muted);padding:0 28px;">AI AUTOMATION</span>
-        <span style="color:var(--primary);padding:0 4px;">✦</span>
-        <span style="font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--text-muted);padding:0 28px;">n8n WORKFLOWS</span>
-        <span style="color:var(--primary);padding:0 4px;">✦</span>
-        <span style="font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--text-muted);padding:0 28px;">WHATSAPP BOTS</span>
-        <span style="color:var(--primary);padding:0 4px;">✦</span>
-        <span style="font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--text-muted);padding:0 28px;">WEB DEVELOPMENT</span>
-        <span style="color:var(--primary);padding:0 4px;">✦</span>
-        <span style="font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--text-muted);padding:0 28px;">CLAUDE API</span>
-        <span style="color:var(--primary);padding:0 4px;">✦</span>
-        <span style="font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--text-muted);padding:0 28px;">OPENAI</span>
-        <span style="color:var(--primary);padding:0 4px;">✦</span>
-        <span style="font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--text-muted);padding:0 28px;">RAG SYSTEMS</span>
-        <span style="color:var(--primary);padding:0 4px;">✦</span>
-        <span style="font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--text-muted);padding:0 28px;">KIGALI, RWANDA</span>
-        <span style="color:var(--primary);padding:0 4px;">✦</span>
-        <span style="font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--primary);font-weight:700;padding:0 28px;">RWANDA'S AI GUY</span>
-        <span style="color:var(--primary);padding:0 4px;">✦</span>
-      </span>
+      <span class="m-item">AI AUTOMATION</span><span class="m-dot">✦</span>
+      <span class="m-item">n8n WORKFLOWS</span><span class="m-dot">✦</span>
+      <span class="m-item">WHATSAPP BOTS</span><span class="m-dot">✦</span>
+      <span class="m-item">WEB DEVELOPMENT</span><span class="m-dot">✦</span>
+      <span class="m-item">CLAUDE API</span><span class="m-dot">✦</span>
+      <span class="m-item">OPENAI</span><span class="m-dot">✦</span>
+      <span class="m-item">RAG SYSTEMS</span><span class="m-dot">✦</span>
+      <span class="m-item">KIGALI, RWANDA</span><span class="m-dot">✦</span>
+      <span class="m-item" style="color:var(--primary);font-weight:700;">RWANDA'S AI GUY</span><span class="m-dot">✦</span>
+      <!-- duplicate for seamless loop -->
+      <span class="m-item">AI AUTOMATION</span><span class="m-dot">✦</span>
+      <span class="m-item">n8n WORKFLOWS</span><span class="m-dot">✦</span>
+      <span class="m-item">WHATSAPP BOTS</span><span class="m-dot">✦</span>
+      <span class="m-item">WEB DEVELOPMENT</span><span class="m-dot">✦</span>
+      <span class="m-item">CLAUDE API</span><span class="m-dot">✦</span>
+      <span class="m-item">OPENAI</span><span class="m-dot">✦</span>
+      <span class="m-item">RAG SYSTEMS</span><span class="m-dot">✦</span>
+      <span class="m-item">KIGALI, RWANDA</span><span class="m-dot">✦</span>
+      <span class="m-item" style="color:var(--primary);font-weight:700;">RWANDA'S AI GUY</span><span class="m-dot">✦</span>
     </div>
   </div>
 
   <!-- ABOUT -->
   <section id="about" class="content">
-    <div class="container">
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:32px;align-items:center;">
+    <div class="wrap">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:40px;align-items:center;">
 
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
           <div class="glass fade-up" style="padding:28px;text-align:center;">
-            <div class="stat-num">3+</div>
-            <div style="font-size:0.82rem;color:var(--text-muted);margin-top:6px;font-family:'JetBrains Mono',monospace;">Live Projects</div>
+            <div class="card-shine"></div>
+            <div class="stat-val">3+</div>
+            <div style="font-size:0.8rem;color:var(--muted);margin-top:6px;font-family:'JetBrains Mono',monospace;">Live Projects</div>
           </div>
-          <div class="glass fade-up" style="padding:28px;text-align:center;" data-delay="100">
-            <div class="stat-num">100%</div>
-            <div style="font-size:0.82rem;color:var(--text-muted);margin-top:6px;font-family:'JetBrains Mono',monospace;">Client Rate</div>
+          <div class="glass fade-up" style="padding:28px;text-align:center;" data-delay="80">
+            <div class="card-shine"></div>
+            <div class="stat-val">100%</div>
+            <div style="font-size:0.8rem;color:var(--muted);margin-top:6px;font-family:'JetBrains Mono',monospace;">Client Rate</div>
           </div>
-          <div class="glass fade-up" style="padding:28px;text-align:center;" data-delay="200">
-            <div class="stat-num">2+</div>
-            <div style="font-size:0.82rem;color:var(--text-muted);margin-top:6px;font-family:'JetBrains Mono',monospace;">Yrs Building</div>
+          <div class="glass fade-up" style="padding:28px;text-align:center;" data-delay="160">
+            <div class="card-shine"></div>
+            <div class="stat-val">2+</div>
+            <div style="font-size:0.8rem;color:var(--muted);margin-top:6px;font-family:'JetBrains Mono',monospace;">Yrs Building</div>
           </div>
-          <div class="glass fade-up" style="padding:28px;text-align:center;" data-delay="300">
-            <div class="stat-num">∞</div>
-            <div style="font-size:0.82rem;color:var(--text-muted);margin-top:6px;font-family:'JetBrains Mono',monospace;">Hrs Automated</div>
+          <div class="glass fade-up" style="padding:28px;text-align:center;" data-delay="240">
+            <div class="card-shine"></div>
+            <div class="stat-val">∞</div>
+            <div style="font-size:0.8rem;color:var(--muted);margin-top:6px;font-family:'JetBrains Mono',monospace;">Hrs Automated</div>
           </div>
         </div>
 
-        <div class="fade-up">
-          <div class="section-label">// about me</div>
-          <h2 style="margin-bottom:20px;">I make businesses run on <span style="color:var(--primary);">autopilot.</span></h2>
-          <p style="color:var(--text-body);margin-bottom:16px;font-size:1rem;">
-            I'm Eddie Nyambo — an AI Automation Engineer and Web Developer based in Kigali, Rwanda. I build systems that cut manual work, eliminate costly errors, and free up your team to focus on what matters.
+        <div class="fade-up" data-delay="100">
+          <div class="label">// about me</div>
+          <h2 style="margin-bottom:18px;">I make businesses run on <span style="color:var(--primary);">autopilot.</span></h2>
+          <p style="color:var(--body);margin-bottom:14px;">
+            I'm Eddie Nyambo — AI Automation Engineer and Web Developer based in Kigali, Rwanda. I build systems that cut manual work, eliminate costly errors, and free up your team to focus on what matters.
           </p>
-          <p style="color:var(--text-body);margin-bottom:28px;font-size:1rem;">
-            From intelligent WhatsApp chatbots to full n8n workflow pipelines and premium web builds — I deliver real, working solutions, not demos.
+          <p style="color:var(--body);margin-bottom:28px;">
+            From intelligent WhatsApp chatbots to full n8n pipelines and premium web builds — real solutions, not demos.
           </p>
           <div style="display:flex;flex-wrap:wrap;gap:8px;">
             <span class="tag" style="background:rgba(255,107,0,0.1);color:#FFAA60;border:1px solid rgba(255,107,0,0.22);">AI Automation</span>
@@ -580,71 +690,62 @@
 
   <!-- SKILLS -->
   <section id="skills" class="content">
-    <div class="container">
+    <div class="wrap">
       <div style="text-align:center;margin-bottom:56px;" class="fade-up">
-        <div class="section-label">// my toolkit</div>
+        <div class="label">// my toolkit</div>
         <h2>Skills & Tools</h2>
       </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:20px;">
 
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:24px;">
-
-        <div class="glass fade-up" style="padding:32px;">
+        <div class="tilt-card fade-up" data-tilt style="padding:32px;">
+          <div class="card-shine"></div>
           <div style="display:flex;align-items:center;gap:14px;margin-bottom:24px;">
             <div style="width:48px;height:48px;border-radius:12px;background:rgba(255,107,0,0.1);border:1px solid rgba(255,107,0,0.22);display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;">🤖</div>
             <div>
-              <div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:1.05rem;">AI Automation</div>
-              <div style="font-size:0.78rem;color:var(--primary);font-family:'JetBrains Mono',monospace;">Primary zone</div>
+              <h3>AI Automation</h3>
+              <div style="font-size:0.76rem;color:var(--primary);font-family:'JetBrains Mono',monospace;">Primary zone</div>
             </div>
           </div>
           <div style="display:flex;flex-wrap:wrap;gap:8px;">
-            <span class="skill-pill orange">n8n</span>
-            <span class="skill-pill orange">OpenAI API</span>
-            <span class="skill-pill orange">Claude API</span>
-            <span class="skill-pill orange">Gemini API</span>
-            <span class="skill-pill orange">WhatsApp Automation</span>
-            <span class="skill-pill orange">RAG Systems</span>
-            <span class="skill-pill orange">AI Chatbots</span>
-            <span class="skill-pill orange">Webhook Integration</span>
-            <span class="skill-pill orange">Process Automation</span>
+            <span class="pill pill-o">n8n</span><span class="pill pill-o">OpenAI API</span>
+            <span class="pill pill-o">Claude API</span><span class="pill pill-o">Gemini API</span>
+            <span class="pill pill-o">WhatsApp Automation</span><span class="pill pill-o">RAG Systems</span>
+            <span class="pill pill-o">AI Chatbots</span><span class="pill pill-o">Webhooks</span>
+            <span class="pill pill-o">Process Automation</span>
           </div>
         </div>
 
-        <div class="glass fade-up" style="padding:32px;" data-delay="100">
+        <div class="tilt-card fade-up" data-tilt data-delay="100" style="padding:32px;">
+          <div class="card-shine"></div>
           <div style="display:flex;align-items:center;gap:14px;margin-bottom:24px;">
             <div style="width:48px;height:48px;border-radius:12px;background:rgba(194,65,12,0.1);border:1px solid rgba(194,65,12,0.22);display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;">💻</div>
             <div>
-              <div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:1.05rem;">Web Development</div>
-              <div style="font-size:0.78rem;color:#F97316;font-family:'JetBrains Mono',monospace;">Frontend & deployment</div>
+              <h3>Web Development</h3>
+              <div style="font-size:0.76rem;color:#F97316;font-family:'JetBrains Mono',monospace;">Frontend & deployment</div>
             </div>
           </div>
           <div style="display:flex;flex-wrap:wrap;gap:8px;">
-            <span class="skill-pill warm">HTML / CSS</span>
-            <span class="skill-pill warm">JavaScript</span>
-            <span class="skill-pill warm">Tailwind CSS</span>
-            <span class="skill-pill warm">Three.js</span>
-            <span class="skill-pill warm">Responsive Design</span>
-            <span class="skill-pill warm">Animations</span>
-            <span class="skill-pill warm">SEO & Schema</span>
-            <span class="skill-pill warm">Git & GitHub</span>
+            <span class="pill pill-w">HTML / CSS</span><span class="pill pill-w">JavaScript</span>
+            <span class="pill pill-w">Tailwind CSS</span><span class="pill pill-w">Three.js</span>
+            <span class="pill pill-w">Responsive Design</span><span class="pill pill-w">Animations</span>
+            <span class="pill pill-w">SEO & Schema</span><span class="pill pill-w">Git & GitHub</span>
           </div>
         </div>
 
-        <div class="glass fade-up" style="padding:32px;" data-delay="200">
+        <div class="tilt-card fade-up" data-tilt data-delay="200" style="padding:32px;">
+          <div class="card-shine"></div>
           <div style="display:flex;align-items:center;gap:14px;margin-bottom:24px;">
             <div style="width:48px;height:48px;border-radius:12px;background:rgba(255,179,0,0.1);border:1px solid rgba(255,179,0,0.22);display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;">⚙️</div>
             <div>
-              <div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:1.05rem;">Infrastructure</div>
-              <div style="font-size:0.78rem;color:var(--accent);font-family:'JetBrains Mono',monospace;">Deployment & ops</div>
+              <h3>Infrastructure</h3>
+              <div style="font-size:0.76rem;color:var(--accent);font-family:'JetBrains Mono',monospace;">Deployment & ops</div>
             </div>
           </div>
           <div style="display:flex;flex-wrap:wrap;gap:8px;">
-            <span class="skill-pill gold">Vercel</span>
-            <span class="skill-pill gold">Google Analytics</span>
-            <span class="skill-pill gold">Search Console</span>
-            <span class="skill-pill gold">DNS & Email Routing</span>
-            <span class="skill-pill gold">ImprovMX</span>
-            <span class="skill-pill gold">Spline 3D</span>
-            <span class="skill-pill gold">Formspree</span>
+            <span class="pill pill-g">Vercel</span><span class="pill pill-g">Google Analytics</span>
+            <span class="pill pill-g">Search Console</span><span class="pill pill-g">DNS & Email</span>
+            <span class="pill pill-g">ImprovMX</span><span class="pill pill-g">Spline 3D</span>
+            <span class="pill pill-g">Formspree</span>
           </div>
         </div>
 
@@ -654,81 +755,75 @@
 
   <!-- PROJECTS -->
   <section id="projects" class="content">
-    <div class="container">
+    <div class="wrap">
       <div style="text-align:center;margin-bottom:56px;" class="fade-up">
-        <div class="section-label">// my work</div>
+        <div class="label">// my work</div>
         <h2>Projects</h2>
-        <p style="color:var(--text-muted);margin-top:12px;max-width:480px;margin-inline:auto;">Real things I built. Real results they deliver.</p>
+        <p style="color:var(--muted);margin-top:10px;max-width:420px;margin-inline:auto;">Real things built. Real results delivered.</p>
       </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:24px;">
 
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px;">
-
-        <div class="project-card fade-up">
-          <div style="height:6px;background:linear-gradient(90deg,var(--primary),var(--accent));"></div>
+        <div class="tilt-card fade-up" data-tilt>
+          <div class="card-shine"></div>
+          <div style="height:5px;background:linear-gradient(90deg,var(--primary),var(--accent));"></div>
           <div style="padding:28px;">
-            <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;">
               <span class="tag" style="background:rgba(255,107,0,0.1);color:#FFAA60;border:1px solid rgba(255,107,0,0.22);">Web + AI</span>
-              <a href="https://ai7optivaro.com" target="_blank" rel="noopener" style="color:var(--text-muted);transition:color 0.2s ease;" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='var(--text-muted)'" title="Live site">
+              <a href="https://ai7optivaro.com" target="_blank" rel="noopener" style="color:var(--muted);transition:color 0.2s;" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='var(--muted)'">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
               </a>
             </div>
-            <h3 style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:1.15rem;margin-bottom:10px;">Ai7 OPTIVARO</h3>
-            <p style="color:var(--text-body);font-size:0.88rem;line-height:1.65;margin-bottom:20px;">
-              Full agency website for an AI automation firm in Kigali. Three.js particle animations, AI chatbot embed, admin panel, contact automation, full SEO with schema markup.
-            </p>
+            <h3 style="margin-bottom:10px;">Ai7 OPTIVARO</h3>
+            <p style="color:var(--body);font-size:0.88rem;line-height:1.65;margin-bottom:20px;">Full agency website for an AI automation firm in Kigali. Three.js animations, AI chatbot, admin panel, SEO.</p>
             <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px;">
-              <span style="font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--text-muted);background:rgba(255,255,255,0.05);padding:3px 8px;border-radius:4px;">HTML/CSS/JS</span>
-              <span style="font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--text-muted);background:rgba(255,255,255,0.05);padding:3px 8px;border-radius:4px;">Three.js</span>
-              <span style="font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--text-muted);background:rgba(255,255,255,0.05);padding:3px 8px;border-radius:4px;">Vercel</span>
-              <span style="font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--text-muted);background:rgba(255,255,255,0.05);padding:3px 8px;border-radius:4px;">n8n</span>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:0.68rem;color:var(--muted);background:rgba(255,255,255,0.05);padding:3px 8px;border-radius:4px;">HTML/CSS/JS</span>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:0.68rem;color:var(--muted);background:rgba(255,255,255,0.05);padding:3px 8px;border-radius:4px;">Three.js</span>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:0.68rem;color:var(--muted);background:rgba(255,255,255,0.05);padding:3px 8px;border-radius:4px;">Vercel</span>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:0.68rem;color:var(--muted);background:rgba(255,255,255,0.05);padding:3px 8px;border-radius:4px;">n8n</span>
             </div>
-            <a href="https://ai7optivaro.com" target="_blank" rel="noopener" class="btn-secondary" style="padding:10px 20px;font-size:0.85rem;width:100%;justify-content:center;">View Live Site →</a>
+            <a href="https://ai7optivaro.com" target="_blank" rel="noopener" class="btn btn-ghost" style="padding:10px 20px;font-size:0.85rem;width:100%;justify-content:center;">View Live Site →</a>
           </div>
         </div>
 
-        <div class="project-card fade-up" data-delay="100">
-          <div style="height:6px;background:linear-gradient(90deg,#10B981,#34D399);"></div>
+        <div class="tilt-card fade-up" data-tilt data-delay="100">
+          <div class="card-shine"></div>
+          <div style="height:5px;background:linear-gradient(90deg,#10B981,#34D399);"></div>
           <div style="padding:28px;">
-            <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;">
               <span class="tag" style="background:rgba(16,185,129,0.1);color:#34D399;border:1px solid rgba(16,185,129,0.2);">Marketplace</span>
-              <a href="https://farmgate-rw.vercel.app" target="_blank" rel="noopener" style="color:var(--text-muted);transition:color 0.2s ease;" onmouseover="this.style.color='#34D399'" onmouseout="this.style.color='var(--text-muted)'" title="Live site">
+              <a href="https://farmgate-rw.vercel.app" target="_blank" rel="noopener" style="color:var(--muted);transition:color 0.2s;" onmouseover="this.style.color='#34D399'" onmouseout="this.style.color='var(--muted)'">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
               </a>
             </div>
-            <h3 style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:1.15rem;margin-bottom:10px;">FarmGate RW</h3>
-            <p style="color:var(--text-body);font-size:0.88rem;line-height:1.65;margin-bottom:20px;">
-              Agricultural livestock marketplace connecting farmers and buyers across Rwanda. Mobile-first with live listing system and WhatsApp-integrated contact flow.
-            </p>
+            <h3 style="margin-bottom:10px;">FarmGate RW</h3>
+            <p style="color:var(--body);font-size:0.88rem;line-height:1.65;margin-bottom:20px;">Agricultural livestock marketplace connecting farmers and buyers across Rwanda. WhatsApp-integrated flow.</p>
             <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px;">
-              <span style="font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--text-muted);background:rgba(255,255,255,0.05);padding:3px 8px;border-radius:4px;">HTML/CSS/JS</span>
-              <span style="font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--text-muted);background:rgba(255,255,255,0.05);padding:3px 8px;border-radius:4px;">Tailwind</span>
-              <span style="font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--text-muted);background:rgba(255,255,255,0.05);padding:3px 8px;border-radius:4px;">Vercel</span>
-              <span style="font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--text-muted);background:rgba(255,255,255,0.05);padding:3px 8px;border-radius:4px;">WhatsApp</span>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:0.68rem;color:var(--muted);background:rgba(255,255,255,0.05);padding:3px 8px;border-radius:4px;">HTML/CSS/JS</span>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:0.68rem;color:var(--muted);background:rgba(255,255,255,0.05);padding:3px 8px;border-radius:4px;">Tailwind</span>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:0.68rem;color:var(--muted);background:rgba(255,255,255,0.05);padding:3px 8px;border-radius:4px;">Vercel</span>
             </div>
-            <a href="https://farmgate-rw.vercel.app" target="_blank" rel="noopener" class="btn-secondary" style="padding:10px 20px;font-size:0.85rem;width:100%;justify-content:center;border-color:rgba(16,185,129,0.25);" onmouseover="this.style.borderColor='#10B981';this.style.background='rgba(16,185,129,0.06)'" onmouseout="this.style.borderColor='rgba(16,185,129,0.25)';this.style.background='transparent'">View Live Site →</a>
+            <a href="https://farmgate-rw.vercel.app" target="_blank" rel="noopener" class="btn btn-ghost" style="padding:10px 20px;font-size:0.85rem;width:100%;justify-content:center;border-color:rgba(16,185,129,0.25);" onmouseover="this.style.borderColor='#10B981';this.style.background='rgba(16,185,129,0.06)'" onmouseout="this.style.borderColor='rgba(16,185,129,0.25)';this.style.background='transparent'">View Live Site →</a>
           </div>
         </div>
 
-        <div class="project-card fade-up" data-delay="200">
-          <div style="height:6px;background:linear-gradient(90deg,#FF6B00,#FFB300);"></div>
+        <div class="tilt-card fade-up" data-tilt data-delay="200">
+          <div class="card-shine"></div>
+          <div style="height:5px;background:linear-gradient(90deg,#FF6B00,#FFB300);"></div>
           <div style="padding:28px;">
-            <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;">
               <span class="tag" style="background:rgba(255,107,0,0.1);color:#FFAA60;border:1px solid rgba(255,107,0,0.22);">AI Automation</span>
-              <span style="font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:#4ADE80;background:rgba(74,222,128,0.1);padding:4px 10px;border-radius:100px;border:1px solid rgba(74,222,128,0.2);">● Live</span>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:0.68rem;color:#4ADE80;background:rgba(74,222,128,0.1);padding:4px 10px;border-radius:100px;border:1px solid rgba(74,222,128,0.2);">● Live</span>
             </div>
-            <h3 style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:1.15rem;margin-bottom:10px;">StepIn Automation</h3>
-            <p style="color:var(--text-body);font-size:0.88rem;line-height:1.65;margin-bottom:20px;">
-              End-to-end WhatsApp automation system for a hospitality business. Customers get instant AI responses, information, and booking support — zero manual effort.
-            </p>
+            <h3 style="margin-bottom:10px;">StepIn Automation</h3>
+            <p style="color:var(--body);font-size:0.88rem;line-height:1.65;margin-bottom:20px;">End-to-end WhatsApp automation for a hospitality business. AI responses, booking support — zero manual effort.</p>
             <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px;">
-              <span style="font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--text-muted);background:rgba(255,255,255,0.05);padding:3px 8px;border-radius:4px;">n8n</span>
-              <span style="font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--text-muted);background:rgba(255,255,255,0.05);padding:3px 8px;border-radius:4px;">WhatsApp API</span>
-              <span style="font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--text-muted);background:rgba(255,255,255,0.05);padding:3px 8px;border-radius:4px;">AI Responses</span>
-              <span style="font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--text-muted);background:rgba(255,255,255,0.05);padding:3px 8px;border-radius:4px;">Workflow</span>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:0.68rem;color:var(--muted);background:rgba(255,255,255,0.05);padding:3px 8px;border-radius:4px;">n8n</span>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:0.68rem;color:var(--muted);background:rgba(255,255,255,0.05);padding:3px 8px;border-radius:4px;">WhatsApp API</span>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:0.68rem;color:var(--muted);background:rgba(255,255,255,0.05);padding:3px 8px;border-radius:4px;">AI Responses</span>
             </div>
-            <a href="https://wa.me/250793154804" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 20px;font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:0.85rem;background:rgba(37,211,102,0.1);border:1px solid rgba(37,211,102,0.3);border-radius:8px;color:#25D366;text-decoration:none;transition:all 0.2s ease;width:100%;" onmouseover="this.style.background='rgba(37,211,102,0.18)';this.style.transform='translateY(-2px)'" onmouseout="this.style.background='rgba(37,211,102,0.1)';this.style.transform='translateY(0)'">
+            <a href="https://wa.me/250793154804" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 20px;font-family:'Outfit',sans-serif;font-weight:700;font-size:0.85rem;background:rgba(37,211,102,0.1);border:1px solid rgba(37,211,102,0.3);border-radius:10px;color:#25D366;text-decoration:none;transition:all 0.2s ease;width:100%;" onmouseover="this.style.background='rgba(37,211,102,0.18)';this.style.transform='translateY(-2px)'" onmouseout="this.style.background='rgba(37,211,102,0.1)';this.style.transform='none'">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
-              Chat the Bot — See it live
+              Chat the Bot Live
             </a>
           </div>
         </div>
@@ -739,37 +834,40 @@
 
   <!-- SERVICES -->
   <section id="services" class="content">
-    <div class="container">
+    <div class="wrap">
       <div style="text-align:center;margin-bottom:56px;" class="fade-up">
-        <div class="section-label">// what i offer</div>
+        <div class="label">// what i offer</div>
         <h2>Services</h2>
-        <p style="color:var(--text-muted);margin-top:12px;max-width:480px;margin-inline:auto;">What you can hire me to build for your business.</p>
+        <p style="color:var(--muted);margin-top:10px;max-width:420px;margin-inline:auto;">What you can hire me to build.</p>
       </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:20px;">
 
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:20px;">
-
-        <div class="glass fade-up" style="padding:28px;">
-          <div class="service-icon" style="background:rgba(255,107,0,0.1);border:1px solid rgba(255,107,0,0.22);">🤖</div>
-          <h3 style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:1rem;margin-bottom:10px;">AI Chatbot Development</h3>
-          <p style="color:var(--text-muted);font-size:0.87rem;line-height:1.65;">Intelligent chatbots for WhatsApp, websites, or any platform — powered by GPT, Claude, or Gemini. 24/7 automated responses.</p>
+        <div class="tilt-card fade-up" data-tilt style="padding:28px;">
+          <div class="card-shine"></div>
+          <div style="width:52px;height:52px;border-radius:14px;background:rgba(255,107,0,0.1);border:1px solid rgba(255,107,0,0.22);display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin-bottom:16px;">🤖</div>
+          <h3 style="margin-bottom:10px;">AI Chatbot Dev</h3>
+          <p style="color:var(--muted);font-size:0.87rem;line-height:1.65;">Intelligent chatbots for WhatsApp, websites, or any platform — powered by GPT, Claude, or Gemini.</p>
         </div>
 
-        <div class="glass fade-up" style="padding:28px;" data-delay="100">
-          <div class="service-icon" style="background:rgba(255,107,0,0.1);border:1px solid rgba(255,107,0,0.22);">⚡</div>
-          <h3 style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:1rem;margin-bottom:10px;">Workflow Automation</h3>
-          <p style="color:var(--text-muted);font-size:0.87rem;line-height:1.65;">Connect your apps, automate repetitive tasks with n8n pipelines that run 24/7 without any human input.</p>
+        <div class="tilt-card fade-up" data-tilt data-delay="80" style="padding:28px;">
+          <div class="card-shine"></div>
+          <div style="width:52px;height:52px;border-radius:14px;background:rgba(255,107,0,0.1);border:1px solid rgba(255,107,0,0.22);display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin-bottom:16px;">⚡</div>
+          <h3 style="margin-bottom:10px;">Workflow Automation</h3>
+          <p style="color:var(--muted);font-size:0.87rem;line-height:1.65;">Connect your apps, automate tasks with n8n pipelines running 24/7 without any human input.</p>
         </div>
 
-        <div class="glass fade-up" style="padding:28px;" data-delay="200">
-          <div class="service-icon" style="background:rgba(194,65,12,0.1);border:1px solid rgba(194,65,12,0.22);">🌐</div>
-          <h3 style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:1rem;margin-bottom:10px;">Web Development</h3>
-          <p style="color:var(--text-muted);font-size:0.87rem;line-height:1.65;">Fast, beautiful, mobile-first websites and web apps. Built clean, SEO-optimized, and deployed in days not months.</p>
+        <div class="tilt-card fade-up" data-tilt data-delay="160" style="padding:28px;">
+          <div class="card-shine"></div>
+          <div style="width:52px;height:52px;border-radius:14px;background:rgba(194,65,12,0.1);border:1px solid rgba(194,65,12,0.22);display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin-bottom:16px;">🌐</div>
+          <h3 style="margin-bottom:10px;">Web Development</h3>
+          <p style="color:var(--muted);font-size:0.87rem;line-height:1.65;">Fast, stunning, mobile-first websites. SEO-optimized and deployed in days, not months.</p>
         </div>
 
-        <div class="glass fade-up" style="padding:28px;" data-delay="300">
-          <div class="service-icon" style="background:rgba(255,179,0,0.1);border:1px solid rgba(255,179,0,0.22);">🔗</div>
-          <h3 style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:1rem;margin-bottom:10px;">AI Integration</h3>
-          <p style="color:var(--text-muted);font-size:0.87rem;line-height:1.65;">Plug AI capabilities directly into your existing tools, CRMs, or business systems. Make your current stack work smarter.</p>
+        <div class="tilt-card fade-up" data-tilt data-delay="240" style="padding:28px;">
+          <div class="card-shine"></div>
+          <div style="width:52px;height:52px;border-radius:14px;background:rgba(255,179,0,0.1);border:1px solid rgba(255,179,0,0.22);display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin-bottom:16px;">🔗</div>
+          <h3 style="margin-bottom:10px;">AI Integration</h3>
+          <p style="color:var(--muted);font-size:0.87rem;line-height:1.65;">Plug AI into your existing tools, CRMs, or business systems. Make your stack work smarter.</p>
         </div>
 
       </div>
@@ -778,69 +876,72 @@
 
   <!-- CTA BANNER -->
   <section class="content" style="padding:64px 0;">
-    <div class="container">
-      <div class="fade-up" style="background:linear-gradient(135deg,rgba(255,107,0,0.1) 0%,rgba(255,179,0,0.05) 100%);border:1px solid rgba(255,107,0,0.22);border-radius:20px;padding:56px 48px;text-align:center;position:relative;overflow:hidden;">
-        <div style="position:absolute;top:-80px;right:-80px;width:320px;height:320px;background:radial-gradient(circle,rgba(255,107,0,0.14) 0%,transparent 70%);pointer-events:none;"></div>
-        <div style="position:absolute;bottom:-60px;left:-60px;width:260px;height:260px;background:radial-gradient(circle,rgba(255,179,0,0.09) 0%,transparent 70%);pointer-events:none;"></div>
-        <div class="section-label" style="margin-bottom:16px;">// ready to automate?</div>
-        <h2 style="margin-bottom:16px;max-width:600px;margin-inline:auto;">Want results like these<br>for your business?</h2>
-        <p style="color:var(--text-muted);margin-bottom:36px;max-width:480px;margin-inline:auto;">Let's talk about what systems you need. I'll tell you exactly what's possible and how fast I can build it.</p>
-        <a href="#contact" class="btn-primary" style="font-size:1rem;padding:16px 40px;">Book a Free Call →</a>
+    <div class="wrap">
+      <div class="fade-up" style="background:linear-gradient(135deg,rgba(255,107,0,0.1),rgba(255,179,0,0.05));border:1px solid rgba(255,107,0,0.22);border-radius:22px;text-align:center;position:relative;overflow:hidden;">
+        <div class="cta-inner" style="padding:56px 48px;position:relative;z-index:1;">
+          <div style="position:absolute;top:-80px;right:-80px;width:300px;height:300px;background:radial-gradient(circle,rgba(255,107,0,0.15),transparent 70%);pointer-events:none;"></div>
+          <div style="position:absolute;bottom:-60px;left:-60px;width:250px;height:250px;background:radial-gradient(circle,rgba(255,179,0,0.1),transparent 70%);pointer-events:none;"></div>
+          <div class="label" style="margin-bottom:14px;">// ready to automate?</div>
+          <h2 style="margin-bottom:14px;">Want results like these<br>for your business?</h2>
+          <p style="color:var(--muted);margin-bottom:32px;max-width:440px;margin-inline:auto;">Tell me what you need. I'll tell you what's possible and how fast I can deliver it.</p>
+          <a href="#contact" class="btn btn-primary" style="font-size:1rem;padding:15px 40px;">Book a Free Call →</a>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- CONTACT -->
   <section id="contact" class="content">
-    <div class="container">
-      <div style="max-width:660px;margin:0 auto;">
-        <div style="text-align:center;margin-bottom:48px;" class="fade-up">
-          <div class="section-label">// get in touch</div>
+    <div class="wrap">
+      <div style="max-width:640px;margin:0 auto;">
+        <div style="text-align:center;margin-bottom:44px;" class="fade-up">
+          <div class="label">// get in touch</div>
           <h2>Let's Work Together</h2>
-          <p style="color:var(--text-muted);margin-top:12px;font-size:1rem;">Have a project? Drop me a message — I respond fast.</p>
+          <p style="color:var(--muted);margin-top:10px;">Have a project? Drop me a message — I respond fast.</p>
         </div>
 
-        <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:36px;" class="fade-up">
-          <a href="mailto:eddienyambo000@gmail.com" style="display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border:1px solid var(--border);border-radius:100px;color:var(--text-body);text-decoration:none;font-size:0.85rem;transition:all 0.2s ease;" onmouseover="this.style.borderColor='var(--primary)';this.style.color='var(--primary)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-body)'">
+        <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:32px;" class="fade-up">
+          <a href="mailto:eddienyambo000@gmail.com" class="cpill" onmouseover="this.style.borderColor='var(--primary)';this.style.color='var(--primary)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--body)'">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
             eddienyambo000@gmail.com
           </a>
-          <a href="https://wa.me/250791811234" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border:1px solid var(--border);border-radius:100px;color:var(--text-body);text-decoration:none;font-size:0.85rem;transition:all 0.2s ease;" onmouseover="this.style.borderColor='#25D366';this.style.color='#25D366'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-body)'">
+          <a href="https://wa.me/250791811234" target="_blank" rel="noopener" class="cpill" onmouseover="this.style.borderColor='#25D366';this.style.color='#25D366'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--body)'">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
             +250 791 811 234
           </a>
-          <a href="https://www.instagram.com/eddien_0/" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border:1px solid var(--border);border-radius:100px;color:var(--text-body);text-decoration:none;font-size:0.85rem;transition:all 0.2s ease;" onmouseover="this.style.borderColor='#E1306C';this.style.color='#E1306C'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-body)'">
+          <a href="https://www.instagram.com/eddien_0/" target="_blank" rel="noopener" class="cpill" onmouseover="this.style.borderColor='#E1306C';this.style.color='#E1306C'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--body)'">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
             @eddien_0
           </a>
-          <div style="display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border:1px solid var(--border);border-radius:100px;color:var(--text-muted);font-size:0.85rem;">
+          <div class="cpill">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
             Kibagabaga, Kigali, Rwanda
           </div>
         </div>
 
         <div class="glass fade-up" style="padding:36px;">
+          <div class="card-shine"></div>
           <form action="https://formspree.io/f/xyknykdz" method="POST">
             <input type="hidden" name="_subject" value="Portfolio inquiry — Eddie Nyambo">
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+            <div class="form-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
               <div>
-                <label style="display:block;font-size:0.75rem;color:var(--text-muted);font-family:'JetBrains Mono',monospace;letter-spacing:0.08em;margin-bottom:7px;">NAME</label>
-                <input name="name" type="text" placeholder="Your name" class="form-input" required>
+                <label class="form-label">NAME</label>
+                <input name="name" type="text" placeholder="Your name" class="form-field" required>
               </div>
               <div>
-                <label style="display:block;font-size:0.75rem;color:var(--text-muted);font-family:'JetBrains Mono',monospace;letter-spacing:0.08em;margin-bottom:7px;">EMAIL</label>
-                <input name="email" type="email" placeholder="your@email.com" class="form-input" required>
+                <label class="form-label">EMAIL</label>
+                <input name="email" type="email" placeholder="your@email.com" class="form-field" required>
               </div>
             </div>
             <div style="margin-bottom:16px;">
-              <label style="display:block;font-size:0.75rem;color:var(--text-muted);font-family:'JetBrains Mono',monospace;letter-spacing:0.08em;margin-bottom:7px;">SUBJECT</label>
-              <input name="subject" type="text" placeholder="What do you need built?" class="form-input" required>
+              <label class="form-label">SUBJECT</label>
+              <input name="subject" type="text" placeholder="What do you need built?" class="form-field" required>
             </div>
             <div style="margin-bottom:24px;">
-              <label style="display:block;font-size:0.75rem;color:var(--text-muted);font-family:'JetBrains Mono',monospace;letter-spacing:0.08em;margin-bottom:7px;">MESSAGE</label>
-              <textarea name="message" rows="4" placeholder="Tell me about your project..." class="form-input" required style="resize:vertical;min-height:120px;"></textarea>
+              <label class="form-label">MESSAGE</label>
+              <textarea name="message" rows="4" placeholder="Tell me about your project..." class="form-field" required style="resize:vertical;min-height:120px;"></textarea>
             </div>
-            <button type="submit" class="btn-primary" style="width:100%;justify-content:center;">
+            <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;">
               Send Message
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22,2 15,22 11,13 2,9 22,2"/></svg>
             </button>
@@ -853,58 +954,120 @@
 
   <!-- FOOTER -->
   <footer class="content" style="border-top:1px solid var(--border);padding:28px 0;">
-    <div class="container">
-      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--text-muted);">
-          © 2026 Eddie Nyambo &nbsp;·&nbsp; Kibagabaga, Kigali, Rwanda 🇷🇼
-        </div>
-        <div style="display:flex;gap:18px;align-items:center;">
-          <a href="https://www.linkedin.com/in/eddie-nyambo-41a460345/" target="_blank" rel="noopener" style="color:var(--text-muted);transition:color 0.2s ease;" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='var(--text-muted)'">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
-          </a>
-          <a href="https://www.instagram.com/eddien_0/" target="_blank" rel="noopener" style="color:var(--text-muted);transition:color 0.2s ease;" onmouseover="this.style.color='#E1306C'" onmouseout="this.style.color='var(--text-muted)'">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
-          </a>
-          <a href="https://github.com/eddienyambo000-crypto" target="_blank" rel="noopener" style="color:var(--text-muted);transition:color 0.2s ease;" onmouseover="this.style.color='var(--text-body)'" onmouseout="this.style.color='var(--text-muted)'">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0 0 22 12.017C22 6.484 17.522 2 12 2z"/></svg>
-          </a>
-          <a href="https://wa.me/250791811234" target="_blank" rel="noopener" style="color:var(--text-muted);transition:color 0.2s ease;" onmouseover="this.style.color='#25D366'" onmouseout="this.style.color='var(--text-muted)'">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
-          </a>
-        </div>
+    <div class="wrap" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:0.76rem;color:var(--muted);">
+        © 2026 Eddie Nyambo &nbsp;·&nbsp; Kibagabaga, Kigali 🇷🇼
+      </div>
+      <div style="display:flex;gap:18px;">
+        <a href="https://www.linkedin.com/in/eddie-nyambo-41a460345/" target="_blank" rel="noopener" class="social-link li"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+        <a href="https://www.instagram.com/eddien_0/" target="_blank" rel="noopener" class="social-link ig"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+        <a href="https://github.com/eddienyambo000-crypto" target="_blank" rel="noopener" class="social-link gh"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0 0 22 12.017C22 6.484 17.522 2 12 2z"/></svg></a>
+        <a href="https://wa.me/250791811234" target="_blank" rel="noopener" class="social-link wa"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg></a>
       </div>
     </div>
   </footer>
 
   <script>
-    const phrases = [
-      'AI Automation Engineer.',
-      'Web Developer.',
-      'I build systems that work while you sleep.',
-      "Rwanda's AI guy.",
-    ];
-    let pi = 0, ci = 0, deleting = false;
-    const el = document.getElementById('typed-text');
-    function type() {
-      const cur = phrases[pi];
-      el.textContent = deleting ? cur.slice(0, ci - 1) : cur.slice(0, ci + 1);
-      if (!deleting) ci++; else ci--;
-      if (!deleting && ci === cur.length) { deleting = true; setTimeout(type, 2200); return; }
-      if (deleting && ci === 0) { deleting = false; pi = (pi + 1) % phrases.length; }
-      setTimeout(type, deleting ? 38 : 68);
+    /* ── TYPING ANIMATION ── */
+    const phrases = ['AI Automation Engineer.','Web Developer.','I build systems that work while you sleep.',"Rwanda's AI guy."];
+    let pi=0,ci=0,del=false;
+    const el=document.getElementById('typed');
+    function type(){
+      const c=phrases[pi];
+      el.textContent=del?c.slice(0,ci-1):c.slice(0,ci+1);
+      if(!del)ci++;else ci--;
+      if(!del&&ci===c.length){del=true;setTimeout(type,2000);return;}
+      if(del&&ci===0){del=false;pi=(pi+1)%phrases.length;}
+      setTimeout(type,del?40:70);
     }
     type();
 
-    const obs = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          const d = parseInt(e.target.dataset.delay || 0);
-          setTimeout(() => e.target.classList.add('visible'), d);
+    /* ── FADE ON SCROLL ── */
+    const obs=new IntersectionObserver(entries=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting){
+          const d=parseInt(e.target.dataset.delay||0);
+          setTimeout(()=>e.target.classList.add('in'),d);
           obs.unobserve(e.target);
         }
       });
-    }, { threshold: 0, rootMargin: '0px 0px 99999px 0px' });
-    document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+    },{threshold:0,rootMargin:'0px 0px 99999px 0px'});
+    document.querySelectorAll('.fade-up').forEach(el=>obs.observe(el));
+
+    /* ── THREE.JS HERO PARTICLES ── */
+    (function(){
+      const canvas=document.getElementById('hero-canvas');
+      const section=document.getElementById('home');
+      const renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:false});
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+      renderer.setSize(section.offsetWidth,section.offsetHeight);
+
+      const scene=new THREE.Scene();
+      const camera=new THREE.PerspectiveCamera(60,section.offsetWidth/section.offsetHeight,0.1,100);
+      camera.position.z=6;
+
+      const count=90;
+      const positions=new Float32Array(count*3);
+      const velocities=[];
+      for(let i=0;i<count;i++){
+        positions[i*3+0]=(Math.random()-0.5)*16;
+        positions[i*3+1]=(Math.random()-0.5)*12;
+        positions[i*3+2]=(Math.random()-0.5)*4;
+        velocities.push({x:(Math.random()-0.5)*0.003,y:(Math.random()-0.5)*0.003});
+      }
+      const geo=new THREE.BufferGeometry();
+      geo.setAttribute('position',new THREE.BufferAttribute(positions,3));
+      const mat=new THREE.PointsMaterial({size:0.06,color:0xFF6B00,transparent:true,opacity:0.55,sizeAttenuation:true});
+      const pts=new THREE.Points(geo,mat);
+      scene.add(pts);
+
+      function tick(){
+        requestAnimationFrame(tick);
+        const pos=geo.attributes.position.array;
+        for(let i=0;i<count;i++){
+          pos[i*3]+=velocities[i].x;
+          pos[i*3+1]+=velocities[i].y;
+          if(Math.abs(pos[i*3])>8)velocities[i].x*=-1;
+          if(Math.abs(pos[i*3+1])>6)velocities[i].y*=-1;
+        }
+        geo.attributes.position.needsUpdate=true;
+        pts.rotation.y+=0.0004;
+        renderer.render(scene,camera);
+      }
+      tick();
+
+      window.addEventListener('resize',()=>{
+        renderer.setSize(section.offsetWidth,section.offsetHeight);
+        camera.aspect=section.offsetWidth/section.offsetHeight;
+        camera.updateProjectionMatrix();
+      });
+    })();
+
+    /* ── 3D CARD TILT (desktop only) ── */
+    const isTouch=window.matchMedia('(hover:none)').matches;
+    if(!isTouch){
+      document.querySelectorAll('[data-tilt]').forEach(card=>{
+        const shine=card.querySelector('.card-shine');
+        card.addEventListener('mousemove',e=>{
+          const r=card.getBoundingClientRect();
+          const x=(e.clientX-r.left)/r.width;
+          const y=(e.clientY-r.top)/r.height;
+          const ry=(x-0.5)*16;
+          const rx=-(y-0.5)*16;
+          card.style.transform=`perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg) translateZ(8px)`;
+          card.style.transition='transform 0.08s ease';
+          if(shine){
+            shine.style.opacity='1';
+            shine.style.background=`radial-gradient(circle at ${x*100}% ${y*100}%, rgba(255,179,0,0.13), transparent 55%)`;
+          }
+        });
+        card.addEventListener('mouseleave',()=>{
+          card.style.transform='';
+          card.style.transition='transform 0.5s cubic-bezier(0.34,1.56,0.64,1)';
+          if(shine)shine.style.opacity='0';
+        });
+      });
+    }
   </script>
 </body>
 </html>
