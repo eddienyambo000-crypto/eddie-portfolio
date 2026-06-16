@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Admin · Eddie Nyambo Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --cream:#FAF7F1;--cream2:#F3ECE1;--paper:#FFFFFF;--espresso:#2E1C12;--coffee:#6F4E37;
+      --coffee-soft:#8A6F5A;--caramel:#B07A4B;--caramel-deep:#9A6638;--mocha-line:#E0D2BF;
+      --shadow:0 18px 50px rgba(46,28,18,0.10),0 4px 14px rgba(46,28,18,0.06);
+      --shadow-sm:0 2px 10px rgba(46,28,18,0.06);
+    }
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+    body{background:var(--cream);color:var(--coffee);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;}
+    h1,h2,h3{font-family:'Playfair Display',serif;color:var(--espresso);}
+    a{color:var(--caramel-deep);}
+    .mono{font-family:'JetBrains Mono',monospace;}
+
+    /* login */
+    #login{min-height:100vh;display:grid;place-items:center;padding:24px;}
+    .login-card{background:var(--paper);border:1px solid var(--mocha-line);border-radius:20px;box-shadow:var(--shadow);padding:38px;width:100%;max-width:400px;}
+    .brand-mark{width:48px;height:48px;border-radius:13px;background:linear-gradient(135deg,var(--caramel),var(--caramel-deep));color:#fff;display:grid;place-items:center;font-weight:700;font-size:1.1rem;margin-bottom:18px;}
+
+    /* shell */
+    #app{display:none;}
+    header.bar{position:sticky;top:0;z-index:50;background:rgba(250,247,241,0.85);backdrop-filter:blur(14px);border-bottom:1px solid var(--mocha-line);}
+    .bar-inner{max-width:1080px;margin:0 auto;padding:14px 22px;display:flex;align-items:center;justify-content:space-between;gap:16px;}
+    .bar .left{display:flex;align-items:center;gap:12px;font-family:'Playfair Display';font-weight:800;color:var(--espresso);}
+    .bar .bm{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--caramel),var(--caramel-deep));color:#fff;display:grid;place-items:center;font-weight:700;font-family:'Inter';font-size:.85rem;}
+    .wrap{max-width:1080px;margin:0 auto;padding:24px 22px 80px;}
+
+    .tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:26px;}
+    .tab{padding:9px 16px;border-radius:10px;border:1px solid var(--mocha-line);background:var(--paper);color:var(--coffee);font-weight:500;cursor:pointer;font-size:.88rem;transition:all .15s;}
+    .tab.active{background:linear-gradient(135deg,var(--caramel),var(--caramel-deep));color:#fff;border-color:transparent;}
+
+    .panel{display:none;}
+    .panel.active{display:block;}
+    .card{background:var(--paper);border:1px solid var(--mocha-line);border-radius:16px;box-shadow:var(--shadow-sm);padding:24px;margin-bottom:18px;}
+    .card h3{margin-bottom:16px;font-size:1.2rem;}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+    label{display:block;font-size:.72rem;letter-spacing:.05em;text-transform:uppercase;color:var(--coffee-soft);margin-bottom:6px;font-family:'JetBrains Mono';}
+    input,textarea,select{width:100%;padding:11px 13px;border:1px solid var(--mocha-line);border-radius:10px;background:var(--cream);color:var(--espresso);font-family:'Inter';font-size:.92rem;}
+    input:focus,textarea:focus,select:focus{outline:none;border-color:var(--caramel);box-shadow:0 0 0 3px rgba(176,122,75,.14);}
+    .fg{margin-bottom:14px;}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border-radius:11px;border:none;cursor:pointer;font-family:'Inter';font-weight:600;font-size:.9rem;background:linear-gradient(135deg,var(--caramel),var(--caramel-deep));color:#fff;transition:transform .15s,box-shadow .15s;}
+    .btn:hover{transform:translateY(-2px);box-shadow:var(--shadow-sm);}
+    .btn.ghost{background:var(--paper);color:var(--espresso);border:1px solid var(--mocha-line);}
+    .btn.danger{background:#fff;color:#a8331f;border:1px solid rgba(168,51,31,.3);}
+    .btn.sm{padding:7px 13px;font-size:.82rem;}
+    .toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;gap:12px;flex-wrap:wrap;}
+
+    .item{border:1px solid var(--mocha-line);border-radius:12px;padding:16px;margin-bottom:12px;background:var(--cream);}
+    .item .ihead{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:8px;}
+    .item .ititle{font-weight:700;color:var(--espresso);}
+    .item .imeta{font-size:.8rem;color:var(--coffee-soft);}
+    .actions{display:flex;gap:8px;flex-shrink:0;}
+
+    .lead{border:1px solid var(--mocha-line);border-radius:12px;padding:16px;margin-bottom:12px;background:var(--paper);}
+    .lead.new{border-left:4px solid var(--caramel);}
+    .badge{display:inline-block;padding:3px 9px;border-radius:100px;font-size:.7rem;font-family:'JetBrains Mono';background:rgba(176,122,75,.12);color:var(--caramel-deep);}
+
+    .toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--espresso);color:#fff;padding:13px 22px;border-radius:12px;box-shadow:var(--shadow);opacity:0;transition:all .3s;z-index:100;font-size:.9rem;}
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+    .err{color:#a8331f;font-size:.86rem;margin-top:10px;}
+    .muted{color:var(--coffee-soft);font-size:.86rem;}
+    .pic{width:54px;height:54px;border-radius:10px;object-fit:cover;border:1px solid var(--mocha-line);background:var(--cream2);}
+    .notice{background:#FFF6EC;border:1px solid rgba(176,122,75,.3);border-radius:12px;padding:14px 16px;font-size:.86rem;color:var(--espresso);margin-bottom:18px;}
+    @media(max-width:620px){.row{grid-template-columns:1fr;}}
+  </style>
+</head>
+<body>
+
+  <!-- LOGIN -->
+  <div id="login">
+    <div class="login-card">
+      <div class="brand-mark">EN</div>
+      <h2 style="font-size:1.5rem;">Portfolio Admin</h2>
+      <p class="muted" style="margin:6px 0 22px;">Sign in to manage your site.</p>
+      <form id="loginForm">
+        <div class="fg"><label>Email</label><input type="email" id="email" required autocomplete="username"></div>
+        <div class="fg"><label>Password</label><input type="password" id="password" required autocomplete="current-password"></div>
+        <button class="btn" style="width:100%;justify-content:center;" type="submit">Sign In</button>
+        <div class="err" id="loginErr"></div>
+      </form>
+      <p class="muted" id="cfgWarn" style="margin-top:18px;display:none;">⚠ Supabase keys not set in <span class="mono">config.js</span>. Add them, then create an admin user in Supabase → Authentication → Users.</p>
+    </div>
+  </div>
+
+  <!-- APP -->
+  <div id="app">
+    <header class="bar">
+      <div class="bar-inner">
+        <div class="left"><span class="bm">EN</span> Portfolio Admin</div>
+        <div style="display:flex;gap:10px;align-items:center;">
+          <a class="btn ghost sm" href="/" target="_blank">View site ↗</a>
+          <button class="btn ghost sm" id="logoutBtn">Log out</button>
+        </div>
+      </div>
+    </header>
+
+    <div class="wrap">
+      <div class="tabs">
+        <button class="tab active" data-tab="profile">Hero / About</button>
+        <button class="tab" data-tab="projects">Projects</button>
+        <button class="tab" data-tab="services">Services</button>
+        <button class="tab" data-tab="skills">Skills</button>
+        <button class="tab" data-tab="testimonials">Testimonials</button>
+        <button class="tab" data-tab="leads">Leads <span id="leadCount" class="badge" style="display:none;"></span></button>
+      </div>
+
+      <!-- PROFILE -->
+      <div class="panel active" id="panel-profile">
+        <div class="card">
+          <h3>Hero & About</h3>
+          <div class="fg"><label>Hero eyebrow</label><input id="p_eyebrow"></div>
+          <div class="fg"><label>Hero headline (H1)</label><input id="p_h1"></div>
+          <div class="fg"><label>Hero subheadline</label><textarea id="p_sub" rows="2"></textarea></div>
+          <div class="fg"><label>Promise line (under buttons)</label><input id="p_promise"></div>
+          <div class="fg"><label>About paragraph</label><textarea id="p_about" rows="4"></textarea></div>
+          <button class="btn" id="saveProfile">Save Hero & About</button>
+        </div>
+
+        <div class="card">
+          <h3>Your Photo</h3>
+          <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+            <img id="photoPrev" class="pic" style="width:90px;height:120px;border-radius:14px;" alt="">
+            <div style="flex:1;min-width:220px;">
+              <label>Upload new photo (vertical portrait works best)</label>
+              <input type="file" id="photoFile" accept="image/*">
+              <p class="muted" style="margin-top:8px;">Tall/portrait images look best — only the upper part shows in the frame.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Stats (the 4 numbers)</h3>
+          <div id="statsEditor"></div>
+          <button class="btn ghost sm" id="addStat" style="margin-top:6px;">+ Add stat</button>
+          <div style="margin-top:14px;"><button class="btn" id="saveStats">Save Stats</button></div>
+        </div>
+      </div>
+
+      <!-- PROJECTS -->
+      <div class="panel" id="panel-projects">
+        <div class="toolbar"><h3>Projects</h3><button class="btn sm" id="addProject">+ New project</button></div>
+        <div id="projectsList"></div>
+      </div>
+
+      <!-- SERVICES -->
+      <div class="panel" id="panel-services">
+        <div class="toolbar"><h3>Services</h3><button class="btn sm" id="addService">+ New service</button></div>
+        <div id="servicesList"></div>
+      </div>
+
+      <!-- SKILLS -->
+      <div class="panel" id="panel-skills">
+        <div class="toolbar"><h3>Skills</h3><button class="btn sm" id="addSkill">+ New skill</button></div>
+        <p class="muted" style="margin-bottom:14px;">Group must be one of: <b>AI Automation</b>, <b>Web Development</b>, <b>Infrastructure</b> (or any name — each unique group becomes a column).</p>
+        <div id="skillsList"></div>
+      </div>
+
+      <!-- TESTIMONIALS -->
+      <div class="panel" id="panel-testimonials">
+        <div class="toolbar"><h3>Testimonials</h3><button class="btn sm" id="addTestimonial">+ New testimonial</button></div>
+        <div id="testimonialsList"></div>
+      </div>
+
+      <!-- LEADS -->
+      <div class="panel" id="panel-leads">
+        <div class="toolbar"><h3>Leads inbox</h3><button class="btn ghost sm" id="refreshLeads">Refresh</button></div>
+        <div id="leadsList"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="./config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const $=(s,el=document)=>el.querySelector(s);
+    const $$=(s,el=document)=>[...el.querySelectorAll(s)];
+    const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+    function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2600);}
+
+    const HAS_CFG=window.SUPA_URL&&window.SUPA_ANON&&window.supabase;
+    let sb=null;
+    if(HAS_CFG){sb=window.supabase.createClient(window.SUPA_URL,window.SUPA_ANON);}
+    else{$('#cfgWarn').style.display='block';}
+
+    /* ── AUTH ── */
+    async function checkSession(){
+      if(!sb)return;
+      const {data:{session}}=await sb.auth.getSession();
+      if(session)showApp();
+    }
+    $('#loginForm').addEventListener('submit',async e=>{
+      e.preventDefault();
+      $('#loginErr').textContent='';
+      if(!sb){$('#loginErr').textContent='Set Supabase keys in config.js first.';return;}
+      const {error}=await sb.auth.signInWithPassword({email:$('#email').value,password:$('#password').value});
+      if(error){$('#loginErr').textContent=error.message;return;}
+      showApp();
+    });
+    $('#logoutBtn').addEventListener('click',async()=>{await sb.auth.signOut();location.reload();});
+    function showApp(){$('#login').style.display='none';$('#app').style.display='block';loadAll();}
+    checkSession();
+
+    /* ── TABS ── */
+    $$('.tab').forEach(t=>t.addEventListener('click',()=>{
+      $$('.tab').forEach(x=>x.classList.remove('active'));t.classList.add('active');
+      $$('.panel').forEach(p=>p.classList.remove('active'));$('#panel-'+t.dataset.tab).classList.add('active');
+    }));
+
+    /* ── LOAD ALL ── */
+    async function loadAll(){loadProfile();loadProjects();loadServices();loadSkills();loadTestimonials();loadLeads();}
+
+    /* ── PROFILE ── */
+    let stats=[];
+    async function loadProfile(){
+      const {data}=await sb.from('pf_profile').select('*').eq('id',1).maybeSingle();
+      const p=data||{};
+      $('#p_eyebrow').value=p.hero_eyebrow||'';
+      $('#p_h1').value=p.hero_h1||'';
+      $('#p_sub').value=p.hero_sub||'';
+      $('#p_promise').value=p.hero_promise||'';
+      $('#p_about').value=p.about_md||'';
+      $('#photoPrev').src=p.photo_url||'./eddie.jpg';
+      stats=Array.isArray(p.stats)?p.stats:[];
+      renderStats();
+    }
+    function renderStats(){
+      $('#statsEditor').innerHTML=stats.map((s,i)=>`<div class="row" style="margin-bottom:10px;align-items:end;"><div><label>Value</label><input data-si="${i}" data-k="value" value="${esc(s.value)}"></div><div style="display:flex;gap:8px;align-items:end;"><div style="flex:1;"><label>Label</label><input data-si="${i}" data-k="label" value="${esc(s.label)}"></div><button class="btn danger sm" data-del="${i}">✕</button></div></div>`).join('');
+      $$('#statsEditor input').forEach(inp=>inp.addEventListener('input',e=>{stats[+e.target.dataset.si][e.target.dataset.k]=e.target.value;}));
+      $$('#statsEditor [data-del]').forEach(b=>b.addEventListener('click',()=>{stats.splice(+b.dataset.del,1);renderStats();}));
+    }
+    $('#addStat').addEventListener('click',()=>{stats.push({value:'',label:''});renderStats();});
+    $('#saveStats').addEventListener('click',async()=>{
+      const {error}=await sb.from('pf_profile').update({stats}).eq('id',1);
+      toast(error?('Error: '+error.message):'Stats saved ✓');
+    });
+    $('#saveProfile').addEventListener('click',async()=>{
+      const payload={hero_eyebrow:$('#p_eyebrow').value,hero_h1:$('#p_h1').value,hero_sub:$('#p_sub').value,hero_promise:$('#p_promise').value,about_md:$('#p_about').value};
+      const {error}=await sb.from('pf_profile').update(payload).eq('id',1);
+      toast(error?('Error: '+error.message):'Saved ✓');
+    });
+    $('#photoFile').addEventListener('change',async e=>{
+      const f=e.target.files[0];if(!f)return;
+      toast('Uploading…');
+      const url=await uploadFile(f,'photo');
+      if(!url)return;
+      await sb.from('pf_profile').update({photo_url:url}).eq('id',1);
+      $('#photoPrev').src=url;toast('Photo updated ✓');
+    });
+
+    async function uploadFile(file,prefix){
+      const bucket=window.SUPA_BUCKET||'media';
+      const ext=(file.name.split('.').pop()||'jpg').toLowerCase();
+      const path=`${prefix}-${Date.now()}.${ext}`;
+      const {error}=await sb.storage.from(bucket).upload(path,file,{upsert:true,cacheControl:'3600'});
+      if(error){toast('Upload error: '+error.message);return null;}
+      const {data}=sb.storage.from(bucket).getPublicUrl(path);
+      return data.publicUrl;
+    }
+
+    /* ── PROJECTS ── */
+    async function loadProjects(){
+      const {data}=await sb.from('pf_projects').select('*').order('sort');
+      $('#projectsList').innerHTML=(data||[]).map(p=>projectCard(p)).join('')||'<p class="muted">No projects yet.</p>';
+      bindProjects(data||[]);
+    }
+    function projectCard(p){
+      return `<div class="item" data-id="${p.id}">
+        <div class="ihead"><div style="display:flex;gap:12px;align-items:center;">${p.cover_url?`<img class="pic" src="${esc(p.cover_url)}">`:''}<div><div class="ititle">${esc(p.title)}</div><div class="imeta">${(p.tags||[]).join(', ')} ${p.published?'':'· hidden'}</div></div></div>
+          <div class="actions"><button class="btn ghost sm" data-edit="${p.id}">Edit</button><button class="btn danger sm" data-del="${p.id}">Delete</button></div></div>
+        <div class="editor" style="display:none;margin-top:12px;">
+          <div class="row"><div class="fg"><label>Title</label><input data-f="title" value="${esc(p.title)}"></div><div class="fg"><label>Accent color (hex)</label><input data-f="accent" value="${esc(p.accent||'#B07A4B')}"></div></div>
+          <div class="fg"><label>Blurb</label><textarea data-f="blurb" rows="2">${esc(p.blurb)}</textarea></div>
+          <div class="row"><div class="fg"><label>Tags (comma separated)</label><input data-f="tags" value="${esc((p.tags||[]).join(', '))}"></div><div class="fg"><label>Live URL</label><input data-f="live_url" value="${esc(p.live_url)}"></div></div>
+          <div class="row"><div class="fg"><label>Sort order</label><input type="number" data-f="sort" value="${p.sort||0}"></div><div class="fg"><label>Published</label><select data-f="published"><option value="true"${p.published?' selected':''}>Yes</option><option value="false"${!p.published?' selected':''}>No</option></select></div></div>
+          <div class="fg"><label>Cover image</label><input type="file" data-cover accept="image/*"></div>
+          <button class="btn sm" data-save="${p.id}">Save</button>
+        </div></div>`;
+    }
+    function bindProjects(rows){
+      $$('#projectsList [data-edit]').forEach(b=>b.addEventListener('click',()=>{const ed=b.closest('.item').querySelector('.editor');ed.style.display=ed.style.display==='none'?'block':'none';}));
+      $$('#projectsList [data-del]').forEach(b=>b.addEventListener('click',async()=>{if(!confirm('Delete this project?'))return;await sb.from('pf_projects').delete().eq('id',b.dataset.del);loadProjects();toast('Deleted ✓');}));
+      $$('#projectsList [data-save]').forEach(b=>b.addEventListener('click',async()=>{
+        const item=b.closest('.item');const g=f=>item.querySelector(`[data-f="${f}"]`).value;
+        const payload={title:g('title'),blurb:g('blurb'),accent:g('accent'),live_url:g('live_url'),sort:+g('sort'),published:g('published')==='true',tags:g('tags').split(',').map(s=>s.trim()).filter(Boolean)};
+        const file=item.querySelector('[data-cover]').files[0];
+        if(file){const url=await uploadFile(file,'project');if(url)payload.cover_url=url;}
+        const {error}=await sb.from('pf_projects').update(payload).eq('id',b.dataset.save);
+        toast(error?('Error: '+error.message):'Saved ✓');loadProjects();
+      }));
+    }
+    $('#addProject').addEventListener('click',async()=>{
+      const {error}=await sb.from('pf_projects').insert([{title:'New Project',blurb:'Describe it…',tags:['Web'],sort:99}]);
+      toast(error?('Error: '+error.message):'Added ✓');loadProjects();
+    });
+
+    /* ── SERVICES ── */
+    async function loadServices(){
+      const {data}=await sb.from('pf_services').select('*').order('sort');
+      $('#servicesList').innerHTML=(data||[]).map(s=>`<div class="item" data-id="${s.id}">
+        <div class="ihead"><div class="ititle">${esc(s.title)}</div><div class="actions"><button class="btn danger sm" data-del="${s.id}">Delete</button></div></div>
+        <div class="fg"><label>Title</label><input data-f="title" value="${esc(s.title)}"></div>
+        <div class="fg"><label>Outcome</label><textarea data-f="outcome" rows="2">${esc(s.outcome)}</textarea></div>
+        <div class="fg" style="max-width:160px;"><label>Sort</label><input type="number" data-f="sort" value="${s.sort||0}"></div>
+        <button class="btn sm" data-save="${s.id}">Save</button></div>`).join('')||'<p class="muted">No services yet.</p>';
+      $$('#servicesList [data-save]').forEach(b=>b.addEventListener('click',async()=>{const it=b.closest('.item');const g=f=>it.querySelector(`[data-f="${f}"]`).value;const {error}=await sb.from('pf_services').update({title:g('title'),outcome:g('outcome'),sort:+g('sort')}).eq('id',b.dataset.save);toast(error?error.message:'Saved ✓');}));
+      $$('#servicesList [data-del]').forEach(b=>b.addEventListener('click',async()=>{if(!confirm('Delete?'))return;await sb.from('pf_services').delete().eq('id',b.dataset.del);loadServices();toast('Deleted ✓');}));
+    }
+    $('#addService').addEventListener('click',async()=>{await sb.from('pf_services').insert([{title:'New Service',outcome:'What the client gets…',sort:99}]);loadServices();toast('Added ✓');});
+
+    /* ── SKILLS ── */
+    async function loadSkills(){
+      const {data}=await sb.from('pf_skills').select('*').order('sort');
+      $('#skillsList').innerHTML=(data||[]).map(s=>`<div class="item" data-id="${s.id}" style="display:flex;gap:10px;align-items:end;">
+        <div style="flex:1;"><label>Group</label><input data-f="grp" value="${esc(s.grp)}"></div>
+        <div style="flex:1;"><label>Label</label><input data-f="label" value="${esc(s.label)}"></div>
+        <div style="width:80px;"><label>Sort</label><input type="number" data-f="sort" value="${s.sort||0}"></div>
+        <button class="btn sm" data-save="${s.id}">Save</button><button class="btn danger sm" data-del="${s.id}">✕</button></div>`).join('')||'<p class="muted">No skills yet.</p>';
+      $$('#skillsList [data-save]').forEach(b=>b.addEventListener('click',async()=>{const it=b.closest('.item');const g=f=>it.querySelector(`[data-f="${f}"]`).value;const {error}=await sb.from('pf_skills').update({grp:g('grp'),label:g('label'),sort:+g('sort')}).eq('id',b.dataset.save);toast(error?error.message:'Saved ✓');}));
+      $$('#skillsList [data-del]').forEach(b=>b.addEventListener('click',async()=>{await sb.from('pf_skills').delete().eq('id',b.dataset.del);loadSkills();toast('Deleted ✓');}));
+    }
+    $('#addSkill').addEventListener('click',async()=>{await sb.from('pf_skills').insert([{grp:'AI Automation',label:'New skill',sort:99}]);loadSkills();toast('Added ✓');});
+
+    /* ── TESTIMONIALS ── */
+    async function loadTestimonials(){
+      const {data}=await sb.from('pf_testimonials').select('*').order('sort');
+      $('#testimonialsList').innerHTML=(data||[]).map(t=>`<div class="item" data-id="${t.id}">
+        <div class="ihead"><div class="ititle">${esc(t.name)} <span class="muted">${esc(t.role||'')}</span></div><div class="actions"><button class="btn danger sm" data-del="${t.id}">Delete</button></div></div>
+        <div class="fg"><label>Quote</label><textarea data-f="quote" rows="2">${esc(t.quote)}</textarea></div>
+        <div class="row"><div class="fg"><label>Name</label><input data-f="name" value="${esc(t.name)}"></div><div class="fg"><label>Role / company</label><input data-f="role" value="${esc(t.role)}"></div></div>
+        <div class="row"><div class="fg"><label>Sort</label><input type="number" data-f="sort" value="${t.sort||0}"></div><div class="fg"><label>Published</label><select data-f="published"><option value="true"${t.published?' selected':''}>Yes</option><option value="false"${!t.published?' selected':''}>No</option></select></div></div>
+        <button class="btn sm" data-save="${t.id}">Save</button></div>`).join('')||'<p class="muted">No testimonials yet.</p>';
+      $$('#testimonialsList [data-save]').forEach(b=>b.addEventListener('click',async()=>{const it=b.closest('.item');const g=f=>it.querySelector(`[data-f="${f}"]`).value;const {error}=await sb.from('pf_testimonials').update({quote:g('quote'),name:g('name'),role:g('role'),sort:+g('sort'),published:g('published')==='true'}).eq('id',b.dataset.save);toast(error?error.message:'Saved ✓');}));
+      $$('#testimonialsList [data-del]').forEach(b=>b.addEventListener('click',async()=>{if(!confirm('Delete?'))return;await sb.from('pf_testimonials').delete().eq('id',b.dataset.del);loadTestimonials();toast('Deleted ✓');}));
+    }
+    $('#addTestimonial').addEventListener('click',async()=>{await sb.from('pf_testimonials').insert([{name:'Client name',role:'Company',quote:'What they said…',sort:99}]);loadTestimonials();toast('Added ✓');});
+
+    /* ── LEADS ── */
+    async function loadLeads(){
+      const {data}=await sb.from('pf_leads').select('*').order('created_at',{ascending:false});
+      const rows=data||[];
+      const newCount=rows.filter(l=>l.status==='new').length;
+      const lc=$('#leadCount');if(newCount){lc.style.display='inline-block';lc.textContent=newCount;}else lc.style.display='none';
+      $('#leadsList').innerHTML=rows.map(l=>`<div class="lead ${l.status==='new'?'new':''}">
+        <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+          <div><b style="color:var(--espresso);">${esc(l.name||'—')}</b> · <a href="mailto:${esc(l.email)}">${esc(l.email||'')}</a> <span class="badge">${esc(l.status)}</span></div>
+          <div class="muted">${new Date(l.created_at).toLocaleString()}</div></div>
+        <div style="margin:8px 0;color:var(--espresso);font-weight:500;">${esc(l.subject||'')}</div>
+        <div class="muted" style="white-space:pre-wrap;">${esc(l.message||'')}</div>
+        <div class="actions" style="margin-top:10px;">
+          <a class="btn ghost sm" href="mailto:${esc(l.email)}?subject=Re: ${encodeURIComponent(l.subject||'')}">Reply</a>
+          ${l.status==='new'?`<button class="btn ghost sm" data-read="${l.id}">Mark read</button>`:''}
+          <button class="btn danger sm" data-dellead="${l.id}">Delete</button></div></div>`).join('')||'<p class="muted">No leads yet.</p>';
+      $$('#leadsList [data-read]').forEach(b=>b.addEventListener('click',async()=>{await sb.from('pf_leads').update({status:'read'}).eq('id',b.dataset.read);loadLeads();}));
+      $$('#leadsList [data-dellead]').forEach(b=>b.addEventListener('click',async()=>{if(!confirm('Delete lead?'))return;await sb.from('pf_leads').delete().eq('id',b.dataset.dellead);loadLeads();toast('Deleted ✓');}));
+    }
+    $('#refreshLeads').addEventListener('click',loadLeads);
+  </script>
+</body>
+</html>
