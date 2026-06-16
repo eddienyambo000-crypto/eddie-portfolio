@@ -59,13 +59,14 @@ create table if not exists public.pf_skills (
 
 -- ── TESTIMONIALS ─────────────────────────────────────────────────────────
 create table if not exists public.pf_testimonials (
-  id         uuid primary key default gen_random_uuid(),
-  name       text not null,
-  role       text,
-  quote      text not null,
-  avatar_url text,
-  sort       int default 0,
-  published  boolean default true
+  id             uuid primary key default gen_random_uuid(),
+  name           text not null,
+  role           text,
+  quote          text not null,
+  avatar_url     text,
+  sort           int default 0,
+  published      boolean default true,
+  consent_public boolean default false   -- client ticked "OK to feature publicly"
 );
 
 -- ── LEADS (contact form inbox) ───────────────────────────────────────────
@@ -96,7 +97,10 @@ create policy "pf_read_profile"      on public.pf_profile      for select using 
 create policy "pf_read_projects"     on public.pf_projects     for select using (true);
 create policy "pf_read_services"     on public.pf_services     for select using (true);
 create policy "pf_read_skills"       on public.pf_skills       for select using (true);
-create policy "pf_read_testimonials" on public.pf_testimonials for select using (true);
+-- testimonials: public sees only published; admin sees all (keeps private submissions private)
+create policy "pf_read_testimonials" on public.pf_testimonials for select using (published = true or auth.role() = 'authenticated');
+-- clients can submit a story via /share, but only as private (published=false)
+create policy "pf_submit_testimonial" on public.pf_testimonials for insert with check (published = false);
 
 -- Anyone can submit a lead; only admin can read/update them
 create policy "pf_insert_leads"      on public.pf_leads        for insert with check (true);

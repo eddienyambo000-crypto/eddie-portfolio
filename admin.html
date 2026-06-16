@@ -334,12 +334,19 @@
     async function loadTestimonials(){
       const {data}=await sb.from('pf_testimonials').select('*').order('sort');
       $('#testimonialsList').innerHTML=(data||[]).map(t=>`<div class="item" data-id="${t.id}">
-        <div class="ihead"><div class="ititle">${esc(t.name)} <span class="muted">${esc(t.role||'')}</span></div><div class="actions"><button class="btn danger sm" data-del="${t.id}">Delete</button></div></div>
-        <div class="fg"><label>Quote</label><textarea data-f="quote" rows="2">${esc(t.quote)}</textarea></div>
+        <div class="ihead"><div style="display:flex;gap:12px;align-items:center;">${t.avatar_url?`<img class="pic" style="border-radius:50%;width:46px;height:46px;" src="${esc(t.avatar_url)}">`:''}<div class="ititle">${esc(t.name)} <span class="muted">${esc(t.role||'')}</span> ${t.consent_public?'<span class="badge">client approved</span>':''}${t.published?'':' <span class="badge">private</span>'}</div></div><div class="actions"><button class="btn danger sm" data-del="${t.id}">Delete</button></div></div>
+        <div class="fg"><label>Quote / case study</label><textarea data-f="quote" rows="3">${esc(t.quote)}</textarea></div>
         <div class="row"><div class="fg"><label>Name</label><input data-f="name" value="${esc(t.name)}"></div><div class="fg"><label>Role / company</label><input data-f="role" value="${esc(t.role)}"></div></div>
-        <div class="row"><div class="fg"><label>Sort</label><input type="number" data-f="sort" value="${t.sort||0}"></div><div class="fg"><label>Published</label><select data-f="published"><option value="true"${t.published?' selected':''}>Yes</option><option value="false"${!t.published?' selected':''}>No</option></select></div></div>
+        <div class="row"><div class="fg"><label>Sort</label><input type="number" data-f="sort" value="${t.sort||0}"></div><div class="fg"><label>Show on site?</label><select data-f="published"><option value="true"${t.published?' selected':''}>Yes — public</option><option value="false"${!t.published?' selected':''}>No — keep private</option></select></div></div>
+        <div class="fg"><label>Photo / logo (square works best)</label><input type="file" data-avatar accept="image/*"></div>
         <button class="btn sm" data-save="${t.id}">Save</button></div>`).join('')||'<p class="muted">No testimonials yet.</p>';
-      $$('#testimonialsList [data-save]').forEach(b=>b.addEventListener('click',async()=>{const it=b.closest('.item');const g=f=>it.querySelector(`[data-f="${f}"]`).value;const {error}=await sb.from('pf_testimonials').update({quote:g('quote'),name:g('name'),role:g('role'),sort:+g('sort'),published:g('published')==='true'}).eq('id',b.dataset.save);toast(error?error.message:'Saved ✓');}));
+      $$('#testimonialsList [data-save]').forEach(b=>b.addEventListener('click',async()=>{
+        const it=b.closest('.item');const g=f=>it.querySelector(`[data-f="${f}"]`).value;
+        const payload={quote:g('quote'),name:g('name'),role:g('role'),sort:+g('sort'),published:g('published')==='true'};
+        const file=it.querySelector('[data-avatar]').files[0];
+        if(file){toast('Uploading photo…');const url=await uploadFile(file,'avatar');if(url)payload.avatar_url=url;}
+        const {error}=await sb.from('pf_testimonials').update(payload).eq('id',b.dataset.save);toast(error?error.message:'Saved ✓');loadTestimonials();
+      }));
       $$('#testimonialsList [data-del]').forEach(b=>b.addEventListener('click',async()=>{if(!confirm('Delete?'))return;await sb.from('pf_testimonials').delete().eq('id',b.dataset.del);loadTestimonials();toast('Deleted ✓');}));
     }
     $('#addTestimonial').addEventListener('click',async()=>{await sb.from('pf_testimonials').insert([{name:'Client name',role:'Company',quote:'What they said…',sort:99}]);loadTestimonials();toast('Added ✓');});

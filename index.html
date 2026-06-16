@@ -3,12 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Eddie Nyambo — AI Automation Engineer | Kigali, Rwanda</title>
-  <meta name="description" content="Eddie Nyambo builds AI automation systems and web apps that make businesses run themselves. WhatsApp AI agents, n8n pipelines, premium web builds. Kigali, Rwanda.">
-  <meta property="og:title" content="Eddie Nyambo — AI Automation Engineer">
-  <meta property="og:description" content="I make your business run itself. AI automation & web systems, built custom, shipped in weeks.">
+  <title>Eddie Nyambo — Websites That Sell For You 24/7 | Kigali, Rwanda</title>
+  <meta name="description" content="I build modern, conversion-focused websites that turn visitors into paying customers — with WhatsApp booking & lead capture that works 24/7. Kigali, Rwanda.">
+  <meta property="og:title" content="Eddie Nyambo — Websites That Sell For You 24/7">
+  <meta property="og:description" content="Modern, fast, mobile-first websites built to convert visitors into customers — and capture leads on WhatsApp around the clock.">
   <meta property="og:type" content="website">
   <meta name="theme-color" content="#FAF7F1">
+  <!-- Vercel Web Analytics (enable 'Web Analytics' in the Vercel project → Analytics tab) -->
+  <script defer src="/_vercel/insights/script.js"></script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -245,6 +247,32 @@
     .megacta::after{content:'';position:absolute;bottom:-120px;right:-80px;width:360px;height:360px;background:radial-gradient(circle,rgba(111,78,55,0.1),transparent 65%);pointer-events:none;}
     .guarantee{display:inline-flex;align-items:center;gap:10px;margin-top:24px;padding:10px 18px;border-radius:100px;background:rgba(176,122,75,0.1);border:1px solid rgba(176,122,75,0.22);font-size:0.85rem;color:var(--espresso);font-weight:500;}
 
+    /* ── THE OFFER ── */
+    .offer{background:linear-gradient(150deg,#34200f,var(--espresso));border-radius:28px;padding:0;color:var(--cream);position:relative;overflow:hidden;box-shadow:var(--shadow-lg);display:grid;grid-template-columns:1.05fr 0.95fr;}
+    .offer::before{content:'';position:absolute;top:-120px;right:-90px;width:380px;height:380px;background:radial-gradient(circle,rgba(176,122,75,0.45),transparent 65%);pointer-events:none;}
+    .offer-l{padding:52px;position:relative;z-index:1;}
+    .offer-r{padding:52px;position:relative;z-index:1;background:rgba(0,0,0,0.16);border-left:1px solid rgba(230,201,168,0.14);}
+    .offer .eyebrow{color:#E6C9A8;}.offer .eyebrow::before{background:#E6C9A8;}
+    .offer h2{color:#fff;font-size:clamp(1.9rem,3.6vw,2.8rem);margin-top:14px;}
+    .offer h2 .serif-i{color:#E6C9A8;}
+    .offer .sub{color:rgba(255,255,255,0.8);margin-top:16px;font-size:1.02rem;}
+    .stack{list-style:none;display:flex;flex-direction:column;gap:14px;}
+    .stack li{display:flex;gap:12px;align-items:flex-start;font-size:0.96rem;color:#F3E9DC;}
+    .stack .ck{flex-shrink:0;width:24px;height:24px;border-radius:7px;background:rgba(230,201,168,0.16);color:#E6C9A8;display:grid;place-items:center;margin-top:1px;}
+    .stack .ck svg{width:14px;height:14px;}
+    .offer-meta{display:flex;gap:26px;flex-wrap:wrap;margin-top:26px;}
+    .offer-meta .m .v{font-family:'Playfair Display';font-weight:900;font-size:1.5rem;color:#fff;line-height:1;}
+    .offer-meta .m .l{font-size:0.72rem;font-family:'JetBrains Mono';color:#E6C9A8;margin-top:5px;}
+    .btn-wa{background:#25D366;color:#063d22;box-shadow:0 12px 28px rgba(37,211,102,0.32);}
+    .btn-wa:hover{transform:translateY(-3px);box-shadow:0 20px 44px rgba(37,211,102,0.42);}
+    .offer-guar{display:flex;gap:11px;align-items:flex-start;margin-top:22px;padding:14px 16px;border-radius:14px;background:rgba(230,201,168,0.1);border:1px solid rgba(230,201,168,0.22);font-size:0.88rem;color:#F3E9DC;}
+    .offer-guar svg{flex-shrink:0;width:20px;height:20px;color:#E6C9A8;margin-top:1px;}
+
+    /* ── WANT-ONE BAND ── */
+    .band{background:var(--paper);border:1px solid var(--mocha-line);border-radius:22px;padding:30px 36px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;box-shadow:var(--shadow-sm);}
+    .band h3{font-family:'Playfair Display',serif;font-size:clamp(1.25rem,2.4vw,1.7rem);color:var(--espresso);font-weight:800;max-width:560px;}
+    .band p{font-size:0.92rem;color:var(--coffee);margin-top:4px;}
+
     /* contact */
     .contact-grid{display:grid;grid-template-columns:0.9fr 1.1fr;gap:40px;align-items:start;}
     .cpill{display:inline-flex;align-items:center;gap:11px;padding:14px 18px;border-radius:14px;background:var(--paper);border:1px solid var(--mocha-line);color:var(--espresso);font-size:0.92rem;font-weight:500;transition:transform .2s var(--spring),border-color .2s,box-shadow .2s;box-shadow:var(--shadow-sm);}
@@ -277,35 +305,48 @@
     ::selection{background:rgba(176,122,75,0.24);color:var(--espresso);}
     :focus-visible{outline:2px solid var(--caramel-deep);outline-offset:3px;border-radius:4px;}
 
-    /* whatsapp float */
-    .wafloat{position:fixed;right:20px;bottom:20px;z-index:90;width:56px;height:56px;border-radius:50%;background:#25D366;color:#fff;display:grid;place-items:center;box-shadow:0 12px 30px rgba(37,211,102,0.4);transition:transform .25s var(--spring);}
-    .wafloat:hover{transform:scale(1.08);}
-    .wafloat svg{width:28px;height:28px;}
+    /* whatsapp float (labeled pill) */
+    .wafloat{position:fixed;right:18px;bottom:18px;z-index:90;display:inline-flex;align-items:center;gap:9px;padding:13px 18px 13px 14px;border-radius:100px;background:#25D366;color:#fff;font-weight:700;font-size:0.9rem;box-shadow:0 12px 30px rgba(37,211,102,0.4);transition:transform .25s var(--spring),box-shadow .25s;}
+    .wafloat:hover{transform:translateY(-3px) scale(1.03);box-shadow:0 18px 40px rgba(37,211,102,0.5);}
+    .wafloat svg{width:24px;height:24px;}
 
     /* ── RESPONSIVE ── */
     @media(max-width:980px){
       .nav-links{display:none;}
       .hamburger{display:grid;}
-      .hero{grid-template-columns:1fr;gap:44px;}
-      .portrait{order:-1;width:min(82%,330px);}
+      .hero{grid-template-columns:1fr;gap:30px;}
+      .hero-text{text-align:center;}
+      .promise,.trust,.socials,.hero-cta{justify-content:center;}
+      .hero-sub{margin-inline:auto;}
+      .portrait{order:-1;width:min(62%,250px);margin:0 auto;}
+      .offer{grid-template-columns:1fr;}
+      .offer-r{border-left:none;border-top:1px solid rgba(230,201,168,0.14);}
       .contact-grid{grid-template-columns:1fr;}
       .g4{grid-template-columns:repeat(2,1fr);}
       .g3{grid-template-columns:1fr 1fr;}
       .case{padding:40px 28px;}
     }
     @media(max-width:680px){
-      section{padding:74px 0;}
+      section{padding:64px 0;}
+      #home{padding:26px 0 54px;}
       .g3,.g2{grid-template-columns:1fr;}
       .hero-cta{flex-direction:column;align-items:stretch;}
       .hero-cta .btn{width:100%;}
-      .megacta{padding:44px 24px;}
-      .case-metrics{gap:24px;}
+      .megacta{padding:44px 22px;}
+      .offer-l,.offer-r{padding:32px 24px;}
+      .band{flex-direction:column;align-items:flex-start;}
+      .band .btn{width:100%;}
+      .case-metrics{gap:22px;}
       .float-chip{display:none;}
+      .sec-head{margin-bottom:36px;}
       .foot{flex-direction:column;text-align:center;}
     }
     @media(max-width:420px){
       .g4{grid-template-columns:1fr 1fr;}
-      .stat{padding:20px 8px;}
+      .stat{padding:18px 6px;}
+      .portrait{width:min(72%,220px);}
+      .wafloat span{display:none;}
+      .wafloat{padding:14px;}
     }
     @media(prefers-reduced-motion:reduce){
       *{animation:none!important;transition:none!important;}
@@ -324,7 +365,7 @@
         <a href="#services" class="nav-link">Services</a>
         <a href="#process" class="nav-link">Process</a>
         <a href="#about" class="nav-link">About</a>
-        <a href="#contact" class="btn btn-primary btn-sm">Get a Free Audit</a>
+        <a href="#offer" class="btn btn-primary btn-sm">Get a Free Teardown</a>
       </div>
       <button class="hamburger" onclick="document.getElementById('mnav').classList.toggle('open')" aria-label="Menu">
         <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
@@ -335,7 +376,8 @@
       <a href="#services" onclick="closeM()">Services</a>
       <a href="#process" onclick="closeM()">Process</a>
       <a href="#about" onclick="closeM()">About</a>
-      <a href="#contact" onclick="closeM()">Get a Free Audit</a>
+      <a href="#offer" onclick="closeM()">The Offer</a>
+      <a href="https://wa.me/250791811234" target="_blank" rel="noopener" onclick="closeM()">WhatsApp Me</a>
     </div>
   </nav>
 
@@ -344,22 +386,22 @@
     <div class="wrap">
       <div class="hero">
         <div class="hero-text reveal">
-          <span class="eyebrow" id="heroEyebrow">AI AUTOMATION ENGINEER · KIGALI, RWANDA</span>
-          <h1 class="h1" id="heroH1">I make your business <span class="serif-i">run itself.</span></h1>
-          <p class="hero-sub" id="heroSub">I design AI automation systems and web apps that cut the busywork, kill costly errors, and free your team — built custom, shipped in weeks.</p>
+          <span class="eyebrow" id="heroEyebrow">MODERN WEBSITES THAT SELL · KIGALI, RWANDA</span>
+          <h1 class="h1" id="heroH1">I build websites that book you clients <span class="serif-i">while you sleep.</span></h1>
+          <p class="hero-sub" id="heroSub">Modern, fast, mobile-first websites built to turn visitors into paying customers — with WhatsApp booking &amp; lead capture that works 24/7, even when you're off the clock.</p>
           <div class="promise" id="heroPromise">
             <span class="chk"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>
-            <span id="heroPromiseTxt">Free 20-min automation audit. I'll map exactly what to automate first.</span>
+            <span id="heroPromiseTxt">Free website teardown — send me your current site (or say "I have none") and I'll show you exactly what's costing you customers.</span>
           </div>
           <div class="hero-cta">
-            <a href="#contact" class="btn btn-primary btn-lg">Book My Free Audit
+            <a href="https://wa.me/250791811234?text=Hi%20Eddie%2C%20I%20want%20a%20website%20that%20brings%20me%20customers." target="_blank" rel="noopener" class="btn btn-primary btn-lg">Get My Free Teardown
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </a>
             <a href="#work" class="btn btn-ghost btn-lg">See My Work</a>
           </div>
           <div class="trust">
             <div class="trust-dots"><span>S</span><span>F</span><span>H</span><span>+</span></div>
-            <div class="trust-txt"><span class="stars">★★★★★</span><br><b>3+ live systems</b> · 100% delivery · Kigali → worldwide</div>
+            <div class="trust-txt"><span class="stars">★★★★★</span><br><b>3+ live builds</b> · 100% delivery · Kigali → worldwide</div>
           </div>
           <div class="socials">
             <span class="soc-lbl">FIND ME</span>
@@ -374,8 +416,8 @@
           <div class="portrait-frame">
             <img id="heroPhoto" src="./eddie.jpg" alt="Eddie Nyambo, AI Automation Engineer">
           </div>
-          <div class="float-chip chip-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9z"/></svg> Ships in weeks</div>
-          <div class="float-chip chip-2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10"/><path d="M22 4 12 14.01l-3-3"/></svg> 24/7 automated</div>
+          <div class="float-chip chip-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9z"/></svg> Live in 2–3 weeks</div>
+          <div class="float-chip chip-2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10"/><path d="M22 4 12 14.01l-3-3"/></svg> Converts 24/7</div>
           <div class="portrait-tag"><span class="pdot"></span><div><b>Available for hire</b><span>Kibagabaga, Kigali 🇷🇼</span></div></div>
         </div>
       </div>
@@ -385,8 +427,8 @@
   <!-- MARQUEE -->
   <div class="marq content">
     <div class="marq-track">
-      <div class="m-item">AI AUTOMATION</div><div class="m-item">n8n WORKFLOWS</div><div class="m-item">WHATSAPP AI AGENTS</div><div class="m-item">CLAUDE &amp; OPENAI</div><div class="m-item">WEB DEVELOPMENT</div><div class="m-item">RAG SYSTEMS</div><div class="m-item">RWANDA'S AI GUY</div>
-      <div class="m-item">AI AUTOMATION</div><div class="m-item">n8n WORKFLOWS</div><div class="m-item">WHATSAPP AI AGENTS</div><div class="m-item">CLAUDE &amp; OPENAI</div><div class="m-item">WEB DEVELOPMENT</div><div class="m-item">RAG SYSTEMS</div><div class="m-item">RWANDA'S AI GUY</div>
+      <div class="m-item">CONVERSION WEBSITES</div><div class="m-item">WHATSAPP BOOKING</div><div class="m-item">24/7 LEAD CAPTURE</div><div class="m-item">MOBILE-FIRST DESIGN</div><div class="m-item">SEO &amp; SPEED</div><div class="m-item">BUSINESS AUTOMATION</div><div class="m-item">RWANDA'S WEBSITE GUY</div>
+      <div class="m-item">CONVERSION WEBSITES</div><div class="m-item">WHATSAPP BOOKING</div><div class="m-item">24/7 LEAD CAPTURE</div><div class="m-item">MOBILE-FIRST DESIGN</div><div class="m-item">SEO &amp; SPEED</div><div class="m-item">BUSINESS AUTOMATION</div><div class="m-item">RWANDA'S WEBSITE GUY</div>
     </div>
   </div>
 
@@ -395,24 +437,24 @@
     <div class="wrap">
       <div class="sec-head center reveal">
         <span class="eyebrow">THE REAL COST</span>
-        <h2 style="margin-top:14px;">Your team is doing work a <span class="serif-i">robot</span> should be doing.</h2>
-        <p class="lead">Every hour spent copying data, chasing leads, and answering the same questions is money walking out the door. Here's what it's quietly costing you:</p>
+        <h2 style="margin-top:14px;">Your website is a brochure — not a <span class="serif-i">salesperson.</span></h2>
+        <p class="lead">Most business sites just sit there looking okay while customers quietly leave. Here's what that's costing you every single day:</p>
       </div>
       <div class="grid g3">
         <div class="pain reveal">
+          <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9z"/></svg></div>
+          <h3>Visitors leave in seconds</h3>
+          <p>They land, don't instantly see why you're the obvious choice, and bounce to a competitor. No site at all? You're invisible.</p>
+        </div>
+        <div class="pain reveal">
           <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-          <h3>Hours lost to busywork</h3>
-          <p>Manual data entry, follow-ups and reports eat the time your team should spend closing and serving customers.</p>
+          <h3>Leads vanish after hours</h3>
+          <p>Someone's ready to buy at 9pm. No way to reach you, no booking, no reply — by morning they've spent that money elsewhere.</p>
         </div>
         <div class="pain reveal">
-          <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
-          <h3>Leads going cold</h3>
-          <p>Customers message after hours and get no reply. By morning, they've already booked with someone faster than you.</p>
-        </div>
-        <div class="pain reveal">
-          <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg></div>
-          <h3>Costly human error</h3>
-          <p>One mistyped number or missed message can cost a sale — or a client. Systems don't get tired. People do.</p>
+          <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+          <h3>It looks DIY</h3>
+          <p>A cheap template tells customers you're cheap. First impressions decide who gets trusted with the money — and the sale.</p>
         </div>
       </div>
     </div>
@@ -423,14 +465,14 @@
     <div class="wrap">
       <div class="sec-head center reveal">
         <span class="eyebrow">THE OUTCOME</span>
-        <h2 style="margin-top:14px;">Now imagine it running <span class="serif-i">while you sleep.</span></h2>
-        <p class="lead">Leads qualified, calls booked, customers answered, data updated — automatically. That's what I build. And it's already live for real businesses:</p>
+        <h2 style="margin-top:14px;">Now imagine it selling <span class="serif-i">while you sleep.</span></h2>
+        <p class="lead">A site that makes you the obvious choice in 3 seconds, captures every lead straight to your WhatsApp, and books customers around the clock. That's what I build — and it's live for real businesses:</p>
       </div>
       <div class="grid g4 card reveal" id="statsGrid" style="padding:6px;">
-        <div class="stat"><div class="v" data-count="3" data-suffix="+">3+</div><div class="l">Live Systems Shipped</div></div>
+        <div class="stat"><div class="v" data-count="3" data-suffix="+">3+</div><div class="l">Live Builds Shipped</div></div>
         <div class="stat"><div class="v" data-count="100" data-suffix="%">100%</div><div class="l">Delivery Rate</div></div>
-        <div class="stat"><div class="v">1000s</div><div class="l">Hours Automated</div></div>
-        <div class="stat"><div class="v">24/7</div><div class="l">Bots Running</div></div>
+        <div class="stat"><div class="v">24/7</div><div class="l">Lead Capture</div></div>
+        <div class="stat"><div class="v">2–3wk</div><div class="l">Turnaround</div></div>
       </div>
     </div>
   </section>
@@ -440,14 +482,14 @@
     <div class="wrap">
       <div class="sec-head reveal">
         <span class="eyebrow">WHAT I BUILD</span>
-        <h2 style="margin-top:14px;">Hire me to take work <span class="serif-i">off your plate.</span></h2>
-        <p class="lead">Not features — outcomes. Each system is built to give you back time and bring in revenue.</p>
+        <h2 style="margin-top:14px;">Websites built to <span class="serif-i">make you money.</span></h2>
+        <p class="lead">Not pretty brochures — sales machines. Every build has one job: turn visitors into paying customers.</p>
       </div>
       <div class="grid g4" id="servicesGrid">
-        <div class="card svc reveal"><div class="num">01</div><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></div><h3>WhatsApp AI Agents</h3><p>A bot that qualifies leads, books calls and answers customers 24/7 — so you stop losing sales after hours.</p></div>
-        <div class="card svc reveal"><div class="num">02</div><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9z"/></svg></div><h3>Workflow Automation</h3><p>n8n pipelines that move data, send follow-ups and run reports automatically — no human touching it.</p></div>
-        <div class="card svc reveal"><div class="num">03</div><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div><h3>Premium Web Builds</h3><p>Fast, stunning, mobile-first sites that turn visitors into booked calls. Shipped in days, not months.</p></div>
-        <div class="card svc reveal"><div class="num">04</div><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div><h3>AI Integration</h3><p>Plug GPT/Claude into your CRM and tools so your existing stack starts working smarter for you.</p></div>
+        <div class="card svc reveal"><div class="num">01</div><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div><h3>Conversion Websites</h3><p>A modern site designed around one job: making you the obvious choice and turning visitors into customers.</p></div>
+        <div class="card svc reveal"><div class="num">02</div><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></div><h3>24/7 WhatsApp Booking</h3><p>A bot + site that captures leads and books customers day and night — so you never lose a sale after hours.</p></div>
+        <div class="card svc reveal"><div class="num">03</div><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9z"/></svg></div><h3>Redesign &amp; Speed</h3><p>Turn a slow, dated, DIY site into a fast, premium one that earns trust in the first 3 seconds.</p></div>
+        <div class="card svc reveal"><div class="num">04</div><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div><h3>Business Automation</h3><p>Behind the site: automations that handle follow-ups, data and reports — so the busywork runs itself.</p></div>
       </div>
     </div>
   </section>
@@ -492,17 +534,33 @@
     </div>
   </section>
 
+  <!-- WANT ONE BAND -->
+  <section class="content" style="padding-top:0;">
+    <div class="wrap">
+      <div class="band reveal">
+        <div>
+          <h3>Want a site like these working for <span class="serif-i" style="color:var(--caramel-deep);">your</span> business 24/7?</h3>
+          <p>Tell me about your business on WhatsApp — I'll tell you exactly what I'd build and what it'd do for your sales.</p>
+        </div>
+        <a href="https://wa.me/250791811234?text=Hi%20Eddie%2C%20I%20saw%20your%20work%20%E2%80%94%20I%20want%20one%20for%20my%20business." target="_blank" rel="noopener" class="btn btn-wa btn-lg">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347"/></svg>
+          Want one? WhatsApp me
+        </a>
+      </div>
+    </div>
+  </section>
+
   <!-- PROCESS -->
   <section id="process" class="content" style="padding-top:0;">
     <div class="wrap">
       <div class="sec-head center reveal">
         <span class="eyebrow">HOW IT WORKS</span>
-        <h2 style="margin-top:14px;">From overwhelmed to <span class="serif-i">automated</span> in 3 steps.</h2>
+        <h2 style="margin-top:14px;">From idea to <span class="serif-i">selling online</span> in 3 steps.</h2>
       </div>
       <div class="grid g3">
-        <div class="card step reveal"><div class="big">1</div><div class="n">// AUDIT</div><h3>We map your bottlenecks</h3><p>A free 20-min call. I find the exact tasks eating your time and pick the highest-ROI thing to automate first.</p></div>
-        <div class="card step reveal"><div class="big">2</div><div class="n">// BUILD</div><h3>I build &amp; wire it up</h3><p>I build the system custom to your operation, connect your tools, and test it on real data — you stay hands-off.</p></div>
-        <div class="card step reveal"><div class="big">3</div><div class="n">// LAUNCH</div><h3>It runs itself</h3><p>We go live. The system works 24/7, I monitor it, and you watch the busywork disappear. Tweaks included.</p></div>
+        <div class="card step reveal"><div class="big">1</div><div class="n">// TEARDOWN</div><h3>Free teardown call</h3><p>We hop on WhatsApp or a 20-min call. I look at your current site (or your business) and show you exactly what's losing you customers.</p></div>
+        <div class="card step reveal"><div class="big">2</div><div class="n">// BUILD</div><h3>I design &amp; build it</h3><p>A custom, conversion-focused site — mobile-first, with your WhatsApp booking wired in. You review, I refine until it's right.</p></div>
+        <div class="card step reveal"><div class="big">3</div><div class="n">// LAUNCH</div><h3>You go live &amp; it sells</h3><p>We launch on fast hosting. It works 24/7, captures leads, and I'm there for tweaks. You get customers — not a headache.</p></div>
       </div>
     </div>
   </section>
@@ -543,8 +601,8 @@
     <div class="wrap">
       <div class="sec-head reveal">
         <span class="eyebrow">ABOUT EDDIE</span>
-        <h2 style="margin-top:14px;">The engineer behind the systems.</h2>
-        <p class="lead" id="aboutText">I'm Eddie Nyambo — AI Automation Engineer &amp; Web Developer based in Kigali, Rwanda. I build systems that do the repetitive work so you don't have to: WhatsApp AI agents, n8n pipelines, CRM dashboards, and premium web builds. Real, deployed solutions — not demos.</p>
+        <h2 style="margin-top:14px;">The builder behind the websites.</h2>
+        <p class="lead" id="aboutText">I'm Eddie Nyambo — I build modern websites that make Rwandan businesses money: fast, mobile-first, conversion-focused, with WhatsApp booking that runs 24/7. Not pretty brochures — sales machines. Real, deployed work for real businesses, not demos.</p>
       </div>
       <div class="grid g3" id="skillsGrid">
         <div class="card skillcol reveal"><div class="hd"><div class="d"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4M8 16h0M16 16h0"/></svg></div><h3>AI Automation</h3></div><div class="pills"><span class="pill">n8n</span><span class="pill">OpenAI API</span><span class="pill">Claude API</span><span class="pill">WhatsApp Automation</span><span class="pill">RAG Systems</span><span class="pill">AI Chatbots</span></div></div>
@@ -554,16 +612,42 @@
     </div>
   </section>
 
-  <!-- MEGA CTA -->
-  <section class="content" style="padding-top:0;">
+  <!-- THE OFFER -->
+  <section id="offer" class="content" style="padding-top:0;">
     <div class="wrap">
-      <div class="megacta reveal">
-        <span class="eyebrow" style="justify-content:center;">READY WHEN YOU ARE</span>
-        <h2 style="margin-top:16px;font-size:clamp(2rem,5vw,3.2rem);">Let's find what to automate first — <span class="serif-i">free.</span></h2>
-        <p class="lead" style="max-width:520px;margin:16px auto 0;">Book a free 20-minute audit. Tell me your bottlenecks, I'll tell you exactly what's possible and how fast I can ship it.</p>
-        <div style="margin-top:30px;"><a href="#contact" class="btn btn-primary btn-lg">Book My Free Audit
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></div>
-        <div class="guarantee"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> No pitch, no pressure. If I can't find 3 things to automate, the call's on me.</div>
+      <div class="offer reveal">
+        <div class="offer-l">
+          <span class="eyebrow">THE OFFER</span>
+          <h2>The 24/7 Client-Getting <span class="serif-i">Website.</span></h2>
+          <p class="sub">I'll build you a modern website that makes you the obvious choice, captures every lead on WhatsApp, and books customers while you sleep. Done-for-you, start to finish.</p>
+          <div class="offer-meta">
+            <div class="m"><div class="v">2–3 wks</div><div class="l">START TO LIVE</div></div>
+            <div class="m"><div class="v">2–3</div><div class="l">BUILDS / MONTH</div></div>
+            <div class="m"><div class="v">100%</div><div class="l">DONE FOR YOU</div></div>
+          </div>
+          <div class="offer-guar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <span><b>You only go live when you love it.</b> Don't love the design? I keep building — free — until you do. The risk is on me.</span>
+          </div>
+          <div style="margin-top:26px;display:flex;flex-wrap:wrap;gap:12px;">
+            <a href="https://wa.me/250791811234?text=Hi%20Eddie%2C%20I%20want%20the%2024%2F7%20client-getting%20website." target="_blank" rel="noopener" class="btn btn-wa btn-lg">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347"/></svg>
+              Message Me on WhatsApp
+            </a>
+            <a href="#contact" class="btn btn-ghost btn-lg" style="background:transparent;color:#F3E9DC;border-color:rgba(230,201,168,0.3);">or use the form ↓</a>
+          </div>
+        </div>
+        <div class="offer-r">
+          <div class="eyebrow" style="margin-bottom:20px;">WHAT YOU GET</div>
+          <ul class="stack">
+            <li><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span> A custom, conversion-focused website — zero generic templates</li>
+            <li><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span> Mobile-first design that looks premium on every phone</li>
+            <li><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span> WhatsApp booking &amp; lead capture wired in — sells 24/7</li>
+            <li><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span> Copy that makes you the obvious choice</li>
+            <li><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span> Basic SEO + visitor analytics so you see it working</li>
+            <li><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span> Fast hosting, your own domain — you own everything</li>
+          </ul>
+        </div>
       </div>
     </div>
   </section>
@@ -574,8 +658,8 @@
       <div class="contact-grid">
         <div class="reveal">
           <span class="eyebrow">GET IN TOUCH</span>
-          <h2 style="margin-top:14px;">Let's build your system.</h2>
-          <p class="lead" style="margin-bottom:26px;">Drop me a message — I reply fast, usually same day.</p>
+          <h2 style="margin-top:14px;">Let's build your site.</h2>
+          <p class="lead" style="margin-bottom:26px;">WhatsApp is fastest — but the form works too. Either way, I reply same day.</p>
           <div class="cstack">
             <a href="mailto:eddienyambo000@gmail.com" class="cpill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> eddienyambo000@gmail.com</a>
             <a href="https://wa.me/250791811234" target="_blank" rel="noopener" class="cpill"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884"/></svg> +250 791 811 234</a>
@@ -602,7 +686,7 @@
   <!-- FOOTER -->
   <footer class="content">
     <div class="wrap foot">
-      <div class="id"><b>Eddie Nyambo</b> — AI Automation Engineer &amp; Web Developer · Kigali, Rwanda 🇷🇼<br>© <span id="yr"></span> · Built &amp; automated by Eddie.</div>
+      <div class="id"><b>Eddie Nyambo</b> — Websites that sell, for businesses in Rwanda &amp; beyond 🇷🇼<br>© <span id="yr"></span> · Worked with me? <a href="/share" style="color:var(--caramel-deep);font-weight:600;">Share your experience →</a></div>
       <div style="display:flex;gap:12px;">
         <a href="https://www.linkedin.com/in/eddie-nyambo-41a460345/" target="_blank" rel="noopener" class="soc li" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
         <a href="https://www.instagram.com/eddien_0/" target="_blank" rel="noopener" class="soc ig" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
@@ -612,7 +696,7 @@
     </div>
   </footer>
 
-  <a href="https://wa.me/250791811234" target="_blank" rel="noopener" class="wafloat" aria-label="WhatsApp Eddie"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg></a>
+  <a href="https://wa.me/250791811234?text=Hi%20Eddie%2C%20I%20want%20a%20website%20for%20my%20business." target="_blank" rel="noopener" class="wafloat" aria-label="WhatsApp Eddie"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg><span>WhatsApp me</span></a>
 
   <script src="./config.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -707,7 +791,8 @@
     function renderTestimonials(rows){
       $('#testimonialsGrid').innerHTML=rows.map(t=>{
         const av=t.avatar_url?`<img src="${esc(t.avatar_url)}" alt="${esc(t.name)}">`:esc((t.name||'?')[0]);
-        return `<div class="card tcard reveal"><p class="q">"${esc(t.quote)}"</p><div class="who"><div class="av">${av}</div><div><div class="nm">${esc(t.name)}</div><div class="rl">${esc(t.role)}</div></div></div></div>`;
+        const q=String(t.quote||'').replace(/^["“”\s]+|["“”\s]+$/g,''); // strip any quotes the user typed so we don't double them
+        return `<div class="card tcard reveal"><p class="q">“${esc(q)}”</p><div class="who"><div class="av">${av}</div><div><div class="nm">${esc(t.name)}</div><div class="rl">${esc(t.role)}</div></div></div></div>`;
       }).join('');
     }
 
