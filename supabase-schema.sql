@@ -11,7 +11,7 @@
 create table if not exists public.pf_profile (
   id          int primary key default 1,
   hero_eyebrow text   default 'AI AUTOMATION ENGINEER · KIGALI, RWANDA',
-  hero_h1      text   default 'I make your business run itself.',
+  hero_h1      text   default 'I make your business|run itself.',  -- text after "|" shows in caramel italic
   hero_sub     text   default 'I design AI automation systems and web apps that cut the busywork, kill costly errors, and free your team — built custom, shipped in weeks.',
   hero_promise text   default 'Free 20-min automation audit. I''ll map exactly what to automate first.',
   about_md     text   default 'I''m Eddie Nyambo — AI Automation Engineer & Web Developer based in Kigali, Rwanda. I build systems that do the repetitive work so you don''t have to: WhatsApp AI agents, n8n pipelines, CRM dashboards, and premium web builds. Real, deployed solutions — not demos.',

@@ -126,10 +126,11 @@
 
     /* half-portrait frame */
     .portrait{position:relative;justify-self:center;width:min(100%,400px);}
-    .portrait-frame{position:relative;width:100%;aspect-ratio:3/4;border-radius:24px 24px 22px 22px;overflow:hidden;background:linear-gradient(160deg,var(--cream2),var(--mocha));box-shadow:var(--shadow-lg);border:1px solid var(--mocha-line);}
-    .portrait-frame img{width:100%;height:100%;object-fit:cover;object-position:top center;}
-    /* bottom fade so the photo "rises" out of the frame (upper part showing) */
-    .portrait-frame::after{content:'';position:absolute;left:0;right:0;bottom:0;height:42%;background:linear-gradient(to top,var(--cream) 6%,rgba(250,247,241,0.55) 46%,transparent);pointer-events:none;}
+    .portrait-frame{position:relative;width:100%;aspect-ratio:7/10;border-radius:24px 24px 22px 22px;overflow:hidden;background:linear-gradient(160deg,var(--cream2),var(--mocha));box-shadow:var(--shadow-lg);border:1px solid var(--mocha-line);}
+    /* crop anchored to face + torso so the full upper body shows (not just the head) */
+    .portrait-frame img{width:100%;height:100%;object-fit:cover;object-position:center 46%;}
+    /* subtle bottom shade for the floating tag to sit on (not a hard fade) */
+    .portrait-frame::after{content:'';position:absolute;left:0;right:0;bottom:0;height:34%;background:linear-gradient(to top,rgba(46,28,18,0.34),transparent);pointer-events:none;}
     /* offset chocolate frame behind */
     .portrait::before{content:'';position:absolute;inset:0;border:1.5px solid var(--caramel);border-radius:24px;transform:translate(16px,16px);z-index:-1;opacity:.55;}
     .portrait-tag{position:absolute;left:18px;bottom:18px;z-index:3;background:rgba(255,255,255,0.9);backdrop-filter:blur(8px);border:1px solid var(--mocha-line);border-radius:14px;padding:11px 16px;box-shadow:var(--shadow);display:flex;align-items:center;gap:11px;}
@@ -344,7 +345,7 @@
       <div class="hero">
         <div class="hero-text reveal">
           <span class="eyebrow" id="heroEyebrow">AI AUTOMATION ENGINEER · KIGALI, RWANDA</span>
-          <h1 class="h1">I make your business <span class="rot-wrap" id="rotWord">run itself.</span></h1>
+          <h1 class="h1" id="heroH1">I make your business <span class="serif-i">run itself.</span></h1>
           <p class="hero-sub" id="heroSub">I design AI automation systems and web apps that cut the busywork, kill costly errors, and free your team — built custom, shipped in weeks.</p>
           <div class="promise" id="heroPromise">
             <span class="chk"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>
@@ -631,13 +632,11 @@
     function watchReveals(){$$('.reveal:not(.in)').forEach(el=>ro.observe(el));}
     watchReveals();
 
-    /* rotating hero word */
-    (function(){
-      if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;
-      const words=['run itself.','scale faster.','close in its sleep.','run itself.'];
-      const el=document.getElementById('rotWord');let i=0;
-      setInterval(()=>{i=(i+1)%words.length;el.style.transition='opacity .3s,transform .3s';el.style.opacity='0';el.style.transform='translateY(6px)';setTimeout(()=>{el.textContent=words[i];el.style.opacity='1';el.style.transform='none';},300);},2600);
-    })();
+    /* render headline: text before "|" is normal, text after is caramel-italic */
+    function setHeadline(raw){
+      const parts=String(raw).split('|');
+      $('#heroH1').innerHTML = parts.length>1 ? `${esc(parts[0].trim())} <span class="serif-i">${esc(parts[1].trim())}</span>` : esc(raw);
+    }
 
     /* count up */
     const counted=new WeakSet();
@@ -672,7 +671,7 @@
         ]);
         if(prof){
           if(prof.hero_eyebrow)$('#heroEyebrow').textContent=prof.hero_eyebrow;
-          if(prof.hero_h1)$('.h1').childNodes[0].nodeValue=prof.hero_h1.replace(/\s*$/,' ');
+          if(prof.hero_h1)setHeadline(prof.hero_h1);
           if(prof.hero_sub)$('#heroSub').textContent=prof.hero_sub;
           if(prof.hero_promise)$('#heroPromiseTxt').textContent=prof.hero_promise;
           if(prof.about_md)$('#aboutText').textContent=prof.about_md;
