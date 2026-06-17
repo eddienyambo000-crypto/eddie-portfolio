@@ -1,16 +1,18 @@
 "use client";
 import { motion } from "framer-motion";
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 
 export function Reveal({
   children,
   delay = 0,
   className,
+  style,
   y = 30,
 }: {
   children: ReactNode;
   delay?: number;
   className?: string;
+  style?: CSSProperties;
   y?: number;
 }) {
   return (
@@ -20,6 +22,7 @@ export function Reveal({
       viewport={{ once: true, margin: "0px 0px -40px 0px" }}
       transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay }}
       className={className}
+      style={style}
     >
       {children}
     </motion.div>

@@ -343,7 +343,7 @@ export function Offer() {
   return (
     <section id="offer" className={`relative z-[1] pb-[104px]`}>
       <div className={wrap}>
-        <Reveal className="relative grid grid-cols-1 overflow-hidden rounded-[28px] text-cream shadow-[var(--shadow-lg)] md:grid-cols-[1.05fr_0.95fr]" >
+        <Reveal className="relative grid grid-cols-1 overflow-hidden rounded-[28px] text-cream shadow-[var(--shadow-lg)] md:grid-cols-[1.05fr_0.95fr]" style={{ background: "linear-gradient(150deg,#34200f,#2e1c12)" }}>
           <div className="pointer-events-none absolute -right-24 -top-24 z-0 h-[380px] w-[380px]" style={{ background: "radial-gradient(circle,rgba(176,122,75,0.45),transparent 65%)" }} />
           <div className="relative z-[1] p-[clamp(32px,4vw,52px)]" style={{ background: "linear-gradient(150deg,#34200f,#2e1c12)" }}>
             <span className="eyebrow" style={{ color: "#E6C9A8" }}>THE OFFER</span>
