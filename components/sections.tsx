@@ -35,7 +35,7 @@ export function Problem() {
             Right now your business runs on your phone, your memory and your hands. The moment you step away, it stalls. Here's what that's quietly costing you every day:
           </p>
         </Reveal>
-        <div className="grid grid-cols-1 gap-5.5 md:grid-cols-3" style={{ gap: "22px" }}>
+        <div className="grid grid-cols-1 gap-[22px] md:grid-cols-3">
           {pains.map((x, i) => (
             <Reveal key={i} delay={i * 0.08} className={`${card} p-[30px]`}>
               <div className="mb-4 grid h-[46px] w-[46px] place-items-center rounded-xl bg-[rgba(154,102,56,0.1)] text-caramel-deep">
@@ -144,7 +144,7 @@ export function Projects({ projects }: { projects: Project[] }) {
                   ))}
                 </div>
                 <h3 className="mb-2 font-sans text-[1.16rem] font-bold text-espresso">{p.title}</h3>
-                <p className="mb-4.5 flex-1 text-[0.9rem]" style={{ marginBottom: 18 }}>{p.blurb}</p>
+                <p className="mb-[18px] flex-1 text-[0.9rem]">{p.blurb}</p>
                 {p.live_url && (
                   <a href={p.live_url} target="_blank" rel="noopener" className="inline-flex items-center gap-1.5 font-semibold text-caramel-deep transition-all group-hover:gap-2.5">
                     View live <ArrowRight size={15} />
@@ -247,26 +247,32 @@ export function CaseStudy() {
 /* ── TESTIMONIALS ── */
 export function Testimonials({ testimonials }: { testimonials: Testimonial[] }) {
   if (!testimonials.length) return null;
+  const single = testimonials.length === 1;
+  const gridCls = single
+    ? "mx-auto max-w-[760px]"
+    : testimonials.length === 2
+      ? "mx-auto grid max-w-[900px] grid-cols-1 gap-[22px] md:grid-cols-2"
+      : "grid grid-cols-1 gap-[22px] md:grid-cols-3";
   return (
-    <section className={`relative z-[1] pb-[104px]`}>
+    <section id="reviews" className="relative z-[1] pb-[104px]">
       <div className={wrap}>
         <Reveal className="mx-auto mb-14 max-w-[640px] text-center">
           <span className="eyebrow">WHAT CLIENTS SAY</span>
           <h2 className="mt-3.5 text-[clamp(2rem,4.6vw,3.4rem)]">Trusted to <span className="serif-i">deliver.</span></h2>
         </Reveal>
-        <div className="grid grid-cols-1 gap-[22px] md:grid-cols-3">
+        <div className={gridCls}>
           {testimonials.map((t, i) => {
             const q = (t.quote || "").replace(/^["“”\s]+|["“”\s]+$/g, "");
             return (
-              <Reveal key={t.id} delay={i * 0.08} className={`${card} p-[30px]`}>
-                <p className="mb-5.5 font-display text-[1.12rem] font-medium italic leading-[1.5] text-espresso" style={{ marginBottom: 22 }}>
+              <Reveal key={t.id} delay={i * 0.08} className={`${card} ${single ? "p-[clamp(30px,5vw,48px)] text-center" : "p-[30px]"}`}>
+                <p className={`mb-[22px] font-display font-medium italic leading-[1.5] text-espresso ${single ? "text-[clamp(1.25rem,2.4vw,1.7rem)]" : "text-[1.12rem]"}`}>
                   “{q}”
                 </p>
-                <div className="flex items-center gap-3.5">
+                <div className={`flex items-center gap-3.5 ${single ? "justify-center" : ""}`}>
                   <div className="grid h-[46px] w-[46px] flex-shrink-0 place-items-center overflow-hidden rounded-full bg-gradient-to-br from-mocha to-caramel font-bold text-espresso">
                     {t.avatar_url ? <Image src={t.avatar_url} alt={t.name} width={46} height={46} className="h-full w-full object-cover" /> : (t.name || "?")[0]}
                   </div>
-                  <div>
+                  <div className={single ? "text-left" : ""}>
                     <div className="text-[0.92rem] font-bold text-espresso">{t.name}</div>
                     <div className="text-[0.8rem] text-coffee-soft">{t.role}</div>
                   </div>
@@ -347,7 +353,7 @@ export function Offer() {
             <p className="mt-4 text-[1.02rem] text-white/80">
               I install a complete system that captures customers, follows them up, books them, and runs your operations — 24/7, without you lifting a finger. Done-for-you, start to finish.
             </p>
-            <div className="mt-6 flex flex-wrap gap-6.5" style={{ gap: 26 }}>
+            <div className="mt-6 flex flex-wrap gap-[26px]">
               {[["2–3 wks", "START TO LIVE"], ["24/7", "RUNS ITSELF"], ["30-day", "GUARANTEE"]].map(([v, l]) => (
                 <div key={l}>
                   <div className="font-display text-[1.5rem] font-black leading-none text-white">{v}</div>
@@ -355,11 +361,11 @@ export function Offer() {
                 </div>
               ))}
             </div>
-            <div className="mt-5.5 flex items-start gap-2.5 rounded-[14px] border border-[rgba(230,201,168,0.22)] bg-[rgba(230,201,168,0.1)] p-4 text-[0.88rem] text-[#F3E9DC]" style={{ marginTop: 22 }}>
+            <div className="mt-[22px] flex items-start gap-2.5 rounded-[14px] border border-[rgba(230,201,168,0.22)] bg-[rgba(230,201,168,0.1)] p-4 text-[0.88rem] text-[#F3E9DC]">
               <ShieldCheck size={20} className="mt-0.5 flex-shrink-0" style={{ color: "#E6C9A8" }} />
               <span><b>The 30-Day Automation Guarantee.</b> If your engine isn't noticeably automating your customer-getting or operations within 30 days of launch, I work for free until it is — or you get a full refund. The risk is 100% mine.</span>
             </div>
-            <div className="mt-6.5 flex flex-wrap gap-3" style={{ marginTop: 26 }}>
+            <div className="mt-[26px] flex flex-wrap gap-3">
               <a href={wa("Hi Eddie, I want the Automated Business Engine.")} target="_blank" rel="noopener" className="inline-flex items-center justify-center gap-2 rounded-[13px] bg-[#25D366] px-9 py-4 text-[1.02rem] font-semibold text-[#063d22] shadow-[0_12px_28px_rgba(37,211,102,0.32)] transition-transform duration-300 hover:-translate-y-0.5">
                 <WaIcon className="h-5 w-5" /> Message Me on WhatsApp
               </a>
@@ -396,7 +402,7 @@ export function Contact() {
           <Reveal>
             <span className="eyebrow">GET IN TOUCH</span>
             <h2 className="mt-3.5 text-[clamp(2rem,4.6vw,3.4rem)]">Let's build your engine.</h2>
-            <p className="mb-6.5 mt-4 text-[1.06rem] text-coffee" style={{ marginBottom: 26 }}>
+            <p className="mb-[26px] mt-4 text-[1.06rem] text-coffee">
               WhatsApp is fastest — but the form works too. Either way, I reply same day.
             </p>
             <div className="flex flex-col gap-3">

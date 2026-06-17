@@ -32,6 +32,12 @@ html {
   -webkit-text-size-adjust: 100%;
 }
 
+/* keep anchored sections clear of the sticky nav */
+section[id],
+:target {
+  scroll-margin-top: 90px;
+}
+
 body {
   background: var(--color-cream);
   color: var(--color-coffee);
