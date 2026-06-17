@@ -1,19 +1,22 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useInView } from "framer-motion";
 import type { Stat } from "@/lib/site";
 
 function Counter({ value }: { value: string }) {
-  const m = value.match(/^(\d+)(.*)$/);
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, amount: 0.5 });
+  // parse once & keep stable so the effect doesn't restart every render
+  const { target, suffix, numeric } = useMemo(() => {
+    const m = value.match(/^(\d+)(.*)$/);
+    return m ? { target: parseInt(m[1], 10), suffix: m[2], numeric: true } : { target: 0, suffix: "", numeric: false };
+  }, [value]);
   const [n, setN] = useState(0);
 
   useEffect(() => {
-    if (!m || !inView) return;
-    const target = parseInt(m[1], 10);
-    const step = Math.max(1, Math.ceil(target / 40));
+    if (!numeric || !inView) return;
     let cur = 0;
+    const step = Math.max(1, Math.ceil(target / 40));
     const id = setInterval(() => {
       cur += step;
       if (cur >= target) {
@@ -21,13 +24,13 @@ function Counter({ value }: { value: string }) {
         clearInterval(id);
       }
       setN(cur);
-    }, 22);
+    }, 24);
     return () => clearInterval(id);
-  }, [inView, m]);
+  }, [inView, numeric, target]);
 
   return (
-    <div ref={ref} className="font-display text-[clamp(2.2rem,4vw,3rem)] font-black leading-none text-espresso">
-      {m ? `${n}${m[2]}` : value}
+    <div ref={ref} className="font-display text-[clamp(2.2rem,4vw,3rem)] font-black leading-none text-espresso tabular-nums">
+      {numeric ? `${n}${suffix}` : value}
     </div>
   );
 }

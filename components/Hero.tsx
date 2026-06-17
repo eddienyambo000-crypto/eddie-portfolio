@@ -3,14 +3,42 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { Linkedin, Instagram, Github, ArrowRight, Check, Zap, BadgeCheck } from "lucide-react";
 import { WaIcon } from "./icons";
-import { Headline } from "./Reveal";
 import { wa, type Profile } from "@/lib/site";
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
+function AnimatedHeadline({ text, className }: { text: string; className?: string }) {
+  const [head, tail] = text.split("|");
+  const headWords = head.trim().split(/\s+/);
+  const tailWords = (tail || "").trim().split(/\s+/).filter(Boolean);
+  const container = { hidden: {}, show: { transition: { staggerChildren: 0.06, delayChildren: 0.15 } } };
+  const word = {
+    hidden: { opacity: 0, y: "0.4em" },
+    show: { opacity: 1, y: 0, transition: { duration: 0.6, ease } },
+  };
+  return (
+    <motion.h1 variants={container} initial="hidden" animate="show" className={className}>
+      {headWords.map((w, i) => (
+        <motion.span key={`h${i}`} variants={word} className="mr-[0.25em] inline-block">
+          {w}
+        </motion.span>
+      ))}
+      {tailWords.map((w, i) => (
+        <motion.span key={`t${i}`} variants={word} className="serif-i mr-[0.25em] inline-block">
+          {w}
+        </motion.span>
+      ))}
+    </motion.h1>
+  );
+}
+
 export function Hero({ profile }: { profile: Profile }) {
   return (
     <section id="home" className="relative z-[1] overflow-hidden pb-[84px] pt-16">
+      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+        <div className="aurora aurora-1" />
+        <div className="aurora aurora-2" />
+      </div>
       <div className="mx-auto grid max-w-[1140px] grid-cols-1 items-center gap-8 px-6 md:grid-cols-[1.15fr_0.85fr] md:gap-14">
         {/* text */}
         <motion.div
@@ -20,7 +48,7 @@ export function Hero({ profile }: { profile: Profile }) {
           className="order-2 text-center md:order-1 md:text-left"
         >
           <span className="eyebrow">{profile.hero_eyebrow}</span>
-          <Headline
+          <AnimatedHeadline
             text={profile.hero_h1}
             className="mt-5 font-display text-[clamp(2.4rem,6vw,4.4rem)] font-black leading-[1.02]"
           />

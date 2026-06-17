@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Playfair_Display, Inter, JetBrains_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
+import { ScrollProgress } from "@/components/ScrollProgress";
 import "./globals.css";
 
 const playfair = Playfair_Display({
@@ -51,6 +52,7 @@ export default function RootLayout({
       className={`${playfair.variable} ${inter.variable} ${jetbrains.variable}`}
     >
       <body>
+        <ScrollProgress />
         {children}
         <Analytics />
       </body>
