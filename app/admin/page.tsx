@@ -1,104 +1,123 @@
 "use client";
-import { useEffect, useState, useCallback } from "react";
-import { supabase, BUCKET } from "@/lib/supabase";
+
+import { useCallback, useEffect, useState } from "react";
+import {
+  ChevronDown,
+  Image as ImageIcon,
+  Loader2,
+  LogOut,
+  Plus,
+  RefreshCw,
+  Trash2,
+  X,
+} from "lucide-react";
+import { BUCKET, cmsReady, supabase } from "@/lib/supabase";
+
+/**
+ * The panel Eddie runs the site from — phone first, because that is where he
+ * edits. Every write is optimistic-free: it saves, then reloads the row, so
+ * what you see on screen is what is actually in the database.
+ */
 
 type Row = Record<string, any>;
-const TABS = ["Hero / About", "Projects", "Services", "Skills", "Testimonials", "Leads"] as const;
+const TABS = ["Hero", "Projects", "Services", "Skills", "Testimonials", "Leads"] as const;
 type Tab = (typeof TABS)[number];
+
+/** Columns added by supabase-migration-2026-09.sql. Saving degrades without them. */
+const EXTRA_PROJECT_COLS = ["client", "year", "problem", "solution", "result", "metrics"];
 
 export default function Admin() {
   const [authed, setAuthed] = useState(false);
   const [checking, setChecking] = useState(true);
-  const [email, setEmail] = useState("");
-  const [pass, setPass] = useState("");
-  const [err, setErr] = useState("");
-  const [tab, setTab] = useState<Tab>("Hero / About");
+  const [tab, setTab] = useState<Tab>("Hero");
   const [toast, setToast] = useState("");
 
   const flash = useCallback((m: string) => {
     setToast(m);
-    setTimeout(() => setToast(""), 2600);
+    setTimeout(() => setToast(""), 3200);
   }, []);
 
   useEffect(() => {
+    if (!cmsReady) return setChecking(false);
     supabase.auth.getSession().then(({ data }) => {
       setAuthed(!!data.session);
       setChecking(false);
     });
   }, []);
 
-  async function login(e: React.FormEvent) {
-    e.preventDefault();
-    setErr("");
-    const { error } = await supabase.auth.signInWithPassword({ email, password: pass });
-    if (error) return setErr(error.message);
-    setAuthed(true);
-  }
-  async function logout() {
-    await supabase.auth.signOut();
-    setAuthed(false);
-  }
-
-  if (checking) return <div className="grid min-h-screen place-items-center text-coffee-soft">Loading…</div>;
-
-  if (!authed)
+  if (!cmsReady) return <NotWired />;
+  if (checking)
     return (
-      <div className="grid min-h-screen place-items-center px-6">
-        <form onSubmit={login} className="w-full max-w-[400px] rounded-[20px] border border-mocha-line bg-paper p-9 shadow-[var(--shadow-card)]">
-          <div className="mb-4 grid h-12 w-12 place-items-center rounded-[13px] bg-gradient-to-br from-caramel to-caramel-deep font-bold text-white">EN</div>
-          <h2 className="font-display text-[1.5rem] text-espresso">Portfolio Admin</h2>
-          <p className="mb-5 mt-1.5 text-[0.9rem] text-coffee-soft">Sign in to manage your site.</p>
-          <Label>Email</Label>
-          <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required autoComplete="username" />
-          <div className="h-3.5" />
-          <Label>Password</Label>
-          <Input type="password" value={pass} onChange={(e) => setPass(e.target.value)} required autoComplete="current-password" />
-          <button className="mt-5 w-full rounded-[11px] bg-gradient-to-br from-caramel to-caramel-deep py-3 font-semibold text-white">Sign In</button>
-          {err && <p className="mt-3 text-[0.86rem] text-[#a8331f]">{err}</p>}
-        </form>
+      <div className="grid min-h-screen place-items-center text-muted">
+        <Loader2 className="animate-spin" aria-label="Loading" />
       </div>
     );
+  if (!authed) return <Login onIn={() => setAuthed(true)} />;
 
   return (
-    <div className="min-h-screen">
-      <header className="sticky top-0 z-50 border-b border-mocha-line bg-cream/85 backdrop-blur">
-        <div className="mx-auto flex max-w-[1080px] items-center justify-between gap-4 px-5 py-3.5">
-          <div className="flex items-center gap-3 font-display font-extrabold text-espresso">
-            <span className="grid h-[34px] w-[34px] place-items-center rounded-[9px] bg-gradient-to-br from-caramel to-caramel-deep text-[0.85rem] font-bold text-white">EN</span>
-            Portfolio Admin
-          </div>
+    <div className="min-h-screen pb-24">
+      <header className="sticky top-0 z-50 border-b border-line bg-ink/92 backdrop-blur-xl">
+        <div className="mx-auto flex max-w-[1080px] items-center justify-between gap-3 px-4 py-3">
           <div className="flex items-center gap-2.5">
-            <a href="/" target="_blank" className="rounded-[10px] border border-mocha-line bg-paper px-3.5 py-2 text-[0.82rem] font-semibold text-espresso">View site ↗</a>
-            <button onClick={logout} className="rounded-[10px] border border-mocha-line bg-paper px-3.5 py-2 text-[0.82rem] font-semibold text-espresso">Log out</button>
+            <span className="grid h-8 w-8 place-items-center rounded-[9px] bg-amber font-mono text-[0.68rem] font-semibold text-[#17110a]">
+              EN
+            </span>
+            <span className="font-display text-[1.05rem] text-ivory">Site control</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <a
+              href="/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-lg border border-line bg-ink-2 px-3 py-2 text-[0.8rem] text-ivory"
+            >
+              View site
+            </a>
+            <button
+              onClick={async () => {
+                await supabase.auth.signOut();
+                setAuthed(false);
+              }}
+              aria-label="Log out"
+              className="grid h-9 w-9 place-items-center rounded-lg border border-line bg-ink-2 text-muted"
+            >
+              <LogOut size={15} aria-hidden />
+            </button>
           </div>
         </div>
-      </header>
 
-      <div className="mx-auto max-w-[1080px] px-5 pb-24 pt-6">
-        <div className="mb-6 flex flex-wrap gap-1.5">
+        <div className="no-bar mx-auto flex max-w-[1080px] gap-1.5 overflow-x-auto px-4 pb-3">
           {TABS.map((t) => (
             <button
               key={t}
               onClick={() => setTab(t)}
-              className={`rounded-[10px] border px-4 py-2 text-[0.88rem] font-medium ${
-                tab === t ? "border-transparent bg-gradient-to-br from-caramel to-caramel-deep text-white" : "border-mocha-line bg-paper text-coffee"
+              aria-pressed={tab === t}
+              className={`min-h-[38px] flex-none rounded-lg border px-3.5 text-[0.85rem] transition-colors duration-200 ${
+                tab === t
+                  ? "border-amber-dim bg-amber/12 text-ivory"
+                  : "border-line bg-ink-2 text-muted"
               }`}
             >
               {t}
             </button>
           ))}
         </div>
+      </header>
 
-        {tab === "Hero / About" && <ProfilePanel flash={flash} />}
+      <div className="mx-auto max-w-[1080px] px-4 pt-6">
+        {tab === "Hero" && <ProfilePanel flash={flash} />}
         {tab === "Projects" && <ProjectsPanel flash={flash} />}
-        {tab === "Services" && <ServicesPanel flash={flash} />}
-        {tab === "Skills" && <SkillsPanel flash={flash} />}
-        {tab === "Testimonials" && <TestimonialsPanel flash={flash} />}
+        {tab === "Services" && <ListPanel flash={flash} kind="services" />}
+        {tab === "Skills" && <ListPanel flash={flash} kind="skills" />}
+        {tab === "Testimonials" && <ListPanel flash={flash} kind="testimonials" />}
         {tab === "Leads" && <LeadsPanel flash={flash} />}
       </div>
 
       {toast && (
-        <div className="fixed bottom-6 left-1/2 z-[100] -translate-x-1/2 rounded-xl bg-espresso px-5 py-3 text-[0.9rem] text-white shadow-[var(--shadow-card)]">
+        <div
+          role="status"
+          className="fixed bottom-6 left-1/2 z-[100] max-w-[92vw] -translate-x-1/2 rounded-xl border border-line bg-ink-3 px-5 py-3 text-[0.88rem] text-ivory shadow-[var(--shadow-lift)]"
+        >
           {toast}
         </div>
       )}
@@ -106,283 +125,1033 @@ export default function Admin() {
   );
 }
 
-/* ── helpers ── */
+/* ─────────────────────────── env not configured ────────────────────────── */
+
+function NotWired() {
+  return (
+    <div className="mx-auto max-w-xl px-5 py-24">
+      <span className="eyebrow">Admin offline</span>
+      <h1 className="mt-5 text-[2rem]">The CMS is not connected.</h1>
+      <p className="mt-4 leading-[1.75]">
+        This panel needs two environment variables. Add them in Vercel under{" "}
+        <span className="text-ivory">Settings → Environment Variables</span>, then redeploy:
+      </p>
+      <pre className="mt-5 overflow-x-auto rounded-xl border border-line bg-ink-2 p-4 font-mono text-[0.78rem] text-amber">
+        {`NEXT_PUBLIC_SUPABASE_URL=https://zjvroxaehidqjocyjqkp.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=sb_publishable_...`}
+      </pre>
+      <p className="mt-5 text-[0.9rem] leading-relaxed">
+        Use the new <span className="font-mono text-ivory">sb_publishable_</span> key from
+        Supabase → Settings → API Keys. The old <span className="font-mono">eyJ…</span> key was
+        disabled on 2 Aug 2026 and will not work. The public site keeps running on its built-in
+        content until this is set.
+      </p>
+    </div>
+  );
+}
+
+/* ──────────────────────────────── login ────────────────────────────────── */
+
+function Login({ onIn }: { onIn: () => void }) {
+  const [email, setEmail] = useState("");
+  const [pass, setPass] = useState("");
+  const [err, setErr] = useState("");
+  const [busy, setBusy] = useState(false);
+
+  async function login(e: React.FormEvent) {
+    e.preventDefault();
+    setBusy(true);
+    setErr("");
+    try {
+      const { error } = await supabase.auth.signInWithPassword({ email, password: pass });
+      if (error) throw error;
+      onIn();
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      setErr(
+        /fetch|network|load failed/i.test(msg)
+          ? "Can't reach the database. Check your internet, or that the Supabase URL and key in Vercel are correct."
+          : /invalid login/i.test(msg)
+            ? "Wrong email or password."
+            : msg
+      );
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <div className="grid min-h-screen place-items-center px-5">
+      <form onSubmit={login} className="panel w-full max-w-[400px] p-8">
+        <span className="grid h-11 w-11 place-items-center rounded-xl bg-amber font-mono text-[0.75rem] font-semibold text-[#17110a]">
+          EN
+        </span>
+        <h1 className="mt-5 font-display text-[1.5rem]">Site control</h1>
+        <p className="mt-1.5 text-[0.88rem]">Sign in to edit the site.</p>
+
+        <div className="mt-6 space-y-3.5">
+          <div>
+            <Label htmlFor="ad-email">Email</Label>
+            <Input
+              id="ad-email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              autoComplete="username"
+              required
+            />
+          </div>
+          <div>
+            <Label htmlFor="ad-pass">Password</Label>
+            <Input
+              id="ad-pass"
+              type="password"
+              value={pass}
+              onChange={(e) => setPass(e.target.value)}
+              autoComplete="current-password"
+              required
+            />
+          </div>
+        </div>
+
+        <button disabled={busy} className="btn btn-primary mt-6 w-full disabled:opacity-60">
+          {busy ? <Loader2 size={16} className="animate-spin" aria-hidden /> : null}
+          Sign in
+        </button>
+        {err && (
+          <p role="alert" className="mt-3 text-[0.85rem] text-alert">
+            {err}
+          </p>
+        )}
+      </form>
+    </div>
+  );
+}
+
+/* ─────────────────────────────── primitives ────────────────────────────── */
+
+const Label = (p: React.LabelHTMLAttributes<HTMLLabelElement>) => (
+  <label
+    {...p}
+    className="mb-1.5 block font-mono text-[0.66rem] uppercase tracking-[0.14em] text-faint"
+  />
+);
+
+const Input = (p: React.InputHTMLAttributes<HTMLInputElement>) => (
+  <input
+    {...p}
+    className="h-11 w-full rounded-xl border border-line bg-ink px-3.5 text-[0.9rem] text-ivory outline-none transition-colors duration-200 focus:border-amber-dim"
+  />
+);
+
+const TArea = (p: React.TextareaHTMLAttributes<HTMLTextAreaElement>) => (
+  <textarea
+    {...p}
+    className="w-full resize-y rounded-xl border border-line bg-ink px-3.5 py-3 text-[0.9rem] leading-relaxed text-ivory outline-none transition-colors duration-200 focus:border-amber-dim"
+  />
+);
+
+function Card({ title, children }: { title?: string; children: React.ReactNode }) {
+  return (
+    <div className="panel mb-4 p-5 lg:p-6">
+      {title && <h2 className="mb-5 font-display text-[1.25rem]">{title}</h2>}
+      {children}
+    </div>
+  );
+}
+
+function Save({ onClick, busy }: { onClick: () => void; busy?: boolean }) {
+  return (
+    <button onClick={onClick} disabled={busy} className="btn btn-primary disabled:opacity-60">
+      {busy ? <Loader2 size={15} className="animate-spin" aria-hidden /> : null}
+      Save
+    </button>
+  );
+}
+
+function Danger({ onClick, label = "Delete" }: { onClick: () => void; label?: string }) {
+  return (
+    <button
+      onClick={onClick}
+      className="flex min-h-[38px] items-center gap-1.5 rounded-lg border border-alert/35 px-3 text-[0.8rem] text-alert transition-colors duration-200 hover:bg-alert/10"
+    >
+      <Trash2 size={13} aria-hidden />
+      {label}
+    </button>
+  );
+}
+
 async function uploadFile(file: File, prefix: string): Promise<string | null> {
   const ext = (file.name.split(".").pop() || "jpg").toLowerCase();
   const path = `${prefix}-${Date.now()}.${ext}`;
-  const { error } = await supabase.storage.from(BUCKET).upload(path, file, { upsert: true, cacheControl: "3600" });
-  if (error) { alert("Upload error: " + error.message); return null; }
+  const { error } = await supabase.storage
+    .from(BUCKET)
+    .upload(path, file, { upsert: true, cacheControl: "3600" });
+  if (error) {
+    alert("Upload failed: " + error.message);
+    return null;
+  }
   return supabase.storage.from(BUCKET).getPublicUrl(path).data.publicUrl;
 }
-const Label = (p: any) => <label className="mb-1.5 block font-mono text-[0.7rem] uppercase tracking-wide text-coffee-soft" {...p} />;
-const Input = (p: any) => <input className="w-full rounded-[10px] border border-mocha-line bg-cream px-3.5 py-2.5 text-[0.92rem] text-espresso outline-none focus:border-caramel" {...p} />;
-const TArea = (p: any) => <textarea className="w-full resize-y rounded-[10px] border border-mocha-line bg-cream px-3.5 py-2.5 text-[0.92rem] text-espresso outline-none focus:border-caramel" {...p} />;
-const Card = (p: any) => <div className="mb-4 rounded-[16px] border border-mocha-line bg-paper p-6 shadow-[var(--shadow-soft)]" {...p} />;
-const Btn = ({ className = "", ...p }: any) => <button className={`rounded-[11px] bg-gradient-to-br from-caramel to-caramel-deep px-5 py-2.5 text-[0.88rem] font-semibold text-white ${className}`} {...p} />;
-const BtnGhost = ({ className = "", ...p }: any) => <button className={`rounded-[10px] border border-mocha-line bg-paper px-3 py-1.5 text-[0.82rem] font-semibold text-espresso ${className}`} {...p} />;
-const BtnDanger = ({ className = "", ...p }: any) => <button className={`rounded-[10px] border border-[rgba(168,51,31,0.3)] bg-paper px-3 py-1.5 text-[0.82rem] font-semibold text-[#a8331f] ${className}`} {...p} />;
 
-/* ── PROFILE ── */
+/* ──────────────────────────────── profile ──────────────────────────────── */
+
 function ProfilePanel({ flash }: { flash: (m: string) => void }) {
   const [p, setP] = useState<Row>({});
   const [stats, setStats] = useState<{ value: string; label: string }[]>([]);
+  const [busy, setBusy] = useState(false);
+
   const load = useCallback(async () => {
     const { data } = await supabase.from("pf_profile").select("*").eq("id", 1).maybeSingle();
     setP(data || {});
     setStats(Array.isArray(data?.stats) ? data!.stats : []);
   }, []);
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => {
+    load();
+  }, [load]);
+
   const set = (k: string, v: any) => setP((o) => ({ ...o, [k]: v }));
 
   async function save() {
-    const { error } = await supabase.from("pf_profile").update({
-      hero_eyebrow: p.hero_eyebrow, hero_h1: p.hero_h1, hero_sub: p.hero_sub, hero_promise: p.hero_promise, about_md: p.about_md,
-    }).eq("id", 1);
-    flash(error ? "Error: " + error.message : "Saved ✓");
+    setBusy(true);
+    const { error } = await supabase
+      .from("pf_profile")
+      .update({
+        hero_eyebrow: p.hero_eyebrow,
+        hero_h1: p.hero_h1,
+        hero_sub: p.hero_sub,
+        hero_promise: p.hero_promise,
+        about_md: p.about_md,
+        stats,
+      })
+      .eq("id", 1);
+    setBusy(false);
+    flash(error ? "Error: " + error.message : "Saved. Live within a minute.");
+    if (!error) load();
   }
-  async function saveStats() {
-    const { error } = await supabase.from("pf_profile").update({ stats }).eq("id", 1);
-    flash(error ? "Error: " + error.message : "Stats saved ✓");
-  }
+
   async function onPhoto(e: React.ChangeEvent<HTMLInputElement>) {
     const f = e.target.files?.[0];
     if (!f) return;
-    flash("Uploading…");
+    flash("Uploading photo…");
     const url = await uploadFile(f, "photo");
     if (!url) return;
     await supabase.from("pf_profile").update({ photo_url: url }).eq("id", 1);
     set("photo_url", url);
-    flash("Photo updated ✓");
+    flash("Photo updated.");
   }
 
   return (
     <>
-      <Card>
-        <h3 className="mb-4 font-display text-[1.2rem] text-espresso">Hero &amp; About</h3>
-        <Label>Hero eyebrow</Label><Input value={p.hero_eyebrow || ""} onChange={(e: any) => set("hero_eyebrow", e.target.value)} />
-        <div className="h-3.5" /><Label>Hero headline (text after &quot;|&quot; shows caramel-italic)</Label><Input value={p.hero_h1 || ""} onChange={(e: any) => set("hero_h1", e.target.value)} />
-        <div className="h-3.5" /><Label>Hero subheadline</Label><TArea rows={2} value={p.hero_sub || ""} onChange={(e: any) => set("hero_sub", e.target.value)} />
-        <div className="h-3.5" /><Label>Promise line</Label><Input value={p.hero_promise || ""} onChange={(e: any) => set("hero_promise", e.target.value)} />
-        <div className="h-3.5" /><Label>About paragraph</Label><TArea rows={4} value={p.about_md || ""} onChange={(e: any) => set("about_md", e.target.value)} />
-        <div className="mt-4"><Btn onClick={save}>Save Hero &amp; About</Btn></div>
-      </Card>
-
-      <Card>
-        <h3 className="mb-4 font-display text-[1.2rem] text-espresso">Your Photo</h3>
-        <div className="flex flex-wrap items-center gap-4">
-          {p.photo_url && <img src={p.photo_url} alt="" className="h-[120px] w-[90px] rounded-[14px] border border-mocha-line object-cover" />}
-          <div className="min-w-[220px] flex-1">
-            <Label>Upload new photo (tall portrait works best)</Label>
-            <input type="file" accept="image/*" onChange={onPhoto} className="text-[0.85rem]" />
+      <Card title="Headline & about">
+        <div className="space-y-4">
+          <div>
+            <Label htmlFor="he">Eyebrow (small line above the headline)</Label>
+            <Input
+              id="he"
+              value={p.hero_eyebrow || ""}
+              onChange={(e) => set("hero_eyebrow", e.target.value)}
+            />
           </div>
+          <div>
+            <Label htmlFor="h1">
+              Headline — everything after the | turns amber italic
+            </Label>
+            <TArea
+              id="h1"
+              rows={2}
+              value={p.hero_h1 || ""}
+              onChange={(e) => set("hero_h1", e.target.value)}
+            />
+          </div>
+          <div>
+            <Label htmlFor="hs">Sub-headline</Label>
+            <TArea
+              id="hs"
+              rows={3}
+              value={p.hero_sub || ""}
+              onChange={(e) => set("hero_sub", e.target.value)}
+            />
+          </div>
+          <div>
+            <Label htmlFor="hp">Promise line (used on the closing CTA)</Label>
+            <TArea
+              id="hp"
+              rows={2}
+              value={p.hero_promise || ""}
+              onChange={(e) => set("hero_promise", e.target.value)}
+            />
+          </div>
+          <div>
+            <Label htmlFor="ab">About paragraph</Label>
+            <TArea
+              id="ab"
+              rows={5}
+              value={p.about_md || ""}
+              onChange={(e) => set("about_md", e.target.value)}
+            />
+          </div>
+        </div>
+
+        <div className="mt-6 border-t border-line pt-5">
+          <Label>The four numbers</Label>
+          <div className="mt-2 space-y-2">
+            {stats.map((s, i) => (
+              <div key={i} className="flex items-end gap-2">
+                <div className="w-[34%]">
+                  <Input
+                    aria-label={`Stat ${i + 1} value`}
+                    placeholder="12+"
+                    value={s.value}
+                    onChange={(e) =>
+                      setStats((a) =>
+                        a.map((x, j) => (j === i ? { ...x, value: e.target.value } : x))
+                      )
+                    }
+                  />
+                </div>
+                <div className="flex-1">
+                  <Input
+                    aria-label={`Stat ${i + 1} label`}
+                    placeholder="Systems shipped"
+                    value={s.label}
+                    onChange={(e) =>
+                      setStats((a) =>
+                        a.map((x, j) => (j === i ? { ...x, label: e.target.value } : x))
+                      )
+                    }
+                  />
+                </div>
+                <button
+                  onClick={() => setStats((a) => a.filter((_, j) => j !== i))}
+                  aria-label={`Remove stat ${i + 1}`}
+                  className="grid h-11 w-11 flex-none place-items-center rounded-xl border border-line text-muted"
+                >
+                  <X size={14} aria-hidden />
+                </button>
+              </div>
+            ))}
+          </div>
+          <button
+            onClick={() => setStats((a) => [...a, { value: "", label: "" }])}
+            className="mt-3 flex min-h-[38px] items-center gap-1.5 rounded-lg border border-line px-3 text-[0.82rem] text-muted"
+          >
+            <Plus size={13} aria-hidden />
+            Add a number
+          </button>
+        </div>
+
+        <div className="mt-6">
+          <Save onClick={save} busy={busy} />
         </div>
       </Card>
 
-      <Card>
-        <h3 className="mb-4 font-display text-[1.2rem] text-espresso">Stats (the 4 numbers)</h3>
-        {stats.map((s, i) => (
-          <div key={i} className="mb-2.5 flex items-end gap-2">
-            <div className="flex-1"><Label>Value</Label><Input value={s.value} onChange={(e: any) => setStats((a) => a.map((x, j) => (j === i ? { ...x, value: e.target.value } : x)))} /></div>
-            <div className="flex-1"><Label>Label</Label><Input value={s.label} onChange={(e: any) => setStats((a) => a.map((x, j) => (j === i ? { ...x, label: e.target.value } : x)))} /></div>
-            <BtnDanger onClick={() => setStats((a) => a.filter((_, j) => j !== i))}>✕</BtnDanger>
+      <Card title="Your photo">
+        <div className="flex flex-wrap items-center gap-5">
+          {p.photo_url && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={p.photo_url}
+              alt="Current portrait"
+              className="h-[120px] w-[96px] rounded-xl border border-line object-cover"
+            />
+          )}
+          <div className="min-w-[220px] flex-1">
+            <Label htmlFor="ph">Upload a new one (tall portrait works best)</Label>
+            <input
+              id="ph"
+              type="file"
+              accept="image/*"
+              onChange={onPhoto}
+              className="w-full text-[0.82rem] text-muted file:mr-3 file:rounded-lg file:border-0 file:bg-amber file:px-3 file:py-2 file:text-[#17110a]"
+            />
           </div>
-        ))}
-        <div className="mt-2 flex gap-2">
-          <BtnGhost onClick={() => setStats((a) => [...a, { value: "", label: "" }])}>+ Add stat</BtnGhost>
-          <Btn onClick={saveStats}>Save Stats</Btn>
         </div>
       </Card>
     </>
   );
 }
 
-/* ── generic list panel for projects/services/skills/testimonials ── */
+/* ──────────────────────────────── projects ─────────────────────────────── */
+
 function ProjectsPanel({ flash }: { flash: (m: string) => void }) {
   const [rows, setRows] = useState<Row[]>([]);
-  const load = useCallback(async () => { const { data } = await supabase.from("pf_projects").select("*").order("sort"); setRows(data || []); }, []);
-  useEffect(() => { load(); }, [load]);
-  async function add() { await supabase.from("pf_projects").insert([{ title: "New Project", blurb: "Describe it…", tags: ["Web"], sort: 99 }]); load(); flash("Added ✓"); }
-  async function del(id: string) { if (!confirm("Delete this project?")) return; await supabase.from("pf_projects").delete().eq("id", id); load(); flash("Deleted ✓"); }
-  async function save(id: string, get: (f: string) => string, file?: File | null) {
-    const payload: Row = { title: get("title"), blurb: get("blurb"), accent: get("accent"), live_url: get("live_url"), sort: +get("sort"), published: get("published") === "true", tags: get("tags").split(",").map((s) => s.trim()).filter(Boolean) };
-    if (file) { const url = await uploadFile(file, "project"); if (url) payload.cover_url = url; }
-    const { error } = await supabase.from("pf_projects").update(payload).eq("id", id); load(); flash(error ? error.message : "Saved ✓");
+  const [loading, setLoading] = useState(true);
+
+  const load = useCallback(async () => {
+    setLoading(true);
+    const { data } = await supabase.from("pf_projects").select("*").order("sort");
+    setRows(data || []);
+    setLoading(false);
+  }, []);
+  useEffect(() => {
+    load();
+  }, [load]);
+
+  async function add() {
+    const { error } = await supabase.from("pf_projects").insert([
+      {
+        title: "New project",
+        blurb: "One sentence on what it does for its owner.",
+        tags: ["Web"],
+        sort: (rows[rows.length - 1]?.sort ?? 0) + 1,
+      },
+    ]);
+    if (error) return flash("Error: " + error.message);
+    flash("Added. Open it and fill it in.");
+    load();
   }
+
   return (
     <>
-      <div className="mb-3.5 flex items-center justify-between"><h3 className="font-display text-[1.2rem] text-espresso">Projects</h3><BtnGhost onClick={add}>+ New project</BtnGhost></div>
-      {rows.map((p) => <ProjectItem key={p.id} p={p} onSave={save} onDel={del} />)}
-      {!rows.length && <p className="text-coffee-soft">No projects yet.</p>}
+      <div className="mb-4 flex items-center justify-between gap-3">
+        <h2 className="font-display text-[1.25rem]">Projects</h2>
+        <button onClick={add} className="btn btn-ghost !min-h-[42px] !px-4 !text-[0.85rem]">
+          <Plus size={14} aria-hidden />
+          New project
+        </button>
+      </div>
+
+      {loading && <p className="text-muted">Loading…</p>}
+      {!loading && !rows.length && (
+        <div className="panel p-8 text-center">
+          <p className="text-muted">No projects yet. The site is showing its built-in examples.</p>
+          <button onClick={add} className="btn btn-primary mt-5">
+            <Plus size={15} aria-hidden />
+            Add your first
+          </button>
+        </div>
+      )}
+
+      {rows.map((p) => (
+        <ProjectItem key={p.id} row={p} reload={load} flash={flash} />
+      ))}
     </>
   );
 }
-function ProjectItem({ p, onSave, onDel }: any) {
+
+function ProjectItem({
+  row,
+  reload,
+  flash,
+}: {
+  row: Row;
+  reload: () => void;
+  flash: (m: string) => void;
+}) {
   const [open, setOpen] = useState(false);
-  const [file, setFile] = useState<File | null>(null);
-  const g = (f: string) => (document.getElementById(`pj-${p.id}-${f}`) as HTMLInputElement)?.value ?? "";
+  const [busy, setBusy] = useState(false);
+  const [f, setF] = useState<Row>(row);
+  const [metrics, setMetrics] = useState<{ value: string; label: string }[]>(
+    Array.isArray(row.metrics) ? row.metrics : []
+  );
+
+  const set = (k: string, v: any) => setF((o) => ({ ...o, [k]: v }));
+
+  async function onCover(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    flash("Uploading image…");
+    const url = await uploadFile(file, "project");
+    if (!url) return;
+    set("cover_url", url);
+    flash("Image ready — press Save.");
+  }
+
+  async function save() {
+    setBusy(true);
+    const base: Row = {
+      title: f.title,
+      blurb: f.blurb,
+      accent: f.accent || "#F0A64B",
+      live_url: f.live_url || null,
+      cover_url: f.cover_url || null,
+      sort: Number(f.sort) || 0,
+      published: !!f.published,
+      tags: String(f.tags ?? "")
+        .split(",")
+        .map((s: string) => s.trim())
+        .filter(Boolean),
+    };
+    const full: Row = {
+      ...base,
+      client: f.client || null,
+      year: f.year || null,
+      problem: f.problem || null,
+      solution: f.solution || null,
+      result: f.result || null,
+      metrics: metrics.filter((m) => m.value || m.label),
+    };
+
+    let { error } = await supabase.from("pf_projects").update(full).eq("id", row.id);
+
+    // The case-study columns only exist after supabase-migration-2026-09.sql.
+    // Without them, keep the basics saveable and say exactly what is missing.
+    if (error && EXTRA_PROJECT_COLS.some((c) => error!.message.includes(c))) {
+      ({ error } = await supabase.from("pf_projects").update(base).eq("id", row.id));
+      flash(
+        error
+          ? "Error: " + error.message
+          : "Saved the basics. Run supabase-migration-2026-09.sql to store the case-study fields."
+      );
+    } else {
+      flash(error ? "Error: " + error.message : "Saved. Live within a minute.");
+    }
+
+    setBusy(false);
+    reload();
+  }
+
+  async function del() {
+    if (!confirm(`Delete "${row.title}"? This cannot be undone.`)) return;
+    const { error } = await supabase.from("pf_projects").delete().eq("id", row.id);
+    flash(error ? "Error: " + error.message : "Deleted.");
+    reload();
+  }
+
+  const tagsValue = Array.isArray(f.tags) ? f.tags.join(", ") : (f.tags ?? "");
+
   return (
-    <div className="mb-3 rounded-[12px] border border-mocha-line bg-cream p-4">
-      <div className="flex items-start justify-between gap-3">
-        <div className="flex items-center gap-3">
-          {p.cover_url && <img src={p.cover_url} className="h-[46px] w-[60px] rounded-lg object-cover" alt="" />}
-          <div><div className="font-bold text-espresso">{p.title}</div><div className="text-[0.8rem] text-coffee-soft">{(p.tags || []).join(", ")} {p.published ? "" : "· hidden"}</div></div>
-        </div>
-        <div className="flex gap-2"><BtnGhost onClick={() => setOpen((v) => !v)}>Edit</BtnGhost><BtnDanger onClick={() => onDel(p.id)}>Delete</BtnDanger></div>
-      </div>
+    <div className="panel mb-3 overflow-hidden">
+      <button
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+        className="flex w-full items-center gap-3 p-4 text-left"
+      >
+        {row.cover_url ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={row.cover_url}
+            alt=""
+            className="h-12 w-16 flex-none rounded-lg border border-line object-cover"
+          />
+        ) : (
+          <span className="grid h-12 w-16 flex-none place-items-center rounded-lg border border-line bg-ink-3 text-faint">
+            <ImageIcon size={15} aria-hidden />
+          </span>
+        )}
+        <span className="min-w-0 flex-1">
+          <span className="block truncate text-[0.98rem] text-ivory">{row.title}</span>
+          <span className="block truncate font-mono text-[0.7rem] text-faint">
+            {(row.tags || []).join(" · ") || "no tags"}
+            {row.published ? "" : " · hidden"}
+          </span>
+        </span>
+        <ChevronDown
+          size={16}
+          aria-hidden
+          className={`flex-none text-faint transition-transform duration-300 ${open ? "rotate-180" : ""}`}
+        />
+      </button>
+
       {open && (
-        <div className="mt-3 grid gap-2.5">
-          <div className="grid gap-2.5 sm:grid-cols-2">
-            <div><Label>Title</Label><Input id={`pj-${p.id}-title`} defaultValue={p.title} /></div>
-            <div><Label>Accent (hex)</Label><Input id={`pj-${p.id}-accent`} defaultValue={p.accent || "#B07A4B"} /></div>
-          </div>
-          <div><Label>Blurb</Label><TArea id={`pj-${p.id}-blurb`} rows={2} defaultValue={p.blurb} /></div>
-          <div className="grid gap-2.5 sm:grid-cols-2">
-            <div><Label>Tags (comma separated)</Label><Input id={`pj-${p.id}-tags`} defaultValue={(p.tags || []).join(", ")} /></div>
-            <div><Label>Live URL</Label><Input id={`pj-${p.id}-live_url`} defaultValue={p.live_url || ""} /></div>
-          </div>
-          <div className="grid gap-2.5 sm:grid-cols-2">
-            <div><Label>Sort</Label><Input id={`pj-${p.id}-sort`} type="number" defaultValue={p.sort || 0} /></div>
-            <div><Label>Published</Label>
-              <select id={`pj-${p.id}-published`} defaultValue={String(!!p.published)} className="w-full rounded-[10px] border border-mocha-line bg-cream px-3.5 py-2.5 text-[0.92rem] text-espresso">
-                <option value="true">Yes</option><option value="false">No</option>
-              </select>
+        <div className="space-y-4 border-t border-line p-4">
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div>
+              <Label htmlFor={`t-${row.id}`}>Title</Label>
+              <Input
+                id={`t-${row.id}`}
+                value={f.title || ""}
+                onChange={(e) => set("title", e.target.value)}
+              />
+            </div>
+            <div>
+              <Label htmlFor={`c-${row.id}`}>Client / where</Label>
+              <Input
+                id={`c-${row.id}`}
+                placeholder="Jean de Dieu / Kigali"
+                value={f.client || ""}
+                onChange={(e) => set("client", e.target.value)}
+              />
             </div>
           </div>
-          <div><Label>Cover image</Label><input type="file" accept="image/*" onChange={(e) => setFile(e.target.files?.[0] || null)} className="text-[0.85rem]" /></div>
-          <Btn className="w-max" onClick={() => onSave(p.id, g, file)}>Save</Btn>
+
+          <div>
+            <Label htmlFor={`b-${row.id}`}>One-line summary (shown on the card)</Label>
+            <TArea
+              id={`b-${row.id}`}
+              rows={2}
+              value={f.blurb || ""}
+              onChange={(e) => set("blurb", e.target.value)}
+            />
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div>
+              <Label htmlFor={`tg-${row.id}`}>Tags (comma separated)</Label>
+              <Input
+                id={`tg-${row.id}`}
+                value={tagsValue}
+                onChange={(e) => set("tags", e.target.value)}
+              />
+            </div>
+            <div>
+              <Label htmlFor={`u-${row.id}`}>Live URL</Label>
+              <Input
+                id={`u-${row.id}`}
+                type="url"
+                placeholder="https://"
+                value={f.live_url || ""}
+                onChange={(e) => set("live_url", e.target.value)}
+              />
+            </div>
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-3">
+            <div>
+              <Label htmlFor={`y-${row.id}`}>Year</Label>
+              <Input
+                id={`y-${row.id}`}
+                value={f.year || ""}
+                onChange={(e) => set("year", e.target.value)}
+              />
+            </div>
+            <div>
+              <Label htmlFor={`a-${row.id}`}>Accent colour</Label>
+              <div className="flex gap-2">
+                <input
+                  id={`a-${row.id}`}
+                  type="color"
+                  value={f.accent || "#F0A64B"}
+                  onChange={(e) => set("accent", e.target.value)}
+                  className="h-11 w-12 flex-none cursor-pointer rounded-xl border border-line bg-ink"
+                />
+                <Input
+                  aria-label="Accent hex"
+                  value={f.accent || "#F0A64B"}
+                  onChange={(e) => set("accent", e.target.value)}
+                />
+              </div>
+            </div>
+            <div>
+              <Label htmlFor={`s-${row.id}`}>Order</Label>
+              <Input
+                id={`s-${row.id}`}
+                type="number"
+                value={f.sort ?? 0}
+                onChange={(e) => set("sort", e.target.value)}
+              />
+            </div>
+          </div>
+
+          <div>
+            <Label htmlFor={`img-${row.id}`}>Cover image</Label>
+            <div className="flex flex-wrap items-center gap-4">
+              {f.cover_url && (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={f.cover_url}
+                  alt="Cover preview"
+                  className="h-20 w-32 rounded-lg border border-line object-cover"
+                />
+              )}
+              <input
+                id={`img-${row.id}`}
+                type="file"
+                accept="image/*"
+                onChange={onCover}
+                className="flex-1 text-[0.82rem] text-muted file:mr-3 file:rounded-lg file:border-0 file:bg-amber file:px-3 file:py-2 file:text-[#17110a]"
+              />
+            </div>
+            <p className="mt-2 text-[0.78rem] text-faint">
+              Wide screenshot, roughly 1600×1000. No image is fine — the card draws its own.
+            </p>
+          </div>
+
+          <details className="rounded-xl border border-line bg-ink-2 p-4">
+            <summary className="cursor-pointer text-[0.9rem] text-ivory">
+              Case study (shown on the project&apos;s own page)
+            </summary>
+            <div className="mt-4 space-y-4">
+              <div>
+                <Label htmlFor={`p-${row.id}`}>The problem they had</Label>
+                <TArea
+                  id={`p-${row.id}`}
+                  rows={3}
+                  value={f.problem || ""}
+                  onChange={(e) => set("problem", e.target.value)}
+                />
+              </div>
+              <div>
+                <Label htmlFor={`so-${row.id}`}>What you built</Label>
+                <TArea
+                  id={`so-${row.id}`}
+                  rows={3}
+                  value={f.solution || ""}
+                  onChange={(e) => set("solution", e.target.value)}
+                />
+              </div>
+              <div>
+                <Label htmlFor={`r-${row.id}`}>What changed for them</Label>
+                <TArea
+                  id={`r-${row.id}`}
+                  rows={3}
+                  value={f.result || ""}
+                  onChange={(e) => set("result", e.target.value)}
+                />
+              </div>
+
+              <div>
+                <Label>Big numbers (up to 4)</Label>
+                <div className="space-y-2">
+                  {metrics.map((m, i) => (
+                    <div key={i} className="flex items-end gap-2">
+                      <div className="w-[34%]">
+                        <Input
+                          aria-label={`Metric ${i + 1} value`}
+                          placeholder="24/7"
+                          value={m.value}
+                          onChange={(e) =>
+                            setMetrics((a) =>
+                              a.map((x, j) => (j === i ? { ...x, value: e.target.value } : x))
+                            )
+                          }
+                        />
+                      </div>
+                      <div className="flex-1">
+                        <Input
+                          aria-label={`Metric ${i + 1} label`}
+                          placeholder="Coverage"
+                          value={m.label}
+                          onChange={(e) =>
+                            setMetrics((a) =>
+                              a.map((x, j) => (j === i ? { ...x, label: e.target.value } : x))
+                            )
+                          }
+                        />
+                      </div>
+                      <button
+                        onClick={() => setMetrics((a) => a.filter((_, j) => j !== i))}
+                        aria-label={`Remove metric ${i + 1}`}
+                        className="grid h-11 w-11 flex-none place-items-center rounded-xl border border-line text-muted"
+                      >
+                        <X size={14} aria-hidden />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+                {metrics.length < 4 && (
+                  <button
+                    onClick={() => setMetrics((a) => [...a, { value: "", label: "" }])}
+                    className="mt-3 flex min-h-[38px] items-center gap-1.5 rounded-lg border border-line px-3 text-[0.82rem] text-muted"
+                  >
+                    <Plus size={13} aria-hidden />
+                    Add a number
+                  </button>
+                )}
+              </div>
+            </div>
+          </details>
+
+          <div className="flex flex-wrap items-center justify-between gap-3 border-t border-line pt-4">
+            <label className="flex cursor-pointer items-center gap-2.5 text-[0.88rem] text-ivory">
+              <input
+                type="checkbox"
+                checked={!!f.published}
+                onChange={(e) => set("published", e.target.checked)}
+                className="h-4 w-4 accent-[#F0A64B]"
+              />
+              Show on the site
+            </label>
+            <div className="flex items-center gap-2">
+              <Danger onClick={del} />
+              <Save onClick={save} busy={busy} />
+            </div>
+          </div>
         </div>
       )}
     </div>
   );
 }
 
-function ServicesPanel({ flash }: { flash: (m: string) => void }) {
-  const [rows, setRows] = useState<Row[]>([]);
-  const load = useCallback(async () => { const { data } = await supabase.from("pf_services").select("*").order("sort"); setRows(data || []); }, []);
-  useEffect(() => { load(); }, [load]);
-  return (
-    <>
-      <div className="mb-3.5 flex items-center justify-between"><h3 className="font-display text-[1.2rem] text-espresso">Services</h3>
-        <BtnGhost onClick={async () => { await supabase.from("pf_services").insert([{ title: "New Service", outcome: "What the client gets…", sort: 99 }]); load(); flash("Added ✓"); }}>+ New service</BtnGhost></div>
-      {rows.map((s) => {
-        const g = (f: string) => (document.getElementById(`sv-${s.id}-${f}`) as HTMLInputElement)?.value ?? "";
-        return (
-          <div key={s.id} className="mb-3 rounded-[12px] border border-mocha-line bg-cream p-4">
-            <div className="mb-2 flex justify-between"><div className="font-bold text-espresso">{s.title}</div><BtnDanger onClick={async () => { if (!confirm("Delete?")) return; await supabase.from("pf_services").delete().eq("id", s.id); load(); flash("Deleted ✓"); }}>Delete</BtnDanger></div>
-            <Label>Title</Label><Input id={`sv-${s.id}-title`} defaultValue={s.title} />
-            <div className="h-2.5" /><Label>Outcome</Label><TArea id={`sv-${s.id}-outcome`} rows={2} defaultValue={s.outcome} />
-            <div className="mt-2 flex items-end gap-2"><div className="w-[120px]"><Label>Sort</Label><Input id={`sv-${s.id}-sort`} type="number" defaultValue={s.sort || 0} /></div>
-              <Btn onClick={async () => { const { error } = await supabase.from("pf_services").update({ title: g("title"), outcome: g("outcome"), sort: +g("sort") }).eq("id", s.id); flash(error ? error.message : "Saved ✓"); }}>Save</Btn></div>
-          </div>
-        );
-      })}
-      {!rows.length && <p className="text-coffee-soft">No services yet.</p>}
-    </>
-  );
-}
+/* ───────────────── generic list panels (services/skills/quotes) ────────── */
 
-function SkillsPanel({ flash }: { flash: (m: string) => void }) {
-  const [rows, setRows] = useState<Row[]>([]);
-  const load = useCallback(async () => { const { data } = await supabase.from("pf_skills").select("*").order("sort"); setRows(data || []); }, []);
-  useEffect(() => { load(); }, [load]);
-  return (
-    <>
-      <div className="mb-3.5 flex items-center justify-between"><h3 className="font-display text-[1.2rem] text-espresso">Skills / Capabilities</h3>
-        <BtnGhost onClick={async () => { await supabase.from("pf_skills").insert([{ grp: "24/7 Automated Customer Follow-Up", label: "New capability", sort: 99 }]); load(); flash("Added ✓"); }}>+ New</BtnGhost></div>
-      <p className="mb-3.5 text-[0.86rem] text-coffee-soft">Each unique <b>group</b> becomes a column on the site.</p>
-      {rows.map((s) => {
-        const g = (f: string) => (document.getElementById(`sk-${s.id}-${f}`) as HTMLInputElement)?.value ?? "";
-        return (
-          <div key={s.id} className="mb-2.5 flex items-end gap-2 rounded-[12px] border border-mocha-line bg-cream p-3">
-            <div className="flex-1"><Label>Group</Label><Input id={`sk-${s.id}-grp`} defaultValue={s.grp} /></div>
-            <div className="flex-1"><Label>Label</Label><Input id={`sk-${s.id}-label`} defaultValue={s.label} /></div>
-            <div className="w-[80px]"><Label>Sort</Label><Input id={`sk-${s.id}-sort`} type="number" defaultValue={s.sort || 0} /></div>
-            <Btn onClick={async () => { const { error } = await supabase.from("pf_skills").update({ grp: g("grp"), label: g("label"), sort: +g("sort") }).eq("id", s.id); flash(error ? error.message : "Saved ✓"); }}>Save</Btn>
-            <BtnDanger onClick={async () => { await supabase.from("pf_skills").delete().eq("id", s.id); load(); flash("Deleted ✓"); }}>✕</BtnDanger>
-          </div>
-        );
-      })}
-      {!rows.length && <p className="text-coffee-soft">No skills yet.</p>}
-    </>
-  );
-}
+type Kind = "services" | "skills" | "testimonials";
 
-function TestimonialsPanel({ flash }: { flash: (m: string) => void }) {
+const KIND: Record<
+  Kind,
+  { table: string; title: string; blank: Row; fields: [string, string, "line" | "area"][] }
+> = {
+  services: {
+    table: "pf_services",
+    title: "Services",
+    blank: { title: "New service", outcome: "What the client gets.", icon: "globe", sort: 99 },
+    fields: [
+      ["title", "Title", "line"],
+      ["outcome", "What it does for them", "area"],
+      ["icon", "Icon: globe, chat, repeat or chart", "line"],
+    ],
+  },
+  skills: {
+    table: "pf_skills",
+    title: "Skills",
+    blank: { grp: "Systems", label: "New capability", sort: 99 },
+    fields: [
+      ["grp", "Group (each unique group is a column)", "line"],
+      ["label", "Label", "line"],
+    ],
+  },
+  testimonials: {
+    table: "pf_testimonials",
+    title: "Testimonials",
+    blank: { name: "Client name", role: "Company", quote: "What they said.", sort: 99 },
+    fields: [
+      ["quote", "Quote", "area"],
+      ["name", "Name", "line"],
+      ["role", "Company / role", "line"],
+    ],
+  },
+};
+
+function ListPanel({ flash, kind }: { flash: (m: string) => void; kind: Kind }) {
+  const cfg = KIND[kind];
   const [rows, setRows] = useState<Row[]>([]);
-  const load = useCallback(async () => { const { data } = await supabase.from("pf_testimonials").select("*").order("sort"); setRows(data || []); }, []);
-  useEffect(() => { load(); }, [load]);
-  return (
-    <>
-      <div className="mb-3.5 flex items-center justify-between"><h3 className="font-display text-[1.2rem] text-espresso">Testimonials</h3>
-        <BtnGhost onClick={async () => { await supabase.from("pf_testimonials").insert([{ name: "Client name", role: "Company", quote: "What they said…", sort: 99 }]); load(); flash("Added ✓"); }}>+ New</BtnGhost></div>
-      {rows.map((t) => <TItem key={t.id} t={t} load={load} flash={flash} />)}
-      {!rows.length && <p className="text-coffee-soft">No testimonials yet.</p>}
-    </>
-  );
-}
-function TItem({ t, load, flash }: any) {
-  const [file, setFile] = useState<File | null>(null);
-  const g = (f: string) => (document.getElementById(`tm-${t.id}-${f}`) as HTMLInputElement)?.value ?? "";
-  async function save() {
-    const payload: Row = { quote: g("quote"), name: g("name"), role: g("role"), sort: +g("sort"), published: g("published") === "true" };
-    if (file) { flash("Uploading photo…"); const url = await uploadFile(file, "avatar"); if (url) payload.avatar_url = url; }
-    const { error } = await supabase.from("pf_testimonials").update(payload).eq("id", t.id); load(); flash(error ? error.message : "Saved ✓");
+
+  const load = useCallback(async () => {
+    const { data } = await supabase.from(cfg.table).select("*").order("sort");
+    setRows(data || []);
+  }, [cfg.table]);
+  useEffect(() => {
+    load();
+  }, [load]);
+
+  async function add() {
+    const { error } = await supabase.from(cfg.table).insert([cfg.blank]);
+    flash(error ? "Error: " + error.message : "Added.");
+    load();
   }
+
   return (
-    <div className="mb-3 rounded-[12px] border border-mocha-line bg-cream p-4">
-      <div className="mb-2 flex items-center justify-between gap-3">
-        <div className="flex items-center gap-3">
-          {t.avatar_url && <img src={t.avatar_url} className="h-[46px] w-[46px] rounded-full object-cover" alt="" />}
-          <div className="font-bold text-espresso">{t.name} <span className="text-[0.82rem] font-normal text-coffee-soft">{t.role}</span>
-            {t.consent_public ? <span className="ml-1.5 rounded-full bg-[rgba(176,122,75,0.12)] px-2 py-0.5 font-mono text-[0.68rem] text-caramel-deep">client approved</span> : null}
-            {!t.published ? <span className="ml-1.5 rounded-full bg-[rgba(176,122,75,0.12)] px-2 py-0.5 font-mono text-[0.68rem] text-caramel-deep">private</span> : null}
+    <>
+      <div className="mb-4 flex items-center justify-between gap-3">
+        <h2 className="font-display text-[1.25rem]">{cfg.title}</h2>
+        <button onClick={add} className="btn btn-ghost !min-h-[42px] !px-4 !text-[0.85rem]">
+          <Plus size={14} aria-hidden />
+          New
+        </button>
+      </div>
+
+      {rows.map((r) => (
+        <ListItem key={r.id} row={r} cfg={cfg} kind={kind} reload={load} flash={flash} />
+      ))}
+      {!rows.length && <p className="text-muted">Nothing here yet.</p>}
+    </>
+  );
+}
+
+function ListItem({
+  row,
+  cfg,
+  kind,
+  reload,
+  flash,
+}: {
+  row: Row;
+  cfg: (typeof KIND)[Kind];
+  kind: Kind;
+  reload: () => void;
+  flash: (m: string) => void;
+}) {
+  const [f, setF] = useState<Row>(row);
+  const [busy, setBusy] = useState(false);
+  const set = (k: string, v: any) => setF((o) => ({ ...o, [k]: v }));
+
+  async function save() {
+    setBusy(true);
+    const payload: Row = { sort: Number(f.sort) || 0 };
+    cfg.fields.forEach(([k]) => (payload[k] = f[k]));
+    if (kind === "testimonials") payload.published = !!f.published;
+    const { error } = await supabase.from(cfg.table).update(payload).eq("id", row.id);
+    setBusy(false);
+    flash(error ? "Error: " + error.message : "Saved.");
+    reload();
+  }
+
+  async function onAvatar(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    flash("Uploading…");
+    const url = await uploadFile(file, "avatar");
+    if (!url) return;
+    await supabase.from(cfg.table).update({ avatar_url: url }).eq("id", row.id);
+    flash("Photo updated.");
+    reload();
+  }
+
+  return (
+    <div className="panel mb-3 space-y-4 p-4 lg:p-5">
+      {cfg.fields.map(([k, label, type]) => (
+        <div key={k}>
+          <Label htmlFor={`${row.id}-${k}`}>{label}</Label>
+          {type === "area" ? (
+            <TArea
+              id={`${row.id}-${k}`}
+              rows={3}
+              value={f[k] || ""}
+              onChange={(e) => set(k, e.target.value)}
+            />
+          ) : (
+            <Input
+              id={`${row.id}-${k}`}
+              value={f[k] || ""}
+              onChange={(e) => set(k, e.target.value)}
+            />
+          )}
+        </div>
+      ))}
+
+      {kind === "testimonials" && (
+        <div className="flex flex-wrap items-center gap-4">
+          {row.avatar_url && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={row.avatar_url}
+              alt=""
+              className="h-12 w-12 rounded-full border border-line object-cover"
+            />
+          )}
+          <div className="min-w-[200px] flex-1">
+            <Label htmlFor={`av-${row.id}`}>Photo or logo</Label>
+            <input
+              id={`av-${row.id}`}
+              type="file"
+              accept="image/*"
+              onChange={onAvatar}
+              className="w-full text-[0.82rem] text-muted file:mr-3 file:rounded-lg file:border-0 file:bg-amber file:px-3 file:py-2 file:text-[#17110a]"
+            />
           </div>
+          <label className="flex cursor-pointer items-center gap-2.5 text-[0.88rem] text-ivory">
+            <input
+              type="checkbox"
+              checked={!!f.published}
+              onChange={(e) => set("published", e.target.checked)}
+              className="h-4 w-4 accent-[#F0A64B]"
+            />
+            Public
+          </label>
         </div>
-        <BtnDanger onClick={async () => { if (!confirm("Delete?")) return; await supabase.from("pf_testimonials").delete().eq("id", t.id); load(); flash("Deleted ✓"); }}>Delete</BtnDanger>
-      </div>
-      <Label>Quote / case study</Label><TArea id={`tm-${t.id}-quote`} rows={3} defaultValue={t.quote} />
-      <div className="mt-2 grid gap-2.5 sm:grid-cols-2">
-        <div><Label>Name</Label><Input id={`tm-${t.id}-name`} defaultValue={t.name} /></div>
-        <div><Label>Role / company</Label><Input id={`tm-${t.id}-role`} defaultValue={t.role || ""} /></div>
-      </div>
-      <div className="mt-2 grid gap-2.5 sm:grid-cols-2">
-        <div><Label>Sort</Label><Input id={`tm-${t.id}-sort`} type="number" defaultValue={t.sort || 0} /></div>
-        <div><Label>Show on site?</Label>
-          <select id={`tm-${t.id}-published`} defaultValue={String(!!t.published)} className="w-full rounded-[10px] border border-mocha-line bg-cream px-3.5 py-2.5 text-[0.92rem] text-espresso">
-            <option value="true">Yes — public</option><option value="false">No — private</option>
-          </select>
+      )}
+
+      <div className="flex items-center justify-between gap-3 border-t border-line pt-4">
+        <div className="w-[110px]">
+          <Label htmlFor={`o-${row.id}`}>Order</Label>
+          <Input
+            id={`o-${row.id}`}
+            type="number"
+            value={f.sort ?? 0}
+            onChange={(e) => set("sort", e.target.value)}
+          />
+        </div>
+        <div className="flex items-center gap-2">
+          <Danger
+            onClick={async () => {
+              if (!confirm("Delete this?")) return;
+              await supabase.from(cfg.table).delete().eq("id", row.id);
+              flash("Deleted.");
+              reload();
+            }}
+          />
+          <Save onClick={save} busy={busy} />
         </div>
       </div>
-      <div className="mt-2"><Label>Photo / logo</Label><input type="file" accept="image/*" onChange={(e) => setFile(e.target.files?.[0] || null)} className="text-[0.85rem]" /></div>
-      <div className="mt-2"><Btn onClick={save}>Save</Btn></div>
     </div>
   );
 }
 
+/* ───────────────────────────────── leads ───────────────────────────────── */
+
 function LeadsPanel({ flash }: { flash: (m: string) => void }) {
   const [rows, setRows] = useState<Row[]>([]);
-  const load = useCallback(async () => { const { data } = await supabase.from("pf_leads").select("*").order("created_at", { ascending: false }); setRows(data || []); }, []);
-  useEffect(() => { load(); }, [load]);
+  const [loading, setLoading] = useState(true);
+  const [err, setErr] = useState("");
+
+  const load = useCallback(async () => {
+    setLoading(true);
+    const { data, error } = await supabase
+      .from("pf_leads")
+      .select("*")
+      .order("created_at", { ascending: false });
+    setErr(error?.message || "");
+    setRows(data || []);
+    setLoading(false);
+  }, []);
+  useEffect(() => {
+    load();
+  }, [load]);
+
+  const unread = rows.filter((r) => r.status === "new").length;
+
   return (
     <>
-      <div className="mb-3.5 flex items-center justify-between"><h3 className="font-display text-[1.2rem] text-espresso">Leads inbox</h3><BtnGhost onClick={load}>Refresh</BtnGhost></div>
+      <div className="mb-4 flex items-center justify-between gap-3">
+        <h2 className="font-display text-[1.25rem]">
+          Leads{" "}
+          {unread > 0 && (
+            <span className="ml-1 rounded-full bg-amber px-2 py-0.5 font-mono text-[0.7rem] text-[#17110a]">
+              {unread} new
+            </span>
+          )}
+        </h2>
+        <button
+          onClick={load}
+          className="flex min-h-[42px] items-center gap-1.5 rounded-lg border border-line px-3.5 text-[0.85rem] text-muted"
+        >
+          <RefreshCw size={14} aria-hidden />
+          Refresh
+        </button>
+      </div>
+
+      {err && (
+        <p role="alert" className="panel mb-4 p-4 text-[0.88rem] text-alert">
+          {err} — if this mentions a policy, run supabase-migration-2026-09.sql.
+        </p>
+      )}
+      {loading && <p className="text-muted">Loading…</p>}
+      {!loading && !rows.length && !err && <p className="text-muted">No leads yet.</p>}
+
       {rows.map((l) => (
-        <div key={l.id} className={`mb-3 rounded-[12px] border border-mocha-line bg-paper p-4 ${l.status === "new" ? "border-l-4 border-l-caramel" : ""}`}>
-          <div className="flex flex-wrap justify-between gap-3">
-            <div><b className="text-espresso">{l.name || "—"}</b> · <a href={`mailto:${l.email}`} className="text-caramel-deep">{l.email}</a>
-              <span className="ml-1.5 rounded-full bg-[rgba(176,122,75,0.12)] px-2 py-0.5 font-mono text-[0.68rem] text-caramel-deep">{l.status}</span></div>
-            <div className="text-[0.8rem] text-coffee-soft">{new Date(l.created_at).toLocaleString()}</div>
+        <div
+          key={l.id}
+          className={`panel mb-3 p-5 ${l.status === "new" ? "border-l-2 border-l-amber" : ""}`}
+        >
+          <div className="flex flex-wrap items-baseline justify-between gap-3">
+            <div className="text-[0.98rem] text-ivory">
+              {l.name || "Someone"}
+              {l.email && (
+                <a href={`mailto:${l.email}`} className="ml-2 text-[0.85rem] text-amber">
+                  {l.email}
+                </a>
+              )}
+            </div>
+            <span className="font-mono text-[0.72rem] text-faint">
+              {new Date(l.created_at).toLocaleString()}
+            </span>
           </div>
-          <div className="my-2 font-medium text-espresso">{l.subject}</div>
-          <div className="whitespace-pre-wrap text-[0.9rem] text-coffee-soft">{l.message}</div>
-          <div className="mt-2.5 flex gap-2">
-            <a className="rounded-[10px] border border-mocha-line bg-paper px-3 py-1.5 text-[0.82rem] font-semibold text-espresso" href={`mailto:${l.email}?subject=Re: ${encodeURIComponent(l.subject || "")}`}>Reply</a>
-            {l.status === "new" && <BtnGhost onClick={async () => { await supabase.from("pf_leads").update({ status: "read" }).eq("id", l.id); load(); }}>Mark read</BtnGhost>}
-            <BtnDanger onClick={async () => { if (!confirm("Delete lead?")) return; await supabase.from("pf_leads").delete().eq("id", l.id); load(); flash("Deleted ✓"); }}>Delete</BtnDanger>
+          <div className="mt-2 text-[0.9rem] text-ivory">{l.subject}</div>
+          <p className="mt-1.5 whitespace-pre-wrap text-[0.88rem] leading-relaxed">{l.message}</p>
+          <div className="mt-4 flex flex-wrap gap-2">
+            {l.status === "new" && (
+              <button
+                onClick={async () => {
+                  await supabase.from("pf_leads").update({ status: "read" }).eq("id", l.id);
+                  load();
+                }}
+                className="min-h-[38px] rounded-lg border border-line px-3 text-[0.82rem] text-muted"
+              >
+                Mark read
+              </button>
+            )}
+            <Danger
+              onClick={async () => {
+                if (!confirm("Delete this lead?")) return;
+                await supabase.from("pf_leads").delete().eq("id", l.id);
+                flash("Deleted.");
+                load();
+              }}
+            />
           </div>
         </div>
       ))}
-      {!rows.length && <p className="text-coffee-soft">No leads yet.</p>}
     </>
   );
 }

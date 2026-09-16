@@ -1,18 +1,32 @@
 import { createClient } from "@supabase/supabase-js";
 
-// anon key is public-safe (same as the old config.js). Env vars override if set.
-const url =
-  process.env.NEXT_PUBLIC_SUPABASE_URL ||
-  "https://zjvroxaehidqjocyjqkp.supabase.co";
-const anon =
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpqdnJveGFlaGlkcWpvY3lqcWtwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1NzIxNjAsImV4cCI6MjA5NjE0ODE2MH0.Ggrh9Rh6p3JfegxlAJpyLL3HGxB421tDT1LdIU_EuI8";
-
-export const SUPA_URL = url;
-export const SUPA_ANON = anon;
+/**
+ * Keys come from env ONLY.
+ *
+ * The old hardcoded `eyJ...` anon key was disabled by Supabase on 2026-08-02
+ * ("Legacy API keys are disabled") when the shared ai7 project rotated to the
+ * new-style keys. Never hardcode again — set these in Vercel:
+ *
+ *   NEXT_PUBLIC_SUPABASE_URL       https://zjvroxaehidqjocyjqkp.supabase.co
+ *   NEXT_PUBLIC_SUPABASE_ANON_KEY  sb_publishable_...
+ *
+ * If they're missing the whole site still renders from lib/site.ts seed data.
+ */
+export const SUPA_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
+export const SUPA_ANON = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
 export const BUCKET = "portfolio";
 
-export const supabase = createClient(url, anon);
+/** True when the CMS is wired. Guard every query with this. */
+export const cmsReady = Boolean(SUPA_URL && SUPA_ANON);
 
-// Fresh client (used in browser components that also do auth)
-export const createBrowserClient = () => createClient(url, anon);
+/**
+ * Always a real client so callers don't need null checks — but when the env is
+ * missing it points at a dead localhost so requests fail fast instead of hanging.
+ */
+export const supabase = createClient(
+  SUPA_URL || "http://127.0.0.1:1",
+  SUPA_ANON || "missing-key"
+);
+
+export const createBrowserClient = () =>
+  createClient(SUPA_URL || "http://127.0.0.1:1", SUPA_ANON || "missing-key");

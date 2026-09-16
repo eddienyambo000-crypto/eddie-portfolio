@@ -1,7 +1,14 @@
 "use client";
-import { useState } from "react";
-import { supabase } from "@/lib/supabase";
 
+import { useState } from "react";
+import { Check, Loader2 } from "lucide-react";
+import { cmsReady, supabase } from "@/lib/supabase";
+import { WHATSAPP_PRETTY } from "@/lib/site";
+
+/**
+ * Private testimonial capture. Everything lands as published=false; it only
+ * goes on the site if the client ticks consent AND Eddie flips it in /admin.
+ */
 export default function Share() {
   const [status, setStatus] = useState<"idle" | "sending" | "ok" | "err">("idle");
   const [consent, setConsent] = useState(false);
@@ -12,6 +19,7 @@ export default function Share() {
     const fd = new FormData(form);
     setStatus("sending");
     try {
+      if (!cmsReady) throw new Error("offline");
       const { error } = await supabase.from("pf_testimonials").insert([
         {
           name: fd.get("name"),
@@ -25,80 +33,114 @@ export default function Share() {
       if (error) throw error;
       setStatus("ok");
       form.reset();
-      setConsent(false);
     } catch {
       setStatus("err");
     }
   }
 
   return (
-    <main className="relative z-[1] mx-auto max-w-[620px] px-6 pb-20 pt-12">
-      <a href="/" className="mb-8 inline-flex items-center gap-2.5 font-display text-[1.1rem] font-extrabold text-espresso">
-        <span className="grid h-[34px] w-[34px] place-items-center rounded-[9px] bg-gradient-to-br from-caramel to-caramel-deep font-sans text-[0.85rem] font-bold text-white">EN</span>
-        Eddie Nyambo
-      </a>
-      <span className="eyebrow">CLIENT STORIES</span>
-      <h1 className="mb-3.5 mt-3 font-display text-[clamp(1.9rem,5vw,2.6rem)] leading-[1.08]">
-        Tell the world what we <span className="serif-i">built together.</span>
+    <section className="mx-auto max-w-[640px] px-5 pb-28 pt-28 sm:pt-32">
+      <span className="eyebrow">Client stories</span>
+      <h1 className="mt-5 text-[clamp(2rem,6vw,2.9rem)] leading-[1.04]">
+        Tell people what we <span className="tail">built together.</span>
       </h1>
-      <p className="mb-7 text-coffee">
-        If I built or improved something for your business, I'd love to hear how it's going. Write a few honest lines — it only goes public if <b>you</b> say it can.
+      <p className="mt-5 leading-[1.75]">
+        If I built something for your business, a few honest lines about how it is going help
+        more than anything. It only goes public if <span className="text-ivory">you</span> say
+        it can.
       </p>
 
-      <div className="rounded-[22px] border border-mocha-line bg-paper p-8 shadow-[var(--shadow-card)]">
-        <form onSubmit={onSubmit}>
-          <div className="mb-4 grid grid-cols-1 gap-3.5 sm:grid-cols-2">
-            <Field label="Your name" name="name" placeholder="e.g. Jean de Dieu" required />
-            <Field label="Business / role" name="role" placeholder="e.g. StepIn Coaching" required />
+      {status === "ok" ? (
+        <div role="status" className="panel-raised edge-top mt-8 p-8 text-center">
+          <span className="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-live/12 text-live">
+            <Check size={20} aria-hidden />
+          </span>
+          <h2 className="mt-5 font-display text-[1.5rem]">Thank you.</h2>
+          <p className="mt-2">
+            Your story is with Eddie.{" "}
+            {consent ? "He may feature it on the site." : "It stays private."}
+          </p>
+        </div>
+      ) : (
+        <form onSubmit={onSubmit} className="panel mt-8 space-y-5 p-6 lg:p-8">
+          <div className="grid gap-5 sm:grid-cols-2">
+            <Field label="Your name" name="name" placeholder="Jean de Dieu" autoComplete="name" />
+            <Field
+              label="Business / role"
+              name="role"
+              placeholder="StepIn Coaching"
+              autoComplete="organization"
+            />
           </div>
-          <div className="mb-4">
-            <label className="mb-1.5 block font-mono text-[0.7rem] uppercase tracking-wide text-coffee-soft">
-              Your story — what did we build & how's it helping?
+
+          <div>
+            <label htmlFor="quote" className="mb-2 block text-[0.88rem] text-ivory">
+              What did we build, and what changed? <span className="text-amber">*</span>
             </label>
             <textarea
+              id="quote"
               name="quote"
               rows={5}
               required
-              placeholder="What was the problem, what did Eddie build, and what changed for your business since?"
-              className="min-h-[130px] w-full resize-y rounded-xl border border-mocha-line bg-cream px-4 py-3.5 text-[0.95rem] text-espresso outline-none transition focus:border-caramel focus:shadow-[0_0_0_4px_rgba(176,122,75,0.14)]"
+              placeholder="What was the problem before, what got built, and what is different now?"
+              className="w-full resize-y rounded-xl border border-line bg-ink px-4 py-3 text-[0.94rem] text-ivory outline-none transition-colors duration-200 placeholder:text-faint focus:border-amber-dim"
             />
           </div>
-          <label className="mb-5 mt-1.5 flex items-start gap-2.5 rounded-xl border border-mocha-line bg-cream2 px-4 py-3.5 text-[0.9rem] text-espresso">
-            <input type="checkbox" checked={consent} onChange={(e) => setConsent(e.target.checked)} className="mt-0.5 h-[18px] w-[18px] flex-shrink-0 accent-[#9A6638]" />
-            <span>Yes — Eddie can feature this (with my name &amp; business) publicly on his website. Leave unchecked to keep it private.</span>
+
+          <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-line bg-ink-2 p-4 text-[0.88rem] text-ivory">
+            <input
+              type="checkbox"
+              checked={consent}
+              onChange={(e) => setConsent(e.target.checked)}
+              className="mt-1 h-4 w-4 flex-none accent-[#F0A64B]"
+            />
+            <span>
+              Eddie can feature this publicly with my name and business. Leave unticked to keep it
+              private.
+            </span>
           </label>
+
+          {status === "err" && (
+            <p role="alert" className="text-[0.88rem] text-alert">
+              Could not send that. Please WhatsApp Eddie instead on {WHATSAPP_PRETTY}.
+            </p>
+          )}
+
           <button
             type="submit"
             disabled={status === "sending"}
-            className="flex w-full items-center justify-center gap-2 rounded-[13px] bg-gradient-to-br from-caramel to-caramel-deep px-6 py-4 font-semibold text-white shadow-[var(--shadow-card)] transition-transform hover:-translate-y-0.5 disabled:opacity-60"
+            className="btn btn-primary w-full disabled:opacity-60"
           >
+            {status === "sending" && <Loader2 size={16} className="animate-spin" aria-hidden />}
             {status === "sending" ? "Sending…" : "Send my story"}
           </button>
-          {status === "ok" && (
-            <p className="mt-4 rounded-xl border border-[rgba(47,170,90,0.25)] bg-[rgba(47,170,90,0.1)] px-4 py-3.5 text-[0.92rem] text-[#1f7a44]">
-              ✓ Thank you! Your story is with Eddie. {consent ? "He may feature it publicly." : "It stays private."}
-            </p>
-          )}
-          {status === "err" && (
-            <p className="mt-4 rounded-xl border border-[rgba(200,60,40,0.22)] bg-[rgba(200,60,40,0.08)] px-4 py-3.5 text-[0.92rem] text-[#a8331f]">
-              Could not send. Please WhatsApp Eddie instead: +250 791 811 234
-            </p>
-          )}
+
+          <p className="text-center font-mono text-[0.66rem] text-faint">
+            Private by default. Nothing appears unless you tick the box and Eddie approves it.
+          </p>
         </form>
-      </div>
-      <p className="mt-4.5 text-center text-[0.8rem] text-coffee-soft" style={{ marginTop: 18 }}>
-        Private by default. Nothing appears on the site unless you tick the box and Eddie approves it. ·{" "}
-        <a href="/" className="font-semibold text-caramel-deep">← Back to site</a>
-      </p>
-    </main>
+      )}
+    </section>
   );
 }
 
-function Field({ label, ...rest }: { label: string } & React.InputHTMLAttributes<HTMLInputElement>) {
+function Field({
+  label,
+  name,
+  ...rest
+}: { label: string; name: string } & React.InputHTMLAttributes<HTMLInputElement>) {
   return (
     <div>
-      <label className="mb-1.5 block font-mono text-[0.7rem] uppercase tracking-wide text-coffee-soft">{label}</label>
-      <input {...rest} className="w-full rounded-xl border border-mocha-line bg-cream px-4 py-3.5 text-[0.95rem] text-espresso outline-none transition focus:border-caramel focus:shadow-[0_0_0_4px_rgba(176,122,75,0.14)]" />
+      <label htmlFor={name} className="mb-2 block text-[0.88rem] text-ivory">
+        {label} <span className="text-amber">*</span>
+      </label>
+      <input
+        id={name}
+        name={name}
+        required
+        {...rest}
+        className="h-12 w-full rounded-xl border border-line bg-ink px-4 text-[0.94rem] text-ivory outline-none transition-colors duration-200 placeholder:text-faint focus:border-amber-dim"
+      />
     </div>
   );
 }

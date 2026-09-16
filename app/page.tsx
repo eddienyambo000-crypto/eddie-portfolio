@@ -1,72 +1,86 @@
-import { supabase } from "@/lib/supabase";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
+import { getContent } from "@/lib/content";
+import { Launcher } from "@/components/Launcher";
+import { SystemDemo } from "@/components/SystemDemo";
+import { LeakCalculator } from "@/components/LeakCalculator";
+import { Reveal, SectionHead } from "@/components/ui";
 import {
-  fallbackProfile, fallbackProjects, fallbackServices, fallbackSkills, fallbackTestimonials,
-} from "@/lib/site";
-import { Nav } from "@/components/Nav";
-import { Hero } from "@/components/Hero";
-import { Marquee } from "@/components/Marquee";
-import { WhatsAppFloat } from "@/components/WhatsAppFloat";
-import {
-  Problem, Outcome, Services, Projects, WantBand, Process, CaseStudy, Testimonials, About, Offer, Contact, Footer,
+  AboutStrip,
+  FinalCTA,
+  Footer,
+  Marquee,
+  Offer,
+  Problem,
+  Process,
+  Section,
+  Services,
+  StatsBar,
+  Testimonials,
+  WorkStrip,
 } from "@/components/sections";
 
-export const revalidate = 60; // ISR: content edits in /admin show within 60s
-
-async function getData() {
-  try {
-    const [p, pr, sv, sk, te] = await Promise.all([
-      supabase.from("pf_profile").select("*").eq("id", 1).maybeSingle(),
-      supabase.from("pf_projects").select("*").eq("published", true).order("sort"),
-      supabase.from("pf_services").select("*").order("sort"),
-      supabase.from("pf_skills").select("*").order("sort"),
-      supabase.from("pf_testimonials").select("*").eq("published", true).order("sort"),
-    ]);
-    const profile = p.data
-      ? {
-          ...fallbackProfile,
-          ...p.data,
-          photo_url: p.data.photo_url || fallbackProfile.photo_url,
-          stats: Array.isArray(p.data.stats) && p.data.stats.length ? p.data.stats : fallbackProfile.stats,
-        }
-      : fallbackProfile;
-    return {
-      profile,
-      projects: pr.data?.length ? pr.data : fallbackProjects,
-      services: sv.data?.length ? sv.data : fallbackServices,
-      skills: sk.data?.length ? sk.data : fallbackSkills,
-      testimonials: te.data?.length ? te.data : fallbackTestimonials,
-    };
-  } catch {
-    return {
-      profile: fallbackProfile,
-      projects: fallbackProjects,
-      services: fallbackServices,
-      skills: fallbackSkills,
-      testimonials: fallbackTestimonials,
-    };
-  }
-}
+export const revalidate = 60; // content edited in /admin appears within a minute
 
 export default async function Home() {
-  const d = await getData();
+  const d = await getContent();
+
   return (
     <>
-      <Nav />
-      <Hero profile={d.profile} />
+      <Launcher profile={d.profile} />
       <Marquee />
+      <StatsBar profile={d.profile} />
       <Problem />
-      <Outcome profile={d.profile} />
+
+      {/* the demo does the selling */}
+      <Section id="demo">
+        <div className="flex flex-wrap items-end justify-between gap-6">
+          <SectionHead
+            eyebrow="Watch it happen"
+            title={
+              <>
+                A customer at 22:41. <span className="tail">You are asleep.</span>
+              </>
+            }
+            lead="This is the whole product in forty seconds. Let it play, then type your own message and see what it does with it."
+          />
+          <Reveal delay={0.1}>
+            <Link href="/system" className="btn btn-ghost">
+              Open the full demo
+              <ArrowRight size={15} aria-hidden />
+            </Link>
+          </Reveal>
+        </div>
+        <div className="mt-12 lg:mt-14">
+          <SystemDemo />
+        </div>
+      </Section>
+
       <Services services={d.services} />
-      <Projects projects={d.projects} />
-      <WantBand />
+      <WorkStrip projects={d.projects} />
+
+      {/* quantify the pain before quoting the price */}
+      <Section id="leak">
+        <SectionHead
+          eyebrow="Your numbers"
+          title={
+            <>
+              What silence is <span className="tail">already costing you.</span>
+            </>
+          }
+          lead="Three sliders. Your own figures. Most owners find out they are funding a competitor."
+        />
+        <div className="mt-12 lg:mt-14">
+          <LeakCalculator />
+        </div>
+      </Section>
+
       <Process />
-      <CaseStudy />
-      <Testimonials testimonials={d.testimonials} />
-      <About profile={d.profile} skills={d.skills} />
       <Offer />
-      <Contact />
-      <Footer />
-      <WhatsAppFloat />
+      <Testimonials testimonials={d.testimonials} />
+      <AboutStrip profile={d.profile} skills={d.skills} />
+      <FinalCTA promise={d.profile.hero_promise} />
+      <Footer projects={d.projects} />
     </>
   );
 }

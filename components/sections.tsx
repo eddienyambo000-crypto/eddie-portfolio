@@ -1,454 +1,669 @@
 import Image from "next/image";
+import Link from "next/link";
 import {
-  Clock, AlertTriangle, Power, Globe, MessageCircle, LineChart, Zap,
-  ArrowRight, Check, ShieldCheck, Database, ServerCog, Mail, MapPin,
+  ArrowRight,
+  ArrowUpRight,
+  BarChart3,
+  Check,
+  Globe,
+  MessageSquare,
+  Quote,
+  Repeat,
+  ShieldCheck,
+  Zap,
 } from "lucide-react";
-import { Reveal } from "./Reveal";
-import { Stats } from "./Stats";
-import { ContactForm } from "./ContactForm";
-import { WaIcon } from "./icons";
-import { Linkedin, Instagram, Github } from "lucide-react";
 import {
-  wa, type Profile, type Project, type Service, type Skill, type Testimonial,
+  CALENDAR,
+  CITY,
+  EMAIL,
+  NAME,
+  OFFER,
+  PROBLEMS,
+  PROCESS,
+  ROLE,
+  WA_DEFAULT,
+  WHATSAPP_PRETTY,
+  slugify,
+  type Profile,
+  type Project,
+  type Service,
+  type Skill,
+  type Testimonial,
 } from "@/lib/site";
+import { CountUp, Reveal, SectionHead } from "@/components/ui";
+import { ProjectCard } from "@/components/ProjectCard";
 
-const wrap = "mx-auto max-w-[1140px] px-6";
-const card =
-  "rounded-[20px] border border-mocha-line bg-paper shadow-[var(--shadow-soft)] transition-all duration-300 hover:-translate-y-1 hover:border-[rgba(176,122,75,0.4)] hover:shadow-[var(--shadow-card)]";
+/* ─────────────────────────── layout primitives ─────────────────────────── */
 
-/* ── PROBLEM ── */
-const pains = [
-  { I: Clock, t: "Hours lost chasing leads", p: "You're stuck replying to the same WhatsApp messages all day instead of closing the big deals that actually grow the business." },
-  { I: AlertTriangle, t: "Orders slip through the cracks", p: "Bookings, orders and shipments get missed or mixed up — because it all depends on a human remembering. Every mistake costs you a customer." },
-  { I: Power, t: "It all stops when you do", p: "The second you put your phone down, the business stops — no follow-ups, no bookings, no sales. You can't scale what can't run without you." },
+export function Section({
+  id,
+  children,
+  className = "",
+  tight = false,
+}: {
+  id?: string;
+  children: React.ReactNode;
+  className?: string;
+  tight?: boolean;
+}) {
+  return (
+    <section
+      id={id}
+      className={`relative px-5 sm:px-8 ${tight ? "py-16 sm:py-20" : "py-20 sm:py-28 lg:py-32"} ${className}`}
+    >
+      <div className="mx-auto max-w-[1240px]">{children}</div>
+    </section>
+  );
+}
+
+/* ───────────────────────────── proof ticker ────────────────────────────── */
+
+const TICKER = [
+  "WhatsApp agents that answer in 5 seconds",
+  "Live in 14 days",
+  "Built in Kigali",
+  "You own everything",
+  "No monthly lock-in",
+  "Follow-up that never forgets",
+  "Systems running today, not demos",
 ];
-export function Problem() {
-  return (
-    <section className={`relative z-[1] py-[104px]`}>
-      <div className={wrap}>
-        <Reveal className="mx-auto mb-14 max-w-[640px] text-center">
-          <span className="eyebrow">THE REAL COST</span>
-          <h2 className="mt-3.5 text-[clamp(2rem,4.6vw,3.4rem)]">
-            You're the bottleneck — and it's <span className="serif-i">capping your growth.</span>
-          </h2>
-          <p className="mt-4 text-[1.06rem] text-coffee">
-            Right now your business runs on your phone, your memory and your hands. The moment you step away, it stalls. Here's what that's quietly costing you every day:
-          </p>
-        </Reveal>
-        <div className="grid grid-cols-1 gap-[22px] md:grid-cols-3">
-          {pains.map((x, i) => (
-            <Reveal key={i} delay={i * 0.08} className={`${card} p-[30px]`}>
-              <div className="mb-4 grid h-[46px] w-[46px] place-items-center rounded-xl bg-[rgba(154,102,56,0.1)] text-caramel-deep">
-                <x.I size={22} />
-              </div>
-              <h3 className="mb-2 font-sans text-[1.05rem] font-bold text-espresso">{x.t}</h3>
-              <p className="text-[0.92rem]">{x.p}</p>
-            </Reveal>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
 
-/* ── OUTCOME + STATS ── */
-export function Outcome({ profile }: { profile: Profile }) {
+export function Marquee() {
   return (
-    <section className={`relative z-[1] pb-[104px]`}>
-      <div className={wrap}>
-        <Reveal className="mx-auto mb-14 max-w-[640px] text-center">
-          <span className="eyebrow">THE OUTCOME</span>
-          <h2 className="mt-3.5 text-[clamp(2rem,4.6vw,3.4rem)]">
-            Now imagine it running <span className="serif-i">without you.</span>
-          </h2>
-          <p className="mt-4 text-[1.06rem] text-coffee">
-            Leads captured and qualified, customers followed up and booked, orders and admin handled — automatically, around the clock. You wake up to a business that ran itself. That's what I install — and it's live for real businesses:
-          </p>
-        </Reveal>
-        <Reveal>
-          <Stats stats={profile.stats} />
-        </Reveal>
-      </div>
-    </section>
-  );
-}
-
-/* ── SERVICES ── */
-const svcIcons = [Globe, MessageCircle, LineChart, Zap];
-export function Services({ services }: { services: Service[] }) {
-  return (
-    <section id="services" className={`relative z-[1] py-[104px]`}>
-      <div className={wrap}>
-        <Reveal className="mb-14 max-w-[640px]">
-          <span className="eyebrow">WHAT I INSTALL</span>
-          <h2 className="mt-3.5 text-[clamp(2rem,4.6vw,3.4rem)]">
-            Everything your engine <span className="serif-i">does for you.</span>
-          </h2>
-          <p className="mt-4 text-[1.06rem] text-coffee">
-            Not a website — a complete system that captures, follows up, books and runs your operations on autopilot.
-          </p>
-        </Reveal>
-        <div className="grid grid-cols-1 gap-[22px] sm:grid-cols-2 lg:grid-cols-4">
-          {services.map((s, i) => {
-            const I = svcIcons[i % svcIcons.length];
-            return (
-              <Reveal key={s.id} delay={i * 0.07} className={`${card} relative overflow-hidden p-[30px]`}>
-                <div className="absolute right-5 top-4 font-display text-[2.4rem] font-black text-cream2">
-                  {String(i + 1).padStart(2, "0")}
-                </div>
-                <div className="mb-4 grid h-[54px] w-[54px] place-items-center rounded-[15px] border border-[rgba(176,122,75,0.18)] bg-gradient-to-br from-[rgba(176,122,75,0.16)] to-[rgba(154,102,56,0.08)] text-caramel-deep">
-                  <I size={24} />
-                </div>
-                <h3 className="mb-2.5 font-sans text-[1.12rem] font-bold text-espresso">{s.title}</h3>
-                <p className="text-[0.92rem]">{s.outcome}</p>
-              </Reveal>
-            );
-          })}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ── PROJECTS ── */
-export function Projects({ projects }: { projects: Project[] }) {
-  return (
-    <section id="work" className={`relative z-[1] pb-[104px]`}>
-      <div className={wrap}>
-        <Reveal className="mb-14 max-w-[640px]">
-          <span className="eyebrow">PROOF OF WORK</span>
-          <h2 className="mt-3.5 text-[clamp(2rem,4.6vw,3.4rem)]">
-            Real systems. <span className="serif-i">Real businesses.</span>
-          </h2>
-          <p className="mt-4 text-[1.06rem] text-coffee">Shipped and running right now — not mockups.</p>
-        </Reveal>
-        <div className="grid grid-cols-1 gap-[22px] md:grid-cols-3">
-          {projects.map((p, i) => (
-            <Reveal key={p.id} delay={i * 0.08} className={`${card} group flex flex-col overflow-hidden`}>
-              <div
-                className="relative grid h-[178px] place-items-center overflow-hidden"
-                style={{ background: `linear-gradient(135deg, ${p.accent || "#B07A4B"}, #5e3d28)` }}
+    <div className="relative overflow-hidden border-y border-line bg-ink-2 py-3.5">
+      <div className="animate-marquee flex w-max gap-10 whitespace-nowrap">
+        {[0, 1].map((dup) => (
+          <div key={dup} className="flex gap-10" aria-hidden={dup === 1}>
+            {TICKER.map((t) => (
+              <span
+                key={t}
+                className="flex items-center gap-10 font-mono text-[0.72rem] uppercase tracking-[0.18em] text-faint"
               >
-                {p.cover_url ? (
-                  <Image src={p.cover_url} alt={p.title} fill className="object-cover" sizes="380px" />
-                ) : (
-                  <span className="px-4 text-center font-display text-[2rem] font-black text-white/90">{p.title}</span>
-                )}
-              </div>
-              <div className="flex flex-1 flex-col p-6">
-                <div className="mb-3 flex flex-wrap gap-1.5">
-                  {(p.tags || []).map((t) => (
-                    <span key={t} className="rounded-lg border border-[rgba(176,122,75,0.22)] bg-[rgba(176,122,75,0.1)] px-3 py-1 font-mono text-[0.68rem] text-caramel-deep">
-                      {t}
-                    </span>
-                  ))}
-                </div>
-                <h3 className="mb-2 font-sans text-[1.16rem] font-bold text-espresso">{p.title}</h3>
-                <p className="mb-[18px] flex-1 text-[0.9rem]">{p.blurb}</p>
-                {p.live_url && (
-                  <a href={p.live_url} target="_blank" rel="noopener" className="inline-flex items-center gap-1.5 font-semibold text-caramel-deep transition-all group-hover:gap-2.5">
-                    View live <ArrowRight size={15} />
-                  </a>
-                )}
-              </div>
-            </Reveal>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ── WANT-ONE BAND ── */
-export function WantBand() {
-  return (
-    <section className={`relative z-[1] pb-[104px]`}>
-      <div className={wrap}>
-        <Reveal className="flex flex-col items-start justify-between gap-6 rounded-[22px] border border-mocha-line bg-paper p-8 shadow-[var(--shadow-soft)] md:flex-row md:items-center md:px-9">
-          <div>
-            <h3 className="max-w-[560px] font-display text-[clamp(1.25rem,2.4vw,1.7rem)] font-extrabold text-espresso">
-              Want a system like this running <span className="serif-i">your</span> business 24/7?
-            </h3>
-            <p className="mt-1 text-[0.92rem] text-coffee">
-              Tell me about your business on WhatsApp — I'll map the exact engine I'd install and what it'd do for your sales.
-            </p>
-          </div>
-          <a
-            href={wa("Hi Eddie, I saw your work — I want one for my business.")}
-            target="_blank"
-            rel="noopener"
-            className="inline-flex w-full items-center justify-center gap-2 rounded-[13px] bg-[#25D366] px-9 py-4 text-[1.02rem] font-semibold text-[#063d22] shadow-[0_12px_28px_rgba(37,211,102,0.32)] transition-transform duration-300 hover:-translate-y-0.5 md:w-auto"
-          >
-            <WaIcon className="h-5 w-5" /> Want one? WhatsApp me
-          </a>
-        </Reveal>
-      </div>
-    </section>
-  );
-}
-
-/* ── PROCESS ── */
-const steps = [
-  { n: "// TEARDOWN", t: "Free teardown call", p: "We hop on WhatsApp or a 20-min call. I look at your business and show you exactly what's losing you customers and time." },
-  { n: "// BUILD", t: "I design & build it", p: "A custom system — site, WhatsApp agent, follow-up and operations wired together. You review, I refine until it's right." },
-  { n: "// LAUNCH", t: "It runs without you", p: "We go live. It captures, books and follows up 24/7, I monitor it, and you get customers — not a headache." },
-];
-export function Process() {
-  return (
-    <section id="process" className={`relative z-[1] pb-[104px]`}>
-      <div className={wrap}>
-        <Reveal className="mx-auto mb-14 max-w-[640px] text-center">
-          <span className="eyebrow">HOW IT WORKS</span>
-          <h2 className="mt-3.5 text-[clamp(2rem,4.6vw,3.4rem)]">
-            From overwhelmed to <span className="serif-i">automated</span> in 3 steps.
-          </h2>
-        </Reveal>
-        <div className="grid grid-cols-1 gap-[22px] md:grid-cols-3">
-          {steps.map((s, i) => (
-            <Reveal key={i} delay={i * 0.08} className={`${card} relative p-[30px]`}>
-              <div className="absolute right-6 top-4 font-display text-[3rem] font-black leading-none text-cream2">{i + 1}</div>
-              <div className="font-mono text-[0.78rem] font-medium tracking-[0.1em] text-caramel-deep">{s.n}</div>
-              <h3 className="mb-2.5 mt-3.5 font-sans text-[1.16rem] font-bold text-espresso">{s.t}</h3>
-              <p className="text-[0.92rem]">{s.p}</p>
-            </Reveal>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ── CASE STUDY ── */
-export function CaseStudy() {
-  return (
-    <section className={`relative z-[1] pb-[104px]`}>
-      <div className={wrap}>
-        <Reveal className="relative overflow-hidden rounded-[26px] p-[clamp(28px,5vw,54px)] text-cream shadow-[var(--shadow-lg)]" style={{ background: "linear-gradient(140deg,#2e1c12,#3f2818)" }}>
-          <div className="pointer-events-none absolute -right-16 -top-24 h-[340px] w-[340px]" style={{ background: "radial-gradient(circle,rgba(176,122,75,0.4),transparent 65%)" }} />
-          <span className="eyebrow" style={{ color: "#E6C9A8" }}>CASE STUDY · STEPIN COACHING</span>
-          <h2 className="mt-3.5 max-w-[620px] text-white">A WhatsApp AI agent that sells while the owner sleeps.</h2>
-          <p className="mt-3.5 max-w-[620px] text-white/80">
-            Built "Amina" — an AI sales agent that qualifies every lead, books calls, and runs a 7-day follow-up sequence into a live CRM. The owner stopped manually chasing leads entirely.
-          </p>
-          <div className="mt-7 flex flex-wrap gap-9">
-            {[["24/7", "Always-on replies"], ["7-day", "Auto follow-up drip"], ["0", "Manual lead chasing"]].map(([v, l]) => (
-              <div key={l}>
-                <div className="font-display text-[2.4rem] font-black leading-none text-white">{v}</div>
-                <div className="mt-1.5 font-mono text-[0.8rem]" style={{ color: "#E6C9A8" }}>{l}</div>
-              </div>
+                {t}
+                <span className="h-1 w-1 rounded-full bg-amber-dim" aria-hidden />
+              </span>
             ))}
           </div>
-        </Reveal>
+        ))}
       </div>
-    </section>
+      <span
+        aria-hidden
+        className="pointer-events-none absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-ink-2 to-transparent"
+      />
+      <span
+        aria-hidden
+        className="pointer-events-none absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-ink-2 to-transparent"
+      />
+    </div>
   );
 }
 
-/* ── TESTIMONIALS ── */
-export function Testimonials({ testimonials }: { testimonials: Testimonial[] }) {
-  if (!testimonials.length) return null;
-  const single = testimonials.length === 1;
-  const gridCls = single
-    ? "mx-auto max-w-[760px]"
-    : testimonials.length === 2
-      ? "mx-auto grid max-w-[900px] grid-cols-1 gap-[22px] md:grid-cols-2"
-      : "grid grid-cols-1 gap-[22px] md:grid-cols-3";
+/* ──────────────────────────────── stats ────────────────────────────────── */
+
+export function StatsBar({ profile }: { profile: Profile }) {
   return (
-    <section id="reviews" className="relative z-[1] pb-[104px]">
-      <div className={wrap}>
-        <Reveal className="mx-auto mb-14 max-w-[640px] text-center">
-          <span className="eyebrow">WHAT CLIENTS SAY</span>
-          <h2 className="mt-3.5 text-[clamp(2rem,4.6vw,3.4rem)]">Trusted to <span className="serif-i">deliver.</span></h2>
-        </Reveal>
-        <div className={gridCls}>
-          {testimonials.map((t, i) => {
-            const q = (t.quote || "").replace(/^["“”\s]+|["“”\s]+$/g, "");
-            return (
-              <Reveal key={t.id} delay={i * 0.08} className={`${card} ${single ? "p-[clamp(30px,5vw,48px)] text-center" : "p-[30px]"}`}>
-                <p className={`mb-[22px] font-display font-medium italic leading-[1.5] text-espresso ${single ? "text-[clamp(1.25rem,2.4vw,1.7rem)]" : "text-[1.12rem]"}`}>
-                  “{q}”
-                </p>
-                <div className={`flex items-center gap-3.5 ${single ? "justify-center" : ""}`}>
-                  <div className="grid h-[46px] w-[46px] flex-shrink-0 place-items-center overflow-hidden rounded-full bg-gradient-to-br from-mocha to-caramel font-bold text-espresso">
-                    {t.avatar_url ? <Image src={t.avatar_url} alt={t.name} width={46} height={46} className="h-full w-full object-cover" /> : (t.name || "?")[0]}
-                  </div>
-                  <div className={single ? "text-left" : ""}>
-                    <div className="text-[0.92rem] font-bold text-espresso">{t.name}</div>
-                    <div className="text-[0.8rem] text-coffee-soft">{t.role}</div>
-                  </div>
-                </div>
-              </Reveal>
-            );
-          })}
+    <Section tight>
+      <div className="panel grid grid-cols-2 divide-line lg:grid-cols-4">
+        {profile.stats.map((s, i) => (
+          <Reveal
+            key={s.label + i}
+            delay={i * 0.06}
+            className={`border-line p-6 lg:p-8 ${i % 2 === 0 ? "border-r" : ""} ${
+              i === 1 ? "lg:border-r" : ""
+            } ${i < 2 ? "border-b lg:border-b-0" : ""}`}
+          >
+            <div className="font-display text-[clamp(2rem,4.6vw,2.9rem)] leading-none text-ivory">
+              <CountUp value={s.value} />
+            </div>
+            <div className="mt-2.5 font-mono text-[0.68rem] uppercase tracking-[0.14em] text-faint">
+              {s.label}
+            </div>
+          </Reveal>
+        ))}
+      </div>
+    </Section>
+  );
+}
+
+/* ─────────────────────────────── problem ───────────────────────────────── */
+
+export function Problem() {
+  return (
+    <Section id="problem">
+      <div className="grid gap-12 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1fr)] lg:gap-16">
+        <SectionHead
+          eyebrow="The real problem"
+          title={
+            <>
+              You are not short of customers.{" "}
+              <span className="tail">You are short of answers.</span>
+            </>
+          }
+          lead="Most Rwandan businesses do not lose to a competitor with a better product. They lose to the one who replied first. Every one of these is costing you money this week."
+        />
+
+        <div className="space-y-px overflow-hidden rounded-2xl border border-line">
+          {PROBLEMS.map((p, i) => (
+            <Reveal key={p} delay={i * 0.07}>
+              <div className="group flex items-start gap-4 bg-ink-2 p-5 transition-colors duration-300 hover:bg-ink-3 sm:p-6">
+                <span className="mt-0.5 font-mono text-[0.72rem] text-alert">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <p className="text-[0.98rem] leading-[1.65] text-ivory">{p}</p>
+              </div>
+            </Reveal>
+          ))}
         </div>
       </div>
-    </section>
+    </Section>
   );
 }
 
-/* ── ABOUT / CAPABILITIES ── */
-const grpIcons: Record<number, typeof MessageCircle> = { 0: MessageCircle, 1: Database, 2: ShieldCheck };
-export function About({ profile, skills }: { profile: Profile; skills: Skill[] }) {
-  const groups: { grp: string; labels: string[] }[] = [];
-  for (const s of skills) {
-    let g = groups.find((x) => x.grp === s.grp);
-    if (!g) { g = { grp: s.grp, labels: [] }; groups.push(g); }
-    g.labels.push(s.label);
-  }
+/* ─────────────────────────────── services ──────────────────────────────── */
+
+const ICONS: Record<string, typeof Globe> = {
+  globe: Globe,
+  chat: MessageSquare,
+  repeat: Repeat,
+  chart: BarChart3,
+};
+
+export function Services({ services }: { services: Service[] }) {
   return (
-    <section id="about" className={`relative z-[1] pb-[104px]`}>
-      <div className={wrap}>
-        <Reveal className="mb-14 max-w-[700px]">
-          <span className="eyebrow">WHAT YOUR ENGINE DOES</span>
-          <h2 className="mt-3.5 text-[clamp(2rem,4.6vw,3.4rem)]">Built to run your business <span className="serif-i">without you.</span></h2>
-          <p className="mt-4 text-[1.06rem] text-coffee">{profile.about_md}</p>
-        </Reveal>
-        <div className="grid grid-cols-1 gap-[22px] md:grid-cols-3">
-          {groups.map((g, i) => {
-            const I = grpIcons[i] || ServerCog;
-            return (
-              <Reveal key={g.grp} delay={i * 0.08} className={`${card} p-[30px]`}>
-                <div className="mb-5 flex items-center gap-3">
-                  <div className="grid h-10 w-10 place-items-center rounded-[11px] bg-[rgba(176,122,75,0.12)] text-caramel-deep">
-                    <I size={20} />
-                  </div>
-                  <h3 className="font-sans text-[1.02rem] font-bold leading-tight text-espresso">{g.grp}</h3>
+    <Section id="services">
+      <SectionHead
+        eyebrow="What I install"
+        title={
+          <>
+            Four machines. <span className="tail">One business that runs itself.</span>
+          </>
+        }
+        lead="You can take one or all four. Each one works on its own, and each one is built to pay for itself before the next quarter."
+      />
+
+      <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:mt-16">
+        {services.map((s, i) => {
+          const Icon = ICONS[s.icon || "globe"] || Zap;
+          return (
+            <Reveal key={s.id} delay={i * 0.07}>
+              <article className="edge-top group panel h-full p-6 transition-[transform,border-color] duration-500 [transition-timing-function:var(--ease-spring)] hover:-translate-y-1 hover:border-amber-dim lg:p-8">
+                <div className="flex items-start justify-between">
+                  <span className="grid h-11 w-11 place-items-center rounded-xl border border-line bg-ink-3 text-amber transition-colors duration-300 group-hover:border-amber-dim">
+                    <Icon size={18} strokeWidth={1.7} aria-hidden />
+                  </span>
+                  <span className="font-mono text-[0.72rem] text-faint">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
                 </div>
-                <div className="flex flex-wrap gap-2">
-                  {g.labels.map((l) => (
-                    <span key={l} className="rounded-full border border-mocha-line bg-cream2 px-3.5 py-1.5 font-mono text-[0.74rem] text-coffee transition-all hover:-translate-y-0.5 hover:border-caramel">
-                      {l}
-                    </span>
-                  ))}
-                </div>
-              </Reveal>
-            );
-          })}
-        </div>
+                <h3 className="mt-6 font-display text-[1.45rem] leading-tight">{s.title}</h3>
+                <p className="mt-3 text-[0.95rem] leading-[1.7]">{s.outcome}</p>
+              </article>
+            </Reveal>
+          );
+        })}
       </div>
-    </section>
+    </Section>
   );
 }
 
-/* ── THE OFFER ── */
-const stack = [
-  "A conversion-built website — your 24/7 salesperson",
-  "A WhatsApp AI agent that captures, qualifies & books leads on autopilot",
-  "Automated follow-up so no lead ever goes cold",
-  "A smart database that remembers every customer, order & booking",
-  "Live dashboards & auto-reports — your whole business at a glance",
-  "Runs 24/7 on a 99.9%-uptime engine — and you own all of it",
-];
+/* ──────────────────────────────── work ─────────────────────────────────── */
+
+export function WorkStrip({ projects }: { projects: Project[] }) {
+  return (
+    <Section id="work">
+      <div className="flex flex-wrap items-end justify-between gap-6">
+        <SectionHead
+          eyebrow="Receipts"
+          title={
+            <>
+              Systems running <span className="tail">right now.</span>
+            </>
+          }
+          lead="Not mockups. Every one of these is live, has a real owner, and you can open it yourself."
+        />
+        <Reveal delay={0.1}>
+          <Link href="/work" className="btn btn-ghost">
+            All work
+            <ArrowRight size={15} aria-hidden />
+          </Link>
+        </Reveal>
+      </div>
+
+      <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:mt-16 lg:grid-cols-3">
+        {projects.slice(0, 3).map((p, i) => (
+          <Reveal key={p.id} delay={i * 0.08}>
+            <ProjectCard p={p} />
+          </Reveal>
+        ))}
+      </div>
+    </Section>
+  );
+}
+
+/* ─────────────────────────────── process ───────────────────────────────── */
+
+export function Process() {
+  return (
+    <Section id="process">
+      <SectionHead
+        eyebrow="How it goes"
+        title={
+          <>
+            Fourteen days. <span className="tail">Six questions from you.</span>
+          </>
+        }
+        lead="You are busy running the business. Building the system is my job, not yours."
+      />
+
+      <div className="mt-12 grid gap-4 lg:mt-16 lg:grid-cols-3">
+        {PROCESS.map((s, i) => (
+          <Reveal key={s.no} delay={i * 0.1}>
+            <div className="panel relative h-full p-6 lg:p-8">
+              <span
+                aria-hidden
+                className="pointer-events-none absolute right-5 top-4 font-display text-[4.6rem] leading-none text-ink-4"
+              >
+                {s.no}
+              </span>
+              <span className="relative font-mono text-[0.66rem] uppercase tracking-[0.16em] text-amber">
+                {s.time}
+              </span>
+              <h3 className="relative mt-4 font-display text-[1.5rem]">{s.title}</h3>
+              <p className="relative mt-3 text-[0.94rem] leading-[1.7]">{s.body}</p>
+            </div>
+          </Reveal>
+        ))}
+      </div>
+    </Section>
+  );
+}
+
+/* ──────────────────────────────── offer ────────────────────────────────── */
+
 export function Offer() {
+  const total = OFFER.stack.reduce(
+    (sum, s) => sum + Number(s.worth.replace(/[^\d]/g, "")),
+    0
+  );
+
   return (
-    <section id="offer" className={`relative z-[1] pb-[104px]`}>
-      <div className={wrap}>
-        <Reveal className="relative grid grid-cols-1 overflow-hidden rounded-[28px] text-cream shadow-[var(--shadow-lg)] md:grid-cols-[1.05fr_0.95fr]" style={{ background: "linear-gradient(150deg,#34200f,#2e1c12)" }}>
-          <div className="pointer-events-none absolute -right-24 -top-24 z-0 h-[380px] w-[380px]" style={{ background: "radial-gradient(circle,rgba(176,122,75,0.45),transparent 65%)" }} />
-          <div className="relative z-[1] p-[clamp(32px,4vw,52px)]" style={{ background: "linear-gradient(150deg,#34200f,#2e1c12)" }}>
-            <span className="eyebrow" style={{ color: "#E6C9A8" }}>THE OFFER</span>
-            <h2 className="mt-3.5 text-[clamp(1.9rem,3.6vw,2.8rem)] text-white">
-              The 24/7 Automated <span className="serif-i" style={{ color: "#E6C9A8" }}>Business Engine.</span>
-            </h2>
-            <p className="mt-4 text-[1.02rem] text-white/80">
-              I install a complete system that captures customers, follows them up, books them, and runs your operations — 24/7, without you lifting a finger. Done-for-you, start to finish.
-            </p>
-            <div className="mt-6 flex flex-wrap gap-[26px]">
-              {[["2–3 wks", "START TO LIVE"], ["24/7", "RUNS ITSELF"], ["30-day", "GUARANTEE"]].map(([v, l]) => (
-                <div key={l}>
-                  <div className="font-display text-[1.5rem] font-black leading-none text-white">{v}</div>
-                  <div className="mt-1.5 font-mono text-[0.72rem]" style={{ color: "#E6C9A8" }}>{l}</div>
-                </div>
+    <Section id="offer">
+      <div className="panel-raised edge-top overflow-hidden">
+        <div className="grid lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
+          {/* the stack */}
+          <div className="border-b border-line p-7 lg:border-b-0 lg:border-r lg:p-11">
+            <span className="eyebrow">The offer</span>
+            <h2 className="mt-5 text-[clamp(1.9rem,4.6vw,2.9rem)]">{OFFER.name}</h2>
+            <p className="mt-4 max-w-lg text-[1rem] leading-[1.7]">{OFFER.promise}</p>
+
+            <ul className="mt-9 space-y-0 divide-y divide-line-soft">
+              {OFFER.stack.map((s, i) => (
+                <Reveal key={s.item} delay={i * 0.05}>
+                  <li className="flex items-center justify-between gap-5 py-3.5">
+                    <span className="flex items-start gap-3 text-[0.94rem] text-ivory">
+                      <Check size={15} className="mt-1 flex-none text-live" aria-hidden />
+                      {s.item}
+                    </span>
+                    <span className="tnum flex-none whitespace-nowrap font-mono text-[0.78rem] text-faint line-through">
+                      {s.worth}
+                    </span>
+                  </li>
+                </Reveal>
               ))}
-            </div>
-            <div className="mt-[22px] flex items-start gap-2.5 rounded-[14px] border border-[rgba(230,201,168,0.22)] bg-[rgba(230,201,168,0.1)] p-4 text-[0.88rem] text-[#F3E9DC]">
-              <ShieldCheck size={20} className="mt-0.5 flex-shrink-0" style={{ color: "#E6C9A8" }} />
-              <span><b>The 30-Day Automation Guarantee.</b> If your engine isn't noticeably automating your customer-getting or operations within 30 days of launch, I work for free until it is — or you get a full refund. The risk is 100% mine.</span>
-            </div>
-            <div className="mt-[26px] flex flex-wrap gap-3">
-              <a href={wa("Hi Eddie, I want the Automated Business Engine.")} target="_blank" rel="noopener" className="inline-flex items-center justify-center gap-2 rounded-[13px] bg-[#25D366] px-9 py-4 text-[1.02rem] font-semibold text-[#063d22] shadow-[0_12px_28px_rgba(37,211,102,0.32)] transition-transform duration-300 hover:-translate-y-0.5">
-                <WaIcon className="h-5 w-5" /> Message Me on WhatsApp
-              </a>
-              <a href="#contact" className="inline-flex items-center justify-center gap-2 rounded-[13px] border border-[rgba(230,201,168,0.3)] bg-transparent px-9 py-4 text-[1.02rem] font-semibold text-[#F3E9DC] transition-transform duration-300 hover:-translate-y-0.5">
-                or use the form ↓
-              </a>
+            </ul>
+
+            <div className="mt-6 flex items-center justify-between border-t border-line pt-5">
+              <span className="text-[0.94rem] text-ivory">Total value, bought piece by piece</span>
+              <span className="tnum flex-none whitespace-nowrap font-mono text-[0.95rem] text-ivory">
+                RWF {total.toLocaleString("en-US")}
+              </span>
             </div>
           </div>
-          <div className="relative z-[1] border-t border-[rgba(230,201,168,0.14)] p-[clamp(32px,4vw,52px)] md:border-l md:border-t-0" style={{ background: "rgba(0,0,0,0.16)" }}>
-            <div className="eyebrow mb-5" style={{ color: "#E6C9A8" }}>WHAT YOU GET</div>
-            <ul className="flex flex-col gap-3.5">
-              {stack.map((s) => (
-                <li key={s} className="flex items-start gap-3 text-[0.96rem] text-[#F3E9DC]">
-                  <span className="mt-0.5 grid h-6 w-6 flex-shrink-0 place-items-center rounded-[7px] bg-[rgba(230,201,168,0.16)] text-[#E6C9A8]">
-                    <Check size={14} strokeWidth={3} />
+
+          {/* the price + risk reversal */}
+          <div className="flex flex-col justify-between bg-[radial-gradient(520px_360px_at_60%_0%,rgba(240,166,75,0.12),transparent_70%)] p-7 lg:p-11">
+            <div>
+              <div className="flex flex-wrap items-center gap-2.5">
+                <span className="flex items-center gap-2 rounded-full border border-line bg-ink px-3 py-1 font-mono text-[0.64rem] uppercase tracking-[0.14em] text-live">
+                  <span className="dot-live" aria-hidden />
+                  {OFFER.slots} slots left
+                </span>
+                <span className="rounded-full border border-line bg-ink px-3 py-1 font-mono text-[0.64rem] uppercase tracking-[0.14em] text-faint">
+                  {OFFER.timeline}
+                </span>
+              </div>
+
+              <div className="mt-7 font-display text-[clamp(2.2rem,5.6vw,3.2rem)] leading-none text-ivory">
+                {OFFER.price}
+              </div>
+              <p className="mt-3 text-[0.9rem]">{OFFER.priceNote}</p>
+
+              <div className="mt-8 rounded-2xl border border-line bg-ink/60 p-5">
+                <div className="flex items-center gap-2 font-mono text-[0.66rem] uppercase tracking-[0.16em] text-live">
+                  <ShieldCheck size={13} aria-hidden />
+                  The risk is mine
+                </div>
+                <p className="mt-2.5 text-[0.89rem] leading-[1.65]">{OFFER.guarantee}</p>
+              </div>
+            </div>
+
+            <div className="mt-8 space-y-2.5">
+              <a
+                href={WA_DEFAULT}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-primary w-full"
+              >
+                Claim a build slot
+                <ArrowRight size={16} aria-hidden />
+              </a>
+              <Link href="/services" className="btn btn-ghost w-full">
+                See what each piece does
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Section>
+  );
+}
+
+/* ───────────────────────── testimonials (inverted) ─────────────────────── */
+
+export function Testimonials({ testimonials }: { testimonials: Testimonial[] }) {
+  if (!testimonials.length) return null;
+
+  return (
+    <div className="surface-paper">
+      <Section>
+        <SectionHead
+          eyebrow="In their words"
+          title={
+            <>
+              The people whose <span className="text-[#8a5420] italic">phones went quiet.</span>
+            </>
+          }
+        />
+        <div className="mt-12 grid gap-4 md:grid-cols-2 lg:mt-14">
+          {testimonials.slice(0, 4).map((t, i) => (
+            <Reveal key={t.id} delay={i * 0.08}>
+              <figure className="flex h-full flex-col rounded-2xl border border-[#d9d0bf] bg-white/60 p-6 lg:p-8">
+                <Quote size={20} className="text-[#b57a35]" aria-hidden />
+                <blockquote className="mt-4 flex-1 font-display text-[1.22rem] leading-[1.45] text-[#14110e]">
+                  &ldquo;{t.quote}&rdquo;
+                </blockquote>
+                <figcaption className="mt-6 flex items-center gap-3 border-t border-[#d9d0bf] pt-5">
+                  {t.avatar_url ? (
+                    <Image
+                      src={t.avatar_url}
+                      alt=""
+                      width={40}
+                      height={40}
+                      className="h-10 w-10 flex-none rounded-full object-cover"
+                    />
+                  ) : (
+                    <span className="grid h-10 w-10 flex-none place-items-center rounded-full bg-[#e2d7c4] font-mono text-[0.75rem] text-[#7a5326]">
+                      {t.name
+                        .split(/\s+/)
+                        .slice(0, 2)
+                        .map((w) => w[0])
+                        .join("")
+                        .toUpperCase()}
+                    </span>
+                  )}
+                  <span className="text-[0.88rem] leading-tight">
+                    <span className="block font-medium text-[#14110e]">{t.name}</span>
+                    <span className="block text-[#6f6459]">{t.role}</span>
                   </span>
-                  {s}
+                </figcaption>
+              </figure>
+            </Reveal>
+          ))}
+        </div>
+      </Section>
+    </div>
+  );
+}
+
+/* ──────────────────────────────── about ────────────────────────────────── */
+
+export function AboutStrip({ profile, skills }: { profile: Profile; skills: Skill[] }) {
+  const groups = Array.from(new Set(skills.map((s) => s.grp)));
+
+  return (
+    <Section id="about">
+      <div className="grid gap-12 lg:grid-cols-[minmax(0,0.78fr)_minmax(0,1fr)] lg:gap-16">
+        <Reveal>
+          <div className="relative">
+            <span
+              aria-hidden
+              className="absolute -inset-3 rounded-[26px] border border-line"
+              style={{ transform: "rotate(-2deg)" }}
+            />
+            <div className="relative aspect-[4/5] overflow-hidden rounded-[22px] border border-line bg-ink-3">
+              <Image
+                src={profile.photo_url || "/eddie.jpg"}
+                alt={`${NAME}, ${ROLE}`}
+                fill
+                sizes="(max-width: 1024px) 88vw, 380px"
+                className="object-cover object-[center_38%] grayscale-[0.35] transition-[filter] duration-700 hover:grayscale-0"
+              />
+              <span
+                aria-hidden
+                className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink/85 via-transparent to-transparent"
+              />
+              <div className="absolute inset-x-0 bottom-0 p-5">
+                <div className="font-display text-[1.3rem] text-ivory">{NAME}</div>
+                <div className="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-amber">
+                  {ROLE} / {CITY}
+                </div>
+              </div>
+            </div>
+          </div>
+        </Reveal>
+
+        <div>
+          <SectionHead
+            eyebrow="Who builds it"
+            title={
+              <>
+                One engineer. <span className="tail">No agency middlemen.</span>
+              </>
+            }
+          />
+          <Reveal delay={0.08}>
+            <p className="mt-6 text-[1.02rem] leading-[1.8]">{profile.about_md}</p>
+          </Reveal>
+
+          <div className="mt-10 grid gap-6 sm:grid-cols-3">
+            {groups.map((g, i) => (
+              <Reveal key={g} delay={0.1 + i * 0.06}>
+                <div>
+                  <div className="font-mono text-[0.66rem] uppercase tracking-[0.16em] text-amber">
+                    {g}
+                  </div>
+                  <ul className="mt-3 space-y-1.5">
+                    {skills
+                      .filter((s) => s.grp === g)
+                      .map((s) => (
+                        <li key={s.id} className="text-[0.88rem]">
+                          {s.label}
+                        </li>
+                      ))}
+                  </ul>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </div>
+    </Section>
+  );
+}
+
+/* ───────────────────────────── the closer ──────────────────────────────── */
+
+export function FinalCTA({ promise }: { promise?: string }) {
+  return (
+    <Section>
+      <Reveal>
+        <div className="panel-raised edge-top relative overflow-hidden px-6 py-16 text-center sm:px-10 lg:py-24">
+          <span
+            aria-hidden
+            className="pointer-events-none absolute inset-0 bg-[radial-gradient(640px_320px_at_50%_0%,rgba(240,166,75,0.18),transparent_70%)]"
+          />
+          <div className="relative mx-auto max-w-2xl">
+            <span className="eyebrow">Last thing</span>
+            <h2 className="mt-6 text-[clamp(2.1rem,6vw,3.6rem)]">
+              Your competitor is replying <span className="tail">right now.</span>
+            </h2>
+            <p className="mt-6 text-[1.04rem] leading-[1.75]">
+              {promise ||
+                "Free teardown. Show me your business and I will map exactly where you are losing customers."}{" "}
+              Thirty minutes, no pitch, and you keep the map either way.
+            </p>
+
+            <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
+              <a
+                href={WA_DEFAULT}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-primary w-full sm:w-auto"
+              >
+                WhatsApp me now
+                <ArrowRight size={16} aria-hidden />
+              </a>
+              <a
+                href={CALENDAR}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-ghost w-full sm:w-auto"
+              >
+                Book the 30 minutes
+                <ArrowUpRight size={15} aria-hidden />
+              </a>
+            </div>
+
+            <p className="mt-6 font-mono text-[0.68rem] uppercase tracking-[0.14em] text-faint">
+              {WHATSAPP_PRETTY} / {CITY}
+            </p>
+          </div>
+        </div>
+      </Reveal>
+    </Section>
+  );
+}
+
+/* ──────────────────────────────── footer ───────────────────────────────── */
+
+export function Footer({ projects = [] }: { projects?: Project[] }) {
+  return (
+    <footer className="border-t border-line bg-ink-2 px-5 pb-28 pt-16 sm:px-8 md:pb-16">
+      <div className="mx-auto max-w-[1240px]">
+        <div className="grid gap-10 md:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)_minmax(0,1fr)]">
+          <div>
+            <div className="flex items-center gap-3">
+              <span className="grid h-9 w-9 place-items-center rounded-[10px] border border-line bg-ink-3 font-mono text-[0.72rem] text-amber">
+                EN
+              </span>
+              <span className="font-display text-[1.1rem] text-ivory">{NAME}</span>
+            </div>
+            <p className="mt-4 max-w-sm text-[0.9rem] leading-[1.7]">
+              {ROLE} in {CITY}. I build the systems that catch your customers, answer them and
+              book them — so the business keeps earning when you put the phone down.
+            </p>
+            <div className="mt-5 flex items-center gap-2 font-mono text-[0.68rem] uppercase tracking-[0.14em] text-live">
+              <span className="dot-live" aria-hidden />
+              Taking {OFFER.slots} builds this month
+            </div>
+          </div>
+
+          <nav aria-label="Site">
+            <div className="font-mono text-[0.66rem] uppercase tracking-[0.16em] text-faint">
+              Site
+            </div>
+            <ul className="mt-3 space-y-0.5 text-[0.9rem]">
+              {[
+                ["/system", "See it working"],
+                ["/work", "The work"],
+                ["/services", "What I build"],
+                ["/about", "About"],
+                ["/contact", "Start a build"],
+              ].map(([href, label]) => (
+                <li key={href}>
+                  <Link
+                    href={href}
+                    className="inline-block py-1 transition-colors duration-200 hover:text-ivory"
+                  >
+                    {label}
+                  </Link>
                 </li>
               ))}
             </ul>
-          </div>
-        </Reveal>
-      </div>
-    </section>
-  );
-}
+          </nav>
 
-/* ── CONTACT ── */
-export function Contact() {
-  return (
-    <section id="contact" className={`relative z-[1] pb-[104px]`}>
-      <div className={wrap}>
-        <div className="grid grid-cols-1 items-start gap-10 md:grid-cols-[0.9fr_1.1fr]">
-          <Reveal>
-            <span className="eyebrow">GET IN TOUCH</span>
-            <h2 className="mt-3.5 text-[clamp(2rem,4.6vw,3.4rem)]">Let's build your engine.</h2>
-            <p className="mb-[26px] mt-4 text-[1.06rem] text-coffee">
-              WhatsApp is fastest — but the form works too. Either way, I reply same day.
-            </p>
-            <div className="flex flex-col gap-3">
-              <a href="mailto:eddienyambo000@gmail.com" className="inline-flex items-center gap-2.5 rounded-[14px] border border-mocha-line bg-paper py-3.5 text-[0.92rem] font-medium text-espresso shadow-[var(--shadow-soft)] transition-all hover:-translate-y-0.5 hover:border-caramel" style={{ paddingLeft: 18, paddingRight: 18 }}>
-                <Mail size={18} className="text-caramel-deep" /> eddienyambo000@gmail.com
-              </a>
-              <a href={wa("Hi Eddie, I want an automated system for my business.")} target="_blank" rel="noopener" className="inline-flex items-center gap-2.5 rounded-[14px] border border-mocha-line bg-paper py-3.5 text-[0.92rem] font-medium text-espresso shadow-[var(--shadow-soft)] transition-all hover:-translate-y-0.5 hover:border-caramel" style={{ paddingLeft: 18, paddingRight: 18 }}>
-                <WaIcon className="h-[18px] w-[18px] text-caramel-deep" /> +250 791 811 234
-              </a>
-              <div className="inline-flex items-center gap-2.5 rounded-[14px] border border-mocha-line bg-paper py-3.5 text-[0.92rem] font-medium text-espresso shadow-[var(--shadow-soft)]" style={{ paddingLeft: 18, paddingRight: 18 }}>
-                <MapPin size={18} className="text-caramel-deep" /> Kibagabaga, Kigali, Rwanda
-              </div>
+          <div>
+            <div className="font-mono text-[0.66rem] uppercase tracking-[0.16em] text-faint">
+              Reach me
             </div>
-          </Reveal>
-          <Reveal delay={0.08}>
-            <ContactForm />
-          </Reveal>
-        </div>
-      </div>
-    </section>
-  );
-}
+            <ul className="mt-3 space-y-0.5 text-[0.9rem]">
+              <li>
+                <a
+                  href={WA_DEFAULT}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block py-1 transition-colors duration-200 hover:text-ivory"
+                >
+                  WhatsApp {WHATSAPP_PRETTY}
+                </a>
+              </li>
+              <li>
+                <a
+                  href={`mailto:${EMAIL}`}
+                  className="inline-block py-1 transition-colors duration-200 hover:text-ivory"
+                >
+                  {EMAIL}
+                </a>
+              </li>
+              <li>
+                <a
+                  href={CALENDAR}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block py-1 transition-colors duration-200 hover:text-ivory"
+                >
+                  Book a call
+                </a>
+              </li>
+            </ul>
 
-/* ── FOOTER ── */
-export function Footer() {
-  return (
-    <footer className="relative z-[1] border-t border-mocha-line bg-cream2 py-10">
-      <div className={`${wrap} flex flex-col items-center justify-between gap-4 text-center md:flex-row md:text-left`}>
-        <div className="text-[0.85rem] text-coffee-soft">
-          <b className="text-espresso">Eddie Nyambo</b> — I install automated business systems that run companies, in Rwanda &amp; beyond 🇷🇼
-          <br />© {new Date().getFullYear()} · Worked with me?{" "}
-          <a href="/share" className="font-semibold text-caramel-deep">Share your experience →</a>
+            {!!projects.length && (
+              <>
+                <div className="mt-7 font-mono text-[0.66rem] uppercase tracking-[0.16em] text-faint">
+                  Live builds
+                </div>
+                <ul className="mt-3 space-y-0.5 text-[0.9rem]">
+                  {projects.slice(0, 3).map((p) => (
+                    <li key={p.id}>
+                      <Link
+                        href={`/work/${slugify(p.title)}`}
+                        className="inline-block py-1 transition-colors duration-200 hover:text-ivory"
+                      >
+                        {p.title}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
+          </div>
         </div>
-        <div className="flex gap-3">
-          {[
-            { I: Linkedin, href: "https://www.linkedin.com/in/eddie-nyambo-41a460345/" },
-            { I: Instagram, href: "https://www.instagram.com/eddien_0/" },
-            { I: Github, href: "https://github.com/eddienyambo000-crypto" },
-          ].map(({ I, href }, i) => (
-            <a key={i} href={href} target="_blank" rel="noopener" className="grid h-[38px] w-[38px] place-items-center rounded-[10px] border border-mocha-line bg-paper text-coffee transition-all hover:-translate-y-0.5 hover:text-espresso">
-              <I size={18} />
-            </a>
-          ))}
-          <a href={wa("Hi Eddie, I want an automated system for my business.")} target="_blank" rel="noopener" className="grid h-[38px] w-[38px] place-items-center rounded-[10px] border border-mocha-line bg-paper text-coffee transition-all hover:-translate-y-0.5 hover:text-[#25D366]">
-            <WaIcon className="h-[18px] w-[18px]" />
-          </a>
+
+        <div className="mt-14 flex flex-col gap-2 border-t border-line pt-6 font-mono text-[0.68rem] text-faint sm:flex-row sm:items-center sm:justify-between">
+          <span>
+            © {new Date().getFullYear()} {NAME}. Built in Kigali.
+          </span>
+          <span>Every system on this page is live.</span>
         </div>
       </div>
     </footer>
