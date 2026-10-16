@@ -1,299 +1,245 @@
 @import "tailwindcss";
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   OPERATOR — the design system.
-   Warm-black console surfaces, ivory text, amber signal. One light inversion
-   surface ("paper") used to break the page rhythm. No cool greys anywhere:
-   every neutral is warmed so it reads as craft, not as a default dark theme.
+   THE INDEX — design tokens.
+   Paper and ink, one accent. See DESIGN_RATIONALE.md.
    ═══════════════════════════════════════════════════════════════════════════ */
 
 @theme {
-  /* surfaces — base → elevated → floating */
-  --color-ink: #0a0908;
-  --color-ink-2: #121110;
-  --color-ink-3: #1a1816;
-  --color-ink-4: #241f1b;
-  --color-line: #2a2522;
-  --color-line-soft: #1e1a18;
+  --color-paper: #efece5;
+  --color-paper-2: #e7e3da; /* recessed panels, input fields */
+  --color-ink: #1d2725;
+  --color-ink-80: #45504d; /* body copy on paper */
+  --color-stone: #a9ada1; /* decorative only — 1.9:1 on paper, never for text */
+  --color-meta: #5c635b; /* meta text, 5.2:1 on paper */
+  --color-stone-2: #c9cbc2; /* rules, hairlines */
+  --color-vermilion: #d34f2d;
+  --color-vermilion-ink: #a93a1d; /* small text on paper, keeps 4.5:1 */
 
-  /* light inversion surface */
-  --color-paper: #f3eee4;
-  --color-paper-2: #e9e2d4;
+  --font-grotesk: var(--font-archivo), system-ui, sans-serif;
+  --font-editorial: var(--font-newsreader), Georgia, serif;
 
-  /* text */
-  --color-ivory: #f6f2ea;
-  --color-muted: #9c938a;
-  --color-faint: #6b635c;
+  /* vertical rhythm */
+  --space-section: clamp(5rem, 11vw, 9.5rem);
+  --space-section-tight: clamp(3rem, 7vw, 5.5rem);
+  --gutter: clamp(1.25rem, 5vw, 5rem);
+  --measure: 62ch;
 
-  /* signal */
-  --color-amber: #f0a64b;
-  --color-amber-deep: #c97b2c;
-  --color-amber-dim: #7a4d1c;
-  --color-live: #5fd08a;
-  --color-alert: #e2694f;
-
-  --font-display: var(--font-instrument), Georgia, serif;
-  --font-sans: var(--font-inter), system-ui, sans-serif;
-  --font-mono: var(--font-jetbrains), ui-monospace, monospace;
-
-  /* layered, colour-tinted depth — never a flat grey shadow */
-  --shadow-panel: 0 1px 0 rgba(255, 244, 230, 0.04) inset,
-    0 20px 50px -20px rgba(0, 0, 0, 0.8);
-  --shadow-lift: 0 1px 0 rgba(255, 244, 230, 0.06) inset,
-    0 30px 70px -24px rgba(0, 0, 0, 0.85), 0 0 0 1px rgba(240, 166, 75, 0.1);
-  --shadow-amber: 0 18px 46px -16px rgba(240, 166, 75, 0.45);
-
-  --ease-spring: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-out-soft: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-editorial: cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
-/* ─────────────────────────────── base ─────────────────────────────── */
+/* ───────────────────────────────── base ─────────────────────────────────── */
 
-/* base layer: element defaults must lose to utilities, never beat them */
 @layer base {
   * {
-    border-color: var(--color-line);
+    border-color: var(--color-stone-2);
   }
 
   html {
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
-    background: var(--color-ink);
+    background: var(--color-paper);
   }
 
   body {
-    background: var(--color-ink);
-    color: var(--color-muted);
-    font-family: var(--font-sans);
-    font-size: 16px;
-    line-height: 1.7;
+    background: var(--color-paper);
+    color: var(--color-ink-80);
+    font-family: var(--font-grotesk);
+    font-size: 1rem;
+    line-height: 1.6;
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
-    text-rendering: optimizeLegibility;
+    font-synthesis-weight: none;
   }
 
-  /* anchored sections clear the sticky rail */
   section[id],
   :target {
-    scroll-margin-top: 96px;
+    scroll-margin-top: 6rem;
   }
 
   h1,
   h2,
   h3,
   h4 {
-    font-family: var(--font-display);
-    color: var(--color-ivory);
+    color: var(--color-ink);
     font-weight: 400;
-    letter-spacing: -0.02em;
-    line-height: 1.02;
+    text-wrap: balance;
   }
 
-  /* small display sizes read cramped with the big-headline tracking */
-  h3,
-  h4 {
-    letter-spacing: -0.005em;
-    line-height: 1.12;
+  /* editorial display: the voice */
+  .display {
+    font-family: var(--font-editorial);
+    font-weight: 400;
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+  }
+
+  /* structural: the filing system */
+  .structural {
+    font-family: var(--font-grotesk);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    line-height: 1;
   }
 
   a {
     color: inherit;
   }
-}
 
-@layer components {
-  /* the accent tail after "|" in an editable headline */
-  .tail {
-    font-style: italic;
-    color: var(--color-amber);
+  ::selection {
+    background: var(--color-vermilion);
+    color: var(--color-paper);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-vermilion);
+    outline-offset: 4px;
+  }
+
+  /* iOS zooms the page when a focused field is under 16px */
+  @media (max-width: 639px) {
+    input,
+    textarea,
+    select {
+      font-size: 16px !important;
+    }
   }
 }
 
-/* ───────────────────── atmosphere: grid + grain + wash ───────────────── */
+/* ───────────────────────────── components ───────────────────────────────── */
 
-.bg-field {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-}
-/* precision grid — the "instrument" layer */
-.bg-field::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image: linear-gradient(rgba(246, 242, 234, 0.028) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(246, 242, 234, 0.028) 1px, transparent 1px);
-  background-size: 76px 76px;
-  mask-image: radial-gradient(ellipse 110% 80% at 50% 0%, #000 20%, transparent 78%);
-  -webkit-mask-image: radial-gradient(ellipse 110% 80% at 50% 0%, #000 20%, transparent 78%);
-}
-/* warm wash so the black never reads blue */
-.bg-field::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(900px 620px at 84% -10%, rgba(240, 166, 75, 0.13), transparent 62%),
-    radial-gradient(760px 560px at -8% 8%, rgba(201, 123, 44, 0.08), transparent 58%),
-    radial-gradient(1200px 700px at 50% 110%, rgba(95, 208, 138, 0.045), transparent 60%);
-}
-
-.grain {
-  position: fixed;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  opacity: 0.4;
-  mix-blend-mode: overlay;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.055'/%3E%3C/svg%3E");
-}
-
-/* ───────────────────────────── components ───────────────────────────── */
-
-/* in the components layer so Tailwind utilities (block, mt-*, w-full...) can
-   always override them — unlayered CSS would silently win */
 @layer components {
-  .eyebrow {
-    font-family: var(--font-mono);
-    font-size: 0.68rem;
+  /* the small uppercase label that files everything */
+  .label {
+    font-family: var(--font-grotesk);
+    font-size: 0.7rem;
     font-weight: 500;
-    letter-spacing: 0.22em;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: var(--color-amber);
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .eyebrow::before {
-    content: "";
-    width: 22px;
-    height: 1px;
-    background: var(--color-amber-deep);
-    flex: none;
+    color: var(--color-meta);
   }
 
-  .panel {
-    background: linear-gradient(180deg, var(--color-ink-2), var(--color-ink));
-    border: 1px solid var(--color-line);
-    border-radius: 18px;
-    box-shadow: var(--shadow-panel);
+  /* vermilion is 3.6:1 on paper: large text only (>=24px). Small accents
+     use --color-vermilion-ink, which is 5.4:1. */
+  .italic-accent {
+    font-style: italic;
+    color: var(--color-vermilion);
   }
 
-  .panel-raised {
-    background: linear-gradient(180deg, var(--color-ink-3), var(--color-ink-2));
-    border: 1px solid var(--color-line);
-    border-radius: 18px;
-    box-shadow: var(--shadow-panel);
-  }
-
-  /* thin top highlight — reads like a machined edge */
-  .edge-top {
-    position: relative;
-    overflow: hidden;
-  }
-  .edge-top::before {
-    content: "";
-    position: absolute;
-    inset: 0 0 auto 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(240, 166, 75, 0.5), transparent);
-  }
-
-  /* buttons — dark ink on amber passes AA; ghost keeps a real visible border */
+  /* one primary action per screen */
   .btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
-    min-height: 48px;
-    padding: 0 22px;
-    border-radius: 12px;
-    font-weight: 600;
+    gap: 0.65rem;
+    min-height: 3rem;
+    padding: 0 1.6rem;
     font-size: 0.95rem;
+    font-weight: 500;
     letter-spacing: -0.01em;
+    border: 1px solid transparent;
     cursor: pointer;
-    transition: transform 220ms var(--ease-spring), box-shadow 220ms var(--ease-spring),
-      background-color 200ms ease, border-color 200ms ease, color 200ms ease;
-    will-change: transform;
+    transition:
+      background-color 220ms var(--ease-editorial),
+      color 220ms var(--ease-editorial),
+      border-color 220ms var(--ease-editorial),
+      transform 220ms var(--ease-editorial);
   }
   .btn-primary {
-    background: var(--color-amber);
-    color: #17110a;
-    box-shadow: var(--shadow-amber);
+    background: var(--color-ink);
+    color: var(--color-paper);
   }
   .btn-primary:hover {
-    background: #ffbc63;
-    transform: translateY(-2px);
+    background: var(--color-vermilion);
   }
   .btn-primary:active {
-    transform: translateY(0) scale(0.985);
+    transform: translateY(1px);
   }
-  .btn-ghost {
-    background: var(--color-ink-2);
-    color: var(--color-ivory);
-    border: 1px solid var(--color-line);
+  .btn-quiet {
+    background: transparent;
+    color: var(--color-ink);
+    border-color: var(--color-ink);
   }
-  .btn-ghost:hover {
-    border-color: var(--color-amber-dim);
-    background: var(--color-ink-3);
-    transform: translateY(-2px);
+  .btn-quiet:hover {
+    background: var(--color-ink);
+    color: var(--color-paper);
   }
-  .btn-ghost:active {
-    transform: translateY(0) scale(0.985);
+  .btn-quiet:active {
+    transform: translateY(1px);
+  }
+
+  /* a link that draws its own rule on approach */
+  .rule-link {
+    position: relative;
+    display: inline-block;
+    color: var(--color-ink);
+  }
+  .rule-link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -0.18em;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 420ms var(--ease-out-soft);
+  }
+  .rule-link:hover::after,
+  .rule-link:focus-visible::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+
+  /* inverse surface — used once or twice, never as a theme */
+  .surface-ink {
+    background: var(--color-ink);
+    color: #b9c0bd;
+  }
+  .surface-ink h1,
+  .surface-ink h2,
+  .surface-ink h3,
+  .surface-ink h4 {
+    color: var(--color-paper);
+  }
+  .surface-ink .label {
+    color: #8f9a96; /* 5.2:1 on ink — #7f8a86 measured 4.2:1 and failed */
+  }
+
+  .hairline {
+    border-top: 1px solid var(--color-stone-2);
+  }
+
+  .no-bar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .no-bar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* tabular figures wherever a number changes in place */
+  .tnum {
+    font-variant-numeric: tabular-nums;
   }
 }
 
-/* live status dot */
-.dot-live {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--color-live);
-  box-shadow: 0 0 0 0 rgba(95, 208, 138, 0.55);
-  animation: live-ping 2.6s var(--ease-out-soft) infinite;
-  flex: none;
-}
-@keyframes live-ping {
-  0% {
-    box-shadow: 0 0 0 0 rgba(95, 208, 138, 0.5);
-  }
-  70% {
-    box-shadow: 0 0 0 9px rgba(95, 208, 138, 0);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(95, 208, 138, 0);
-  }
-}
+/* ───────────────────────────── motion ───────────────────────────────────── */
 
-/* marquee */
-@keyframes marquee {
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(1.25rem);
+  }
   to {
-    transform: translateX(-50%);
-  }
-}
-.animate-marquee {
-  animation: marquee 42s linear infinite;
-}
-
-/* the signal pulse that travels the pipeline in the system demo */
-@keyframes flow {
-  0% {
-    transform: translateX(-100%);
-    opacity: 0;
-  }
-  12% {
     opacity: 1;
-  }
-  88% {
-    opacity: 1;
-  }
-  100% {
-    transform: translateX(100%);
-    opacity: 0;
+    transform: none;
   }
 }
-.animate-flow {
-  animation: flow 2.4s var(--ease-out-soft) infinite;
+.animate-rise {
+  animation: rise 0.9s var(--ease-out-soft) both;
 }
 
 @keyframes caret {
@@ -310,76 +256,17 @@
   animation: caret 1.05s steps(1) infinite;
 }
 
-/* tabular numerals wherever numbers change in place */
-.tnum {
-  font-variant-numeric: tabular-nums;
-  font-feature-settings: "tnum";
-}
-
-/* the light inversion surface */
-@layer components {
-  .surface-paper {
-    background: var(--color-paper);
-    color: #3a322b;
-  }
-  .surface-paper h1,
-  .surface-paper h2,
-  .surface-paper h3,
-  .surface-paper h4 {
-    color: #14110e;
-  }
-  .surface-paper .eyebrow {
-    color: #8a5420;
-  }
-  .surface-paper .eyebrow::before {
-    background: #b57a35;
-  }
-}
-
-/* iOS zooms the page when a focused field is under 16px — never let it */
-@media (max-width: 639px) {
-  input,
-  textarea,
-  select {
-    font-size: 16px !important;
-  }
-}
-
-/* hide scrollbar on the horizontal rails but keep it scrollable */
-.no-bar {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-.no-bar::-webkit-scrollbar {
-  display: none;
-}
-
-/* ─────────────────────────── system chrome ──────────────────────────── */
-
 ::-webkit-scrollbar {
   width: 10px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--color-ink);
+  background: var(--color-paper);
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--color-ink-4);
-  border-radius: 10px;
-  border: 2px solid var(--color-ink);
+  background: var(--color-stone);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-amber-dim);
-}
-
-::selection {
-  background: rgba(240, 166, 75, 0.28);
-  color: var(--color-ivory);
-}
-
-:focus-visible {
-  outline: 2px solid var(--color-amber);
-  outline-offset: 3px;
-  border-radius: 6px;
+  background: var(--color-ink);
 }
 
 @media (prefers-reduced-motion: reduce) {

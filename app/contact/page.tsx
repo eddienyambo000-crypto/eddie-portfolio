@@ -1,108 +1,86 @@
 import type { Metadata } from "next";
-import { CalendarCheck, Mail, MessageCircle } from "lucide-react";
-import { PageHero } from "@/components/PageHero";
 import { ContactForm } from "@/components/ContactForm";
-import { Footer, Section } from "@/components/sections";
+import { Band, PageIntro, Wrap } from "@/components/Page";
 import { Reveal } from "@/components/ui";
-import { getContent } from "@/lib/content";
-import { CALENDAR, EMAIL, OFFER, WA_DEFAULT, WHATSAPP_PRETTY } from "@/lib/site";
+import { CALENDAR, EMAIL, WA_DEFAULT, WHATSAPP_PRETTY } from "@/lib/site";
 
 export const revalidate = 60;
 
 export const metadata: Metadata = {
-  title: "Start a build",
+  title: "Contact",
   description:
-    "Free teardown of your business: 30 minutes, no pitch, and you keep the map either way. WhatsApp, email or book a call.",
+    "Tell me what you need. WhatsApp is fastest, or book a thirty-minute call, or send the form and I will come back to you.",
   alternates: { canonical: "/contact" },
 };
 
-const WAYS = [
-  {
-    Icon: MessageCircle,
-    label: "WhatsApp",
-    value: WHATSAPP_PRETTY,
-    note: "Fastest. I usually reply the same hour.",
-    href: WA_DEFAULT,
-  },
-  {
-    Icon: CalendarCheck,
-    label: "Book the 30 minutes",
-    value: "Free teardown call",
-    note: "Pick a slot that suits you. No pitch, no deck.",
-    href: CALENDAR,
-  },
-  {
-    Icon: Mail,
-    label: "Email",
-    value: EMAIL,
-    note: "Best if you want to send documents first.",
-    href: `mailto:${EMAIL}`,
-  },
-];
-
-export default async function ContactPage() {
-  const d = await getContent();
-
+export default function ContactPage() {
   return (
     <>
-      <PageHero
-        eyebrow={`${OFFER.slots} build slots left this month`}
-        title="Show me the business.|I will show you the leak."
-        lead="Thirty minutes. I map how customers reach you now and exactly where they fall out. You keep that map whether you hire me or not — it is useful either way."
-      />
+      <PageIntro
+        no="04"
+        title="Have a problem|worth solving?"
+        lead="Tell me how customers reach you today and what keeps breaking. If it is worth building I will quote it, and if it is not I will tell you that instead."
+      >
+        <div className="mt-10 flex flex-wrap items-center gap-3">
+          <a
+            href={WA_DEFAULT}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn btn-primary"
+          >
+            WhatsApp me
+            <span aria-hidden>&#8599;</span>
+          </a>
+          <a
+            href={CALENDAR}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn btn-quiet"
+          >
+            Book 30 minutes
+          </a>
+        </div>
+        <p className="label mt-5">
+          {WHATSAPP_PRETTY} &nbsp;/&nbsp;{" "}
+          <a href={`mailto:${EMAIL}`} className="rule-link">
+            {EMAIL}
+          </a>
+        </p>
+      </PageIntro>
 
-      <Section tight>
-        <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.62fr)] lg:gap-6">
-          <ContactForm />
-
-          <div className="flex flex-col gap-3">
-            {WAYS.map((w, i) => (
-              <Reveal key={w.label} delay={i * 0.07}>
-                <a
-                  href={w.href}
-                  target={w.href.startsWith("mailto") ? undefined : "_blank"}
-                  rel="noopener noreferrer"
-                  className="panel group flex h-full items-start gap-4 p-5 transition-[transform,border-color] duration-400 [transition-timing-function:var(--ease-spring)] hover:-translate-y-1 hover:border-amber-dim lg:p-6"
-                >
-                  <span className="grid h-11 w-11 flex-none place-items-center rounded-xl border border-line bg-ink-3 text-amber">
-                    <w.Icon size={18} strokeWidth={1.7} aria-hidden />
-                  </span>
-                  <span className="min-w-0">
-                    <span className="block font-mono text-[0.66rem] uppercase tracking-[0.16em] text-faint">
-                      {w.label}
-                    </span>
-                    <span className="mt-1 block truncate text-[1rem] text-ivory">{w.value}</span>
-                    <span className="mt-1.5 block text-[0.85rem] leading-relaxed">{w.note}</span>
-                  </span>
-                </a>
-              </Reveal>
-            ))}
-
-            <Reveal delay={0.24}>
-              <div className="panel-raised edge-top p-5 lg:p-6">
-                <div className="flex items-center gap-2 font-mono text-[0.64rem] uppercase tracking-[0.16em] text-live">
-                  <span className="dot-live" aria-hidden />
-                  What happens next
-                </div>
-                <ol className="mt-4 space-y-3 text-[0.88rem] leading-relaxed">
-                  {[
-                    "I reply and ask three questions about how customers reach you.",
-                    "We do 30 minutes. I map the leak and tell you what to fix first.",
-                    "If it is worth building, I quote it. If it is not, I tell you that too.",
-                  ].map((s, i) => (
-                    <li key={s} className="flex gap-3">
-                      <span className="font-mono text-[0.72rem] text-amber">0{i + 1}</span>
-                      {s}
-                    </li>
-                  ))}
-                </ol>
+      <Band tight>
+        <Wrap>
+          <div className="grid gap-10 lg:grid-cols-12 lg:gap-14">
+            <div className="lg:col-span-7">
+              <h2 className="label">Or send it in writing</h2>
+              <div className="mt-6">
+                <ContactForm />
               </div>
+            </div>
+
+            <Reveal className="lg:col-span-4 lg:col-start-9">
+              <h2 className="label">What happens next</h2>
+              <ol className="mt-6">
+                {[
+                  "I reply, usually the same day, with three questions about how customers reach you.",
+                  "We talk for thirty minutes. I map where enquiries fall out of your process.",
+                  "If it is worth building, you get a quote and a date. If not, you keep the map.",
+                ].map((s, i) => (
+                  <li
+                    key={s}
+                    className="flex gap-5 border-b border-stone-2 py-5 last:border-0"
+                  >
+                    <span className="label tnum shrink-0 text-ink">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <span className="text-[0.98rem] leading-relaxed">{s}</span>
+                  </li>
+                ))}
+              </ol>
             </Reveal>
           </div>
-        </div>
-      </Section>
-
-      <Footer projects={d.projects} />
+        </Wrap>
+      </Band>
     </>
   );
 }

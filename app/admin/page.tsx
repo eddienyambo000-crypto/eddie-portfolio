@@ -48,7 +48,7 @@ export default function Admin() {
   if (!cmsReady) return <NotWired />;
   if (checking)
     return (
-      <div className="grid min-h-screen place-items-center text-muted">
+      <div className="grid min-h-screen place-items-center text-ink-80">
         <Loader2 className="animate-spin" aria-label="Loading" />
       </div>
     );
@@ -56,20 +56,20 @@ export default function Admin() {
 
   return (
     <div className="min-h-screen pb-24">
-      <header className="sticky top-0 z-50 border-b border-line bg-ink/92 backdrop-blur-xl">
+      <header className="sticky top-0 z-50 border-b border-stone-2 bg-paper/92 backdrop-blur-xl">
         <div className="mx-auto flex max-w-[1080px] items-center justify-between gap-3 px-4 py-3">
           <div className="flex items-center gap-2.5">
-            <span className="grid h-8 w-8 place-items-center rounded-[9px] bg-amber font-mono text-[0.68rem] font-semibold text-[#17110a]">
+            <span className="grid h-8 w-8 place-items-center rounded-[9px] bg-paper font-grotesk text-[0.68rem] font-semibold text-paper">
               EN
             </span>
-            <span className="font-display text-[1.05rem] text-ivory">Site control</span>
+            <span className="display text-[1.05rem] text-ink">Site control</span>
           </div>
           <div className="flex items-center gap-2">
             <a
               href="/"
               target="_blank"
               rel="noopener noreferrer"
-              className="rounded-lg border border-line bg-ink-2 px-3 py-2 text-[0.8rem] text-ivory"
+              className="rounded-lg border border-stone-2 bg-paper px-3 py-2 text-[0.8rem] text-ink"
             >
               View site
             </a>
@@ -79,7 +79,7 @@ export default function Admin() {
                 setAuthed(false);
               }}
               aria-label="Log out"
-              className="grid h-9 w-9 place-items-center rounded-lg border border-line bg-ink-2 text-muted"
+              className="grid h-9 w-9 place-items-center rounded-lg border border-stone-2 bg-paper text-ink-80"
             >
               <LogOut size={15} aria-hidden />
             </button>
@@ -94,8 +94,8 @@ export default function Admin() {
               aria-pressed={tab === t}
               className={`min-h-[38px] flex-none rounded-lg border px-3.5 text-[0.85rem] transition-colors duration-200 ${
                 tab === t
-                  ? "border-amber-dim bg-amber/12 text-ivory"
-                  : "border-line bg-ink-2 text-muted"
+                  ? "border-ink bg-paper-2 text-ink"
+                  : "border-stone-2 bg-paper text-ink-80"
               }`}
             >
               {t}
@@ -116,7 +116,7 @@ export default function Admin() {
       {toast && (
         <div
           role="status"
-          className="fixed bottom-6 left-1/2 z-[100] max-w-[92vw] -translate-x-1/2 rounded-xl border border-line bg-ink-3 px-5 py-3 text-[0.88rem] text-ivory shadow-[var(--shadow-lift)]"
+          className="fixed bottom-6 left-1/2 z-[100] max-w-[92vw] -translate-x-1/2 rounded-xl border border-stone-2 bg-paper-2 px-5 py-3 text-[0.88rem] text-ink "
         >
           {toast}
         </div>
@@ -134,15 +134,15 @@ function NotWired() {
       <h1 className="mt-5 text-[2rem]">The CMS is not connected.</h1>
       <p className="mt-4 leading-[1.75]">
         This panel needs two environment variables. Add them in Vercel under{" "}
-        <span className="text-ivory">Settings → Environment Variables</span>, then redeploy:
+        <span className="text-ink">Settings → Environment Variables</span>, then redeploy:
       </p>
-      <pre className="mt-5 overflow-x-auto rounded-xl border border-line bg-ink-2 p-4 font-mono text-[0.78rem] text-amber">
+      <pre className="mt-5 overflow-x-auto rounded-xl border border-stone-2 bg-paper p-4 font-grotesk text-[0.78rem] text-vermilion">
         {`NEXT_PUBLIC_SUPABASE_URL=https://zjvroxaehidqjocyjqkp.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=sb_publishable_...`}
       </pre>
       <p className="mt-5 text-[0.9rem] leading-relaxed">
-        Use the new <span className="font-mono text-ivory">sb_publishable_</span> key from
-        Supabase → Settings → API Keys. The old <span className="font-mono">eyJ…</span> key was
+        Use the new <span className="font-grotesk text-ink">sb_publishable_</span> key from
+        Supabase → Settings → API Keys. The old <span className="font-grotesk">eyJ…</span> key was
         disabled on 2 Aug 2026 and will not work. The public site keeps running on its built-in
         content until this is set.
       </p>
@@ -182,11 +182,11 @@ function Login({ onIn }: { onIn: () => void }) {
 
   return (
     <div className="grid min-h-screen place-items-center px-5">
-      <form onSubmit={login} className="panel w-full max-w-[400px] p-8">
-        <span className="grid h-11 w-11 place-items-center rounded-xl bg-amber font-mono text-[0.75rem] font-semibold text-[#17110a]">
+      <form onSubmit={login} className="border border-stone-2 bg-paper w-full max-w-[400px] p-8">
+        <span className="grid h-11 w-11 place-items-center rounded-xl bg-paper font-grotesk text-[0.75rem] font-semibold text-paper">
           EN
         </span>
-        <h1 className="mt-5 font-display text-[1.5rem]">Site control</h1>
+        <h1 className="mt-5 display text-[1.5rem]">Site control</h1>
         <p className="mt-1.5 text-[0.88rem]">Sign in to edit the site.</p>
 
         <div className="mt-6 space-y-3.5">
@@ -219,7 +219,7 @@ function Login({ onIn }: { onIn: () => void }) {
           Sign in
         </button>
         {err && (
-          <p role="alert" className="mt-3 text-[0.85rem] text-alert">
+          <p role="alert" className="mt-3 text-[0.85rem] text-vermilion-ink">
             {err}
           </p>
         )}
@@ -233,28 +233,28 @@ function Login({ onIn }: { onIn: () => void }) {
 const Label = (p: React.LabelHTMLAttributes<HTMLLabelElement>) => (
   <label
     {...p}
-    className="mb-1.5 block font-mono text-[0.66rem] uppercase tracking-[0.14em] text-faint"
+    className="mb-1.5 block font-grotesk text-[0.66rem] uppercase tracking-[0.14em] text-stone"
   />
 );
 
 const Input = (p: React.InputHTMLAttributes<HTMLInputElement>) => (
   <input
     {...p}
-    className="h-11 w-full rounded-xl border border-line bg-ink px-3.5 text-[0.9rem] text-ivory outline-none transition-colors duration-200 focus:border-amber-dim"
+    className="h-11 w-full rounded-xl border border-stone-2 bg-paper-2 px-3.5 text-[0.9rem] text-ink outline-none transition-colors duration-200 focus:border-ink"
   />
 );
 
 const TArea = (p: React.TextareaHTMLAttributes<HTMLTextAreaElement>) => (
   <textarea
     {...p}
-    className="w-full resize-y rounded-xl border border-line bg-ink px-3.5 py-3 text-[0.9rem] leading-relaxed text-ivory outline-none transition-colors duration-200 focus:border-amber-dim"
+    className="w-full resize-y rounded-xl border border-stone-2 bg-paper-2 px-3.5 py-3 text-[0.9rem] leading-relaxed text-ink outline-none transition-colors duration-200 focus:border-ink"
   />
 );
 
 function Card({ title, children }: { title?: string; children: React.ReactNode }) {
   return (
-    <div className="panel mb-4 p-5 lg:p-6">
-      {title && <h2 className="mb-5 font-display text-[1.25rem]">{title}</h2>}
+    <div className="border border-stone-2 bg-paper mb-4 p-5 lg:p-6">
+      {title && <h2 className="mb-5 display text-[1.25rem]">{title}</h2>}
       {children}
     </div>
   );
@@ -273,7 +273,7 @@ function Danger({ onClick, label = "Delete" }: { onClick: () => void; label?: st
   return (
     <button
       onClick={onClick}
-      className="flex min-h-[38px] items-center gap-1.5 rounded-lg border border-alert/35 px-3 text-[0.8rem] text-alert transition-colors duration-200 hover:bg-alert/10"
+      className="flex min-h-[38px] items-center gap-1.5 rounded-lg border border-stone-2 px-3 text-[0.8rem] text-vermilion-ink transition-colors duration-200 hover:bg-paper-2"
     >
       <Trash2 size={13} aria-hidden />
       {label}
@@ -393,7 +393,7 @@ function ProfilePanel({ flash }: { flash: (m: string) => void }) {
           </div>
         </div>
 
-        <div className="mt-6 border-t border-line pt-5">
+        <div className="mt-6 border-t border-stone-2 pt-5">
           <Label>The four numbers</Label>
           <div className="mt-2 space-y-2">
             {stats.map((s, i) => (
@@ -425,7 +425,7 @@ function ProfilePanel({ flash }: { flash: (m: string) => void }) {
                 <button
                   onClick={() => setStats((a) => a.filter((_, j) => j !== i))}
                   aria-label={`Remove stat ${i + 1}`}
-                  className="grid h-11 w-11 flex-none place-items-center rounded-xl border border-line text-muted"
+                  className="grid h-11 w-11 flex-none place-items-center rounded-xl border border-stone-2 text-ink-80"
                 >
                   <X size={14} aria-hidden />
                 </button>
@@ -434,7 +434,7 @@ function ProfilePanel({ flash }: { flash: (m: string) => void }) {
           </div>
           <button
             onClick={() => setStats((a) => [...a, { value: "", label: "" }])}
-            className="mt-3 flex min-h-[38px] items-center gap-1.5 rounded-lg border border-line px-3 text-[0.82rem] text-muted"
+            className="mt-3 flex min-h-[38px] items-center gap-1.5 rounded-lg border border-stone-2 px-3 text-[0.82rem] text-ink-80"
           >
             <Plus size={13} aria-hidden />
             Add a number
@@ -453,7 +453,7 @@ function ProfilePanel({ flash }: { flash: (m: string) => void }) {
             <img
               src={p.photo_url}
               alt="Current portrait"
-              className="h-[120px] w-[96px] rounded-xl border border-line object-cover"
+              className="h-[120px] w-[96px] rounded-xl border border-stone-2 object-cover"
             />
           )}
           <div className="min-w-[220px] flex-1">
@@ -463,7 +463,7 @@ function ProfilePanel({ flash }: { flash: (m: string) => void }) {
               type="file"
               accept="image/*"
               onChange={onPhoto}
-              className="w-full text-[0.82rem] text-muted file:mr-3 file:rounded-lg file:border-0 file:bg-amber file:px-3 file:py-2 file:text-[#17110a]"
+              className="w-full text-[0.82rem] text-ink-80 file:mr-3 file:rounded-lg file:border-0 file:bg-ink file:px-3 file:py-2 file:text-paper"
             />
           </div>
         </div>
@@ -505,17 +505,17 @@ function ProjectsPanel({ flash }: { flash: (m: string) => void }) {
   return (
     <>
       <div className="mb-4 flex items-center justify-between gap-3">
-        <h2 className="font-display text-[1.25rem]">Projects</h2>
-        <button onClick={add} className="btn btn-ghost !min-h-[42px] !px-4 !text-[0.85rem]">
+        <h2 className="display text-[1.25rem]">Projects</h2>
+        <button onClick={add} className="btn btn-quiet !min-h-[42px] !px-4 !text-[0.85rem]">
           <Plus size={14} aria-hidden />
           New project
         </button>
       </div>
 
-      {loading && <p className="text-muted">Loading…</p>}
+      {loading && <p className="text-ink-80">Loading…</p>}
       {!loading && !rows.length && (
-        <div className="panel p-8 text-center">
-          <p className="text-muted">No projects yet. The site is showing its built-in examples.</p>
+        <div className="border border-stone-2 bg-paper p-8 text-center">
+          <p className="text-ink-80">No projects yet. The site is showing its built-in examples.</p>
           <button onClick={add} className="btn btn-primary mt-5">
             <Plus size={15} aria-hidden />
             Add your first
@@ -612,7 +612,7 @@ function ProjectItem({
   const tagsValue = Array.isArray(f.tags) ? f.tags.join(", ") : (f.tags ?? "");
 
   return (
-    <div className="panel mb-3 overflow-hidden">
+    <div className="border border-stone-2 bg-paper mb-3 overflow-hidden">
       <button
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
@@ -623,16 +623,16 @@ function ProjectItem({
           <img
             src={row.cover_url}
             alt=""
-            className="h-12 w-16 flex-none rounded-lg border border-line object-cover"
+            className="h-12 w-16 flex-none rounded-lg border border-stone-2 object-cover"
           />
         ) : (
-          <span className="grid h-12 w-16 flex-none place-items-center rounded-lg border border-line bg-ink-3 text-faint">
+          <span className="grid h-12 w-16 flex-none place-items-center rounded-lg border border-stone-2 bg-paper-2 text-stone">
             <ImageIcon size={15} aria-hidden />
           </span>
         )}
         <span className="min-w-0 flex-1">
-          <span className="block truncate text-[0.98rem] text-ivory">{row.title}</span>
-          <span className="block truncate font-mono text-[0.7rem] text-faint">
+          <span className="block truncate text-[0.98rem] text-ink">{row.title}</span>
+          <span className="block truncate font-grotesk text-[0.7rem] text-stone">
             {(row.tags || []).join(" · ") || "no tags"}
             {row.published ? "" : " · hidden"}
           </span>
@@ -640,12 +640,12 @@ function ProjectItem({
         <ChevronDown
           size={16}
           aria-hidden
-          className={`flex-none text-faint transition-transform duration-300 ${open ? "rotate-180" : ""}`}
+          className={`flex-none text-stone transition-transform duration-300 ${open ? "rotate-180" : ""}`}
         />
       </button>
 
       {open && (
-        <div className="space-y-4 border-t border-line p-4">
+        <div className="space-y-4 border-t border-stone-2 p-4">
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
               <Label htmlFor={`t-${row.id}`}>Title</Label>
@@ -714,7 +714,7 @@ function ProjectItem({
                   type="color"
                   value={f.accent || "#F0A64B"}
                   onChange={(e) => set("accent", e.target.value)}
-                  className="h-11 w-12 flex-none cursor-pointer rounded-xl border border-line bg-ink"
+                  className="h-11 w-12 flex-none cursor-pointer rounded-xl border border-stone-2 bg-paper"
                 />
                 <Input
                   aria-label="Accent hex"
@@ -742,7 +742,7 @@ function ProjectItem({
                 <img
                   src={f.cover_url}
                   alt="Cover preview"
-                  className="h-20 w-32 rounded-lg border border-line object-cover"
+                  className="h-20 w-32 rounded-lg border border-stone-2 object-cover"
                 />
               )}
               <input
@@ -750,16 +750,16 @@ function ProjectItem({
                 type="file"
                 accept="image/*"
                 onChange={onCover}
-                className="flex-1 text-[0.82rem] text-muted file:mr-3 file:rounded-lg file:border-0 file:bg-amber file:px-3 file:py-2 file:text-[#17110a]"
+                className="flex-1 text-[0.82rem] text-ink-80 file:mr-3 file:rounded-lg file:border-0 file:bg-ink file:px-3 file:py-2 file:text-paper"
               />
             </div>
-            <p className="mt-2 text-[0.78rem] text-faint">
+            <p className="mt-2 text-[0.78rem] text-stone">
               Wide screenshot, roughly 1600×1000. No image is fine — the card draws its own.
             </p>
           </div>
 
-          <details className="rounded-xl border border-line bg-ink-2 p-4">
-            <summary className="cursor-pointer text-[0.9rem] text-ivory">
+          <details className="rounded-xl border border-stone-2 bg-paper p-4">
+            <summary className="cursor-pointer text-[0.9rem] text-ink">
               Case study (shown on the project&apos;s own page)
             </summary>
             <div className="mt-4 space-y-4">
@@ -823,7 +823,7 @@ function ProjectItem({
                       <button
                         onClick={() => setMetrics((a) => a.filter((_, j) => j !== i))}
                         aria-label={`Remove metric ${i + 1}`}
-                        className="grid h-11 w-11 flex-none place-items-center rounded-xl border border-line text-muted"
+                        className="grid h-11 w-11 flex-none place-items-center rounded-xl border border-stone-2 text-ink-80"
                       >
                         <X size={14} aria-hidden />
                       </button>
@@ -833,7 +833,7 @@ function ProjectItem({
                 {metrics.length < 4 && (
                   <button
                     onClick={() => setMetrics((a) => [...a, { value: "", label: "" }])}
-                    className="mt-3 flex min-h-[38px] items-center gap-1.5 rounded-lg border border-line px-3 text-[0.82rem] text-muted"
+                    className="mt-3 flex min-h-[38px] items-center gap-1.5 rounded-lg border border-stone-2 px-3 text-[0.82rem] text-ink-80"
                   >
                     <Plus size={13} aria-hidden />
                     Add a number
@@ -843,13 +843,13 @@ function ProjectItem({
             </div>
           </details>
 
-          <div className="flex flex-wrap items-center justify-between gap-3 border-t border-line pt-4">
-            <label className="flex cursor-pointer items-center gap-2.5 text-[0.88rem] text-ivory">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-t border-stone-2 pt-4">
+            <label className="flex cursor-pointer items-center gap-2.5 text-[0.88rem] text-ink">
               <input
                 type="checkbox"
                 checked={!!f.published}
                 onChange={(e) => set("published", e.target.checked)}
-                className="h-4 w-4 accent-[#F0A64B]"
+                className="h-4 w-4 accent-[#1D2725]"
               />
               Show on the site
             </label>
@@ -924,8 +924,8 @@ function ListPanel({ flash, kind }: { flash: (m: string) => void; kind: Kind }) 
   return (
     <>
       <div className="mb-4 flex items-center justify-between gap-3">
-        <h2 className="font-display text-[1.25rem]">{cfg.title}</h2>
-        <button onClick={add} className="btn btn-ghost !min-h-[42px] !px-4 !text-[0.85rem]">
+        <h2 className="display text-[1.25rem]">{cfg.title}</h2>
+        <button onClick={add} className="btn btn-quiet !min-h-[42px] !px-4 !text-[0.85rem]">
           <Plus size={14} aria-hidden />
           New
         </button>
@@ -934,7 +934,7 @@ function ListPanel({ flash, kind }: { flash: (m: string) => void; kind: Kind }) 
       {rows.map((r) => (
         <ListItem key={r.id} row={r} cfg={cfg} kind={kind} reload={load} flash={flash} />
       ))}
-      {!rows.length && <p className="text-muted">Nothing here yet.</p>}
+      {!rows.length && <p className="text-ink-80">Nothing here yet.</p>}
     </>
   );
 }
@@ -979,7 +979,7 @@ function ListItem({
   }
 
   return (
-    <div className="panel mb-3 space-y-4 p-4 lg:p-5">
+    <div className="border border-stone-2 bg-paper mb-3 space-y-4 p-4 lg:p-5">
       {cfg.fields.map(([k, label, type]) => (
         <div key={k}>
           <Label htmlFor={`${row.id}-${k}`}>{label}</Label>
@@ -1007,7 +1007,7 @@ function ListItem({
             <img
               src={row.avatar_url}
               alt=""
-              className="h-12 w-12 rounded-full border border-line object-cover"
+              className="h-12 w-12 rounded-full border border-stone-2 object-cover"
             />
           )}
           <div className="min-w-[200px] flex-1">
@@ -1017,22 +1017,22 @@ function ListItem({
               type="file"
               accept="image/*"
               onChange={onAvatar}
-              className="w-full text-[0.82rem] text-muted file:mr-3 file:rounded-lg file:border-0 file:bg-amber file:px-3 file:py-2 file:text-[#17110a]"
+              className="w-full text-[0.82rem] text-ink-80 file:mr-3 file:rounded-lg file:border-0 file:bg-ink file:px-3 file:py-2 file:text-paper"
             />
           </div>
-          <label className="flex cursor-pointer items-center gap-2.5 text-[0.88rem] text-ivory">
+          <label className="flex cursor-pointer items-center gap-2.5 text-[0.88rem] text-ink">
             <input
               type="checkbox"
               checked={!!f.published}
               onChange={(e) => set("published", e.target.checked)}
-              className="h-4 w-4 accent-[#F0A64B]"
+              className="h-4 w-4 accent-[#1D2725]"
             />
             Public
           </label>
         </div>
       )}
 
-      <div className="flex items-center justify-between gap-3 border-t border-line pt-4">
+      <div className="flex items-center justify-between gap-3 border-t border-stone-2 pt-4">
         <div className="w-[110px]">
           <Label htmlFor={`o-${row.id}`}>Order</Label>
           <Input
@@ -1084,17 +1084,17 @@ function LeadsPanel({ flash }: { flash: (m: string) => void }) {
   return (
     <>
       <div className="mb-4 flex items-center justify-between gap-3">
-        <h2 className="font-display text-[1.25rem]">
+        <h2 className="display text-[1.25rem]">
           Leads{" "}
           {unread > 0 && (
-            <span className="ml-1 rounded-full bg-amber px-2 py-0.5 font-mono text-[0.7rem] text-[#17110a]">
+            <span className="ml-1 rounded-full bg-paper px-2 py-0.5 font-grotesk text-[0.7rem] text-paper">
               {unread} new
             </span>
           )}
         </h2>
         <button
           onClick={load}
-          className="flex min-h-[42px] items-center gap-1.5 rounded-lg border border-line px-3.5 text-[0.85rem] text-muted"
+          className="flex min-h-[42px] items-center gap-1.5 rounded-lg border border-stone-2 px-3.5 text-[0.85rem] text-ink-80"
         >
           <RefreshCw size={14} aria-hidden />
           Refresh
@@ -1102,32 +1102,32 @@ function LeadsPanel({ flash }: { flash: (m: string) => void }) {
       </div>
 
       {err && (
-        <p role="alert" className="panel mb-4 p-4 text-[0.88rem] text-alert">
+        <p role="alert" className="border border-stone-2 bg-paper mb-4 p-4 text-[0.88rem] text-vermilion-ink">
           {err} — if this mentions a policy, run supabase-migration-2026-09.sql.
         </p>
       )}
-      {loading && <p className="text-muted">Loading…</p>}
-      {!loading && !rows.length && !err && <p className="text-muted">No leads yet.</p>}
+      {loading && <p className="text-ink-80">Loading…</p>}
+      {!loading && !rows.length && !err && <p className="text-ink-80">No leads yet.</p>}
 
       {rows.map((l) => (
         <div
           key={l.id}
-          className={`panel mb-3 p-5 ${l.status === "new" ? "border-l-2 border-l-amber" : ""}`}
+          className={`border border-stone-2 bg-paper mb-3 p-5 ${l.status === "new" ? "border-l-2 border-l-vermilion" : ""}`}
         >
           <div className="flex flex-wrap items-baseline justify-between gap-3">
-            <div className="text-[0.98rem] text-ivory">
+            <div className="text-[0.98rem] text-ink">
               {l.name || "Someone"}
               {l.email && (
-                <a href={`mailto:${l.email}`} className="ml-2 text-[0.85rem] text-amber">
+                <a href={`mailto:${l.email}`} className="ml-2 text-[0.85rem] text-vermilion">
                   {l.email}
                 </a>
               )}
             </div>
-            <span className="font-mono text-[0.72rem] text-faint">
+            <span className="font-grotesk text-[0.72rem] text-stone">
               {new Date(l.created_at).toLocaleString()}
             </span>
           </div>
-          <div className="mt-2 text-[0.9rem] text-ivory">{l.subject}</div>
+          <div className="mt-2 text-[0.9rem] text-ink">{l.subject}</div>
           <p className="mt-1.5 whitespace-pre-wrap text-[0.88rem] leading-relaxed">{l.message}</p>
           <div className="mt-4 flex flex-wrap gap-2">
             {l.status === "new" && (
@@ -1136,7 +1136,7 @@ function LeadsPanel({ flash }: { flash: (m: string) => void }) {
                   await supabase.from("pf_leads").update({ status: "read" }).eq("id", l.id);
                   load();
                 }}
-                className="min-h-[38px] rounded-lg border border-line px-3 text-[0.82rem] text-muted"
+                className="min-h-[38px] rounded-lg border border-stone-2 px-3 text-[0.82rem] text-ink-80"
               >
                 Mark read
               </button>

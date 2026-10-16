@@ -2,11 +2,9 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { getContent } from "@/lib/content";
 import { slugify, type Project } from "@/lib/site";
-import { PageHero } from "@/components/PageHero";
-import { FinalCTA, Footer, Section } from "@/components/sections";
+import { Band, NextStep, Wrap } from "@/components/Page";
 import { Reveal } from "@/components/ui";
 
 export const revalidate = 60;
@@ -28,7 +26,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { slug } = await params;
   const hit = await find(slug);
-  if (!hit) return { title: "Project not found" };
+  if (!hit) return { title: "Not found" };
   return {
     title: hit.p.title,
     description: hit.p.blurb,
@@ -49,131 +47,155 @@ export default async function CaseStudy({ params }: Params) {
   const { p, all } = hit;
   const idx = all.findIndex((x) => x.id === p.id);
   const next = all[(idx + 1) % all.length];
+  const tall = p.shape === "tall";
+
   const story = [
-    { k: "The problem", v: p.problem },
-    { k: "What I built", v: p.solution },
-    { k: "What changed", v: p.result },
+    { k: "The challenge", v: p.problem },
+    { k: "The solution", v: p.solution },
+    { k: "The result", v: p.result },
   ].filter((s) => s.v);
 
   return (
     <>
-      <PageHero
-        eyebrow={[p.client, p.year].filter(Boolean).join(" / ") || "Case study"}
-        title={p.title}
-        lead={p.blurb}
-        back={{ href: "/work", label: "All work" }}
-      >
-        <div className="mt-8 flex flex-wrap items-center gap-3">
-          {p.live_url && (
-            <a
-              href={p.live_url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn btn-primary"
-            >
-              Open it live
-              <ArrowUpRight size={15} aria-hidden />
-            </a>
-          )}
-          {!!p.tags?.length && (
-            <div className="flex flex-wrap gap-1.5">
-              {p.tags.map((t) => (
-                <span
-                  key={t}
-                  className="rounded-full border border-line px-3 py-1.5 font-mono text-[0.68rem] text-muted"
+      {/* ── masthead ── */}
+      <Wrap className="pt-14 lg:pt-20">
+        <Link href="/work" className="label rule-link">
+          &#8592; Selected Work
+        </Link>
+
+        <div className="mt-8 grid gap-6 lg:grid-cols-12 lg:items-end">
+          <div className="lg:col-span-8">
+            <h1 className="display text-[clamp(2.5rem,7.6vw,5.2rem)] text-ink">{p.title}</h1>
+            <p className="mt-5 max-w-[48ch] text-[1.08rem] leading-relaxed">{p.blurb}</p>
+          </div>
+
+          <dl className="lg:col-span-4 lg:justify-self-end lg:text-right">
+            {p.client && (
+              <div className="mb-4">
+                <dt className="label">Client</dt>
+                <dd className="mt-1 text-[0.98rem] text-ink">{p.client}</dd>
+              </div>
+            )}
+            {p.year && (
+              <div className="mb-4">
+                <dt className="label">Year</dt>
+                <dd className="tnum mt-1 text-[0.98rem] text-ink">{p.year}</dd>
+              </div>
+            )}
+            {!!p.tags?.length && (
+              <div>
+                <dt className="label">Built with</dt>
+                <dd className="mt-1 text-[0.98rem] text-ink">{p.tags.join(", ")}</dd>
+              </div>
+            )}
+          </dl>
+        </div>
+
+        {p.live_url && (
+          <a
+            href={p.live_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn btn-primary mt-9"
+          >
+            Open the live system
+            <span aria-hidden>&#8599;</span>
+          </a>
+        )}
+      </Wrap>
+
+      {/* ── the capture ── */}
+      {p.cover_url && (
+        <Band tight>
+          <Wrap>
+            <Reveal>
+              <figure>
+                <div
+                  className={`relative w-full overflow-hidden bg-paper-2 ${
+                    tall ? "mx-auto aspect-[9/15] max-w-[380px]" : "aspect-[16/9]"
+                  }`}
                 >
-                  {t}
-                </span>
+                  <Image
+                    src={p.cover_url}
+                    alt={`${p.title} — screenshot of the live system`}
+                    fill
+                    sizes="(max-width: 1440px) 100vw, 1440px"
+                    priority
+                    className={tall ? "object-contain" : "object-cover object-top"}
+                  />
+                </div>
+                <figcaption className="label mt-3">
+                  Screenshot of the live system, {p.year}
+                </figcaption>
+              </figure>
+            </Reveal>
+          </Wrap>
+        </Band>
+      )}
+
+      {/* ── challenge / solution / result ── */}
+      {story.length > 0 && (
+        <Band>
+          <Wrap>
+            <div className="grid gap-10 lg:grid-cols-12">
+              {story.map((s, i) => (
+                <Reveal
+                  key={s.k}
+                  delay={i * 0.08}
+                  className={`lg:col-span-4 ${i === 0 ? "lg:col-start-1" : ""}`}
+                >
+                  <div className="border-t border-ink pt-5">
+                    <h2 className="label text-ink">{s.k}</h2>
+                    <p className="mt-4 text-[1.02rem] leading-[1.75]">{s.v}</p>
+                  </div>
+                </Reveal>
               ))}
             </div>
-          )}
-        </div>
-      </PageHero>
-
-      {p.cover_url && (
-        <Section tight>
-          <Reveal>
-            <div className="panel relative aspect-[16/9] overflow-hidden">
-              <Image
-                src={p.cover_url}
-                alt={`${p.title} — screenshot`}
-                fill
-                sizes="(max-width: 1240px) 100vw, 1240px"
-                priority
-                className="object-cover"
-              />
-            </div>
-          </Reveal>
-        </Section>
+          </Wrap>
+        </Band>
       )}
 
+      {/* ── verifiable facts only ── */}
       {!!p.metrics?.length && (
-        <Section tight>
-          {/* one column per metric on sm+, however many Eddie entered */}
-          <div
-            className="panel grid grid-cols-1 sm:[grid-template-columns:repeat(var(--n),minmax(0,1fr))]"
-            style={{ ["--n" as string]: Math.min(p.metrics.length, 4) }}
-          >
-            {p.metrics.slice(0, 4).map((m, i) => (
-              <Reveal
-                key={m.label + i}
-                delay={i * 0.06}
-                className={`border-line p-6 lg:p-8 ${i > 0 ? "border-t sm:border-l sm:border-t-0" : ""}`}
-              >
-                <div className="font-display text-[clamp(1.8rem,4vw,2.6rem)] leading-none text-ivory">
-                  {m.value}
-                </div>
-                <div className="mt-2.5 font-mono text-[0.66rem] uppercase tracking-[0.14em] text-faint">
-                  {m.label}
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </Section>
-      )}
-
-      {story.length > 0 && (
-        <Section>
-          <div className="grid gap-10 lg:grid-cols-3 lg:gap-8">
-            {story.map((s, i) => (
-              <Reveal key={s.k} delay={i * 0.08}>
-                <div className="border-t border-amber-dim pt-6">
-                  <div className="font-mono text-[0.66rem] uppercase tracking-[0.16em] text-amber">
-                    {s.k}
-                  </div>
-                  <p className="mt-4 text-[1rem] leading-[1.78]">{s.v}</p>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </Section>
+        <Band tight>
+          <Wrap>
+            <dl className="hairline grid grid-cols-2 gap-8 pt-10 lg:grid-cols-4">
+              {p.metrics.slice(0, 4).map((m, i) => (
+                <Reveal key={m.label + i} delay={i * 0.06}>
+                  <dt className="display text-[clamp(1.6rem,3.4vw,2.4rem)] text-ink">
+                    {m.value}
+                  </dt>
+                  <dd className="label mt-2">{m.label}</dd>
+                </Reveal>
+              ))}
+            </dl>
+          </Wrap>
+        </Band>
       )}
 
       {next && next.id !== p.id && (
-        <Section tight>
-          <Reveal>
-            <Link
-              href={`/work/${slugify(next.title)}`}
-              className="panel group flex items-center justify-between gap-6 p-6 transition-[border-color,transform] duration-400 [transition-timing-function:var(--ease-spring)] hover:-translate-y-1 hover:border-amber-dim lg:p-8"
-            >
-              <div>
-                <div className="font-mono text-[0.66rem] uppercase tracking-[0.16em] text-faint">
-                  Next build
-                </div>
-                <div className="mt-2 font-display text-[1.6rem] text-ivory">{next.title}</div>
-              </div>
-              <ArrowRight
-                size={20}
-                aria-hidden
-                className="flex-none text-faint transition-[color,transform] duration-400 group-hover:translate-x-1 group-hover:text-amber"
-              />
+        <Band tight>
+          <Wrap>
+            <Link href={`/work/${slugify(next.title)}`} className="group block hairline pt-10">
+              <span className="label">Next project</span>
+              <span className="display mt-2 flex items-baseline gap-4 text-[clamp(1.8rem,4.4vw,3rem)] text-ink">
+                {next.title}
+                <span
+                  aria-hidden
+                  className="text-meta transition-[transform,color] duration-[520ms] [transition-timing-function:var(--ease-out-soft)] group-hover:translate-x-2 group-hover:text-vermilion-ink"
+                >
+                  &#8594;
+                </span>
+              </span>
             </Link>
-          </Reveal>
-        </Section>
+          </Wrap>
+        </Band>
       )}
 
-      <FinalCTA />
-      <Footer projects={all} />
+      <NextStep
+        title="Have a problem worth solving?"
+        lead="Tell me what is breaking and I will tell you whether it is worth automating."
+      />
     </>
   );
 }

@@ -108,13 +108,13 @@ export function ContactForm() {
         initial={{ opacity: 0, y: 14 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-        className="panel-raised edge-top p-8 text-center lg:p-12"
+        className="border border-stone-2 bg-paper-2 p-8 text-center lg:p-12"
         role="status"
       >
-        <span className="mx-auto grid h-14 w-14 place-items-center rounded-2xl border border-line bg-live/12 text-live">
+        <span className="mx-auto grid h-14 w-14 place-items-center rounded-2xl border border-stone-2 bg-paper-2 text-vermilion">
           <Check size={22} aria-hidden />
         </span>
-        <h3 className="mt-6 font-display text-[1.7rem]">Got it, {form.name.split(" ")[0]}.</h3>
+        <h3 className="mt-6 display text-[1.7rem]">Got it, {form.name.split(" ")[0]}.</h3>
         <p className="mx-auto mt-3 max-w-md text-[0.98rem] leading-[1.7]">
           It is written down — I will come back to you within a few hours. If you want the
           teardown today, jump straight onto WhatsApp and we start now.
@@ -133,7 +133,7 @@ export function ContactForm() {
   }
 
   return (
-    <form onSubmit={submit} className="panel p-6 lg:p-9" noValidate>
+    <form onSubmit={submit} className="border border-stone-2 bg-paper p-6 lg:p-9" noValidate>
       <div className="grid gap-5 sm:grid-cols-2">
         <Field label="Your name" id="name" required error={bad.name}>
           <Input
@@ -196,8 +196,8 @@ export function ContactForm() {
                   onClick={() => set("need", n)}
                   className={`min-h-[46px] rounded-xl border px-3.5 py-2.5 text-left text-[0.86rem] transition-[background-color,border-color,color,transform] duration-200 active:scale-[0.98] ${
                     on
-                      ? "border-amber-dim bg-amber/12 text-ivory"
-                      : "border-line bg-ink-2 text-muted hover:border-amber-dim hover:text-ivory"
+                      ? "border-ink bg-paper-2 text-ink"
+                      : "border-stone-2 bg-paper text-ink-80 hover:border-ink hover:text-ink"
                   }`}
                 >
                   {n}
@@ -215,14 +215,14 @@ export function ContactForm() {
             rows={4}
             value={form.message}
             onChange={(e) => set("message", e.target.value)}
-            className="w-full resize-y rounded-xl border border-line bg-ink px-4 py-3 text-[0.94rem] text-ivory outline-none transition-colors duration-200 placeholder:text-faint focus:border-amber-dim"
+            className="w-full resize-y rounded-xl border border-stone-2 bg-paper-2 px-4 py-3 text-[0.94rem] text-ink outline-none transition-colors duration-200 placeholder:text-meta focus:border-ink"
             placeholder="How customers reach you today, what keeps breaking, what you want gone."
           />
         </Field>
       </div>
 
       {state === "error" && (
-        <p role="alert" className="mt-4 text-[0.88rem] text-alert">
+        <p role="alert" className="mt-4 text-[0.88rem] text-vermilion-ink">
           {err}{" "}
           <a href={waHandoff} target="_blank" rel="noopener noreferrer" className="underline">
             Send it on WhatsApp instead
@@ -249,7 +249,7 @@ export function ContactForm() {
             </>
           )}
         </button>
-        <p className="text-[0.8rem] leading-relaxed text-faint">
+        <p className="text-[0.8rem] leading-relaxed text-stone">
           No newsletter, no list. Your details are used to reply to you and nothing else.
         </p>
       </div>
@@ -278,19 +278,19 @@ function Field({
     <div>
       <label
         htmlFor={id}
-        className="mb-2 flex items-baseline gap-2 text-[0.88rem] text-ivory"
+        className="mb-2 flex items-baseline gap-2 text-[0.88rem] text-ink"
       >
         {label}
         {required && (
-          <span className="text-amber" aria-hidden>
+          <span className="text-vermilion" aria-hidden>
             *
           </span>
         )}
-        {hint && <span className="font-mono text-[0.66rem] text-faint">{hint}</span>}
+        {hint && <span className="font-grotesk text-[0.66rem] text-stone">{hint}</span>}
       </label>
       {children}
       {error && (
-        <p id={`${id}-error`} role="alert" className="mt-1.5 text-[0.8rem] text-alert">
+        <p id={`${id}-error`} role="alert" className="mt-1.5 text-[0.8rem] text-vermilion-ink">
           {error}
         </p>
       )}
@@ -316,7 +316,7 @@ function Input({
       type={type}
       value={value}
       onChange={(e) => onChange(e.target.value)}
-      className="h-12 w-full rounded-xl border border-line bg-ink px-4 text-[0.94rem] text-ivory outline-none transition-colors duration-200 placeholder:text-faint focus:border-amber-dim aria-[invalid=true]:border-alert"
+      className="h-12 w-full rounded-xl border border-stone-2 bg-paper-2 px-4 text-[0.94rem] text-ink outline-none transition-colors duration-200 placeholder:text-meta focus:border-ink aria-[invalid=true]:border-vermilion"
       {...rest}
     />
   );

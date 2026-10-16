@@ -12,44 +12,53 @@ Framer Motion · lucide-react · Supabase (content + leads) · Vercel.
 - Deploy: push to `master`, Vercel auto-deploys. Keep root `vercel.json` (`framework: nextjs`)
   or the project reverts to a static build and 404s.
 
-## Design system — "OPERATOR"
-Defined once in `app/globals.css` under `@theme`. Do not introduce raw hex in components.
+## Design system — "THE INDEX"
+Defined once in `app/globals.css` under `@theme`. See DESIGN_RATIONALE.md for the why.
+Do not introduce raw hex in components.
 
-- Surfaces: `ink` → `ink-2` → `ink-3` → `ink-4` (warm blacks, never blue-grey)
-- Text: `ivory` / `muted` / `faint`
-- Signal: `amber` (primary), `amber-deep`, `live` (green), `alert` (red)
-- One light inversion surface: `.surface-paper` (used for testimonials only)
-- Fonts: Instrument Serif (display) · Inter (UI) · JetBrains Mono (labels/numbers)
-- Utilities: `.panel`, `.panel-raised`, `.edge-top`, `.eyebrow`, `.btn`, `.dot-live`, `.tnum`
+- Surfaces: `paper` #EFECE5, `paper-2` (recessed), `ink` #1D2725 (type + the one inverse panel)
+- Text: `ink` / `ink-80` (body) / `meta` (small labels)
+- Accent: `vermilion` #D34F2D for large text only, `vermilion-ink` for anything small
+- `stone` is DECORATIVE ONLY — it measures 1.9:1 on paper. Never use it for text.
+- Fonts: Archivo (structure: masthead, labels, meta) + Newsreader (voice: statement,
+  titles, quotes). `.display` and `.structural` set the two roles.
+- Utilities: `.label`, `.italic-accent`, `.btn` / `.btn-primary` / `.btn-quiet`,
+  `.rule-link`, `.surface-ink`, `.hairline`, `.tnum`
 
 ### Rules
-- Animate `transform` and `opacity` only. Never `transition-all`.
+- Animate `transform` / `opacity` / `clip-path` only. Never `transition-all`.
+- Contrast: body + small text >= 4.5:1, large text >= 3:1. Check before shipping a colour.
 - Every interactive element needs hover, `focus-visible` and active states.
-- Touch targets ≥ 44px. The mobile dock is capped at 5 items.
-- Numbers that change in place get `.tnum` so the layout does not jitter.
-- Icons come from lucide-react. No emoji as icons, ever.
-- Respect `prefers-reduced-motion` — `useReducedMotion()` in client components.
+- Touch targets >= 44px. Respect `prefers-reduced-motion` (`useReducedMotion()`).
+- The public pages use type and rules, not icons. lucide-react stays only for the
+  demo, the forms and /admin, where an icon is doing real work.
+- Nothing on this site may assert an unverified fact. No invented metrics,
+  testimonials, or scarcity. See the "What was removed" section of the rationale.
+- Project images in `public/work/` are real captures. A project with no honest
+  capture gets the typographic ink panel instead.
 
 ## Structure
 ```
 app/
-  page.tsx            home: Launcher + the full conversion spine
-  system/             the interactive demo (the strongest sales asset)
-  work/               grid + /work/[slug] case studies
-  services/           offer + pricing + process
-  about/  contact/    trust + lead capture
+  page.tsx            the index: masthead, statement, four rows, image stage
+  work/               editorial index + /work/[slug] case studies
+  services/           four services, the offer, process, leak estimate
+  about/  contact/    the person, and how to start
+  system/             the interactive demo (strongest piece of evidence)
   admin/              Eddie's CMS (Supabase Auth)
   share/              private client testimonial capture
 components/
-  Launcher            the "choose a door" home screen
-  Shell               top rail + mobile dock + ⌘K command palette
+  IndexHome           the homepage index + the hover image stage
+  Chrome              header (hidden on the index) + footer
+  Page                Wrap / Band / PageIntro / NextStep
   SystemDemo          scripted WhatsApp flow + rule-based free typing
-  LeakCalculator      turns the visitor's numbers into money lost
-  sections.tsx        server-rendered page sections
+  LeakCalculator      the visitor's own numbers, conservatively estimated
+  ContactForm         save-first lead capture with WhatsApp fallback
 lib/
-  site.ts             all copy, offer, destinations, seed content
-  content.ts          one Supabase fetch with seed fallback
+  site.ts             copy, offer, index rows, seed content
+  content.ts          one Supabase fetch with per-table seed fallback
   supabase.ts         env-only keys
+public/work/          real WebP captures of the live projects
 ```
 
 ## Content

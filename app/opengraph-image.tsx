@@ -5,7 +5,7 @@ export const alt = `${NAME} — ${ROLE}`;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-/** The card that shows up when the link is pasted into WhatsApp. */
+/** The card that appears when the link is pasted into WhatsApp. */
 export default function OG() {
   return new ImageResponse(
     (
@@ -16,56 +16,49 @@ export default function OG() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          background: "#0A0908",
-          backgroundImage:
-            "radial-gradient(900px 600px at 85% -10%, rgba(240,166,75,0.22), transparent 60%)",
+          background: "#EFECE5",
+          color: "#1D2725",
           padding: 72,
-          fontFamily: "sans-serif",
+          fontFamily: "Georgia, serif",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-          <div
-            style={{
-              width: 48,
-              height: 48,
-              borderRadius: 12,
-              background: "#F0A64B",
-              color: "#17110a",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: 20,
-              fontWeight: 700,
-            }}
-          >
-            EN
-          </div>
-          <div style={{ color: "#F6F2EA", fontSize: 26 }}>{NAME}</div>
+        <div style={{ display: "flex", justifyContent: "space-between", fontSize: 22 }}>
+          <span style={{ letterSpacing: 4, textTransform: "uppercase" }}>{NAME}</span>
+          <span style={{ letterSpacing: 4, textTransform: "uppercase", color: "#A9ADA1" }}>
+            Index
+          </span>
         </div>
 
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          <div style={{ color: "#F6F2EA", fontSize: 76, lineHeight: 1.05, letterSpacing: -2 }}>
-            Your business should
+        <div style={{ display: "flex", flexDirection: "column", maxWidth: 960 }}>
+          <div style={{ fontSize: 68, lineHeight: 1.08, letterSpacing: -1.5 }}>
+            I build the systems your business needs
           </div>
-          <div style={{ color: "#F0A64B", fontSize: 76, lineHeight: 1.05, letterSpacing: -2 }}>
-            make money while you sleep.
+          <div
+            style={{
+              fontSize: 68,
+              lineHeight: 1.08,
+              letterSpacing: -1.5,
+              fontStyle: "italic",
+              color: "#D34F2D",
+            }}
+          >
+            when you&apos;re not there.
           </div>
         </div>
 
         <div
           style={{
             display: "flex",
-            alignItems: "center",
-            gap: 20,
-            color: "#9C938A",
-            fontSize: 24,
+            gap: 18,
+            fontSize: 22,
+            letterSpacing: 3,
+            textTransform: "uppercase",
+            color: "#45504D",
           }}
         >
           <span>{ROLE}</span>
-          <span style={{ color: "#2A2522" }}>/</span>
+          <span style={{ color: "#A9ADA1" }}>/</span>
           <span>{CITY}</span>
-          <span style={{ color: "#2A2522" }}>/</span>
-          <span style={{ color: "#5FD08A" }}>Live in 14 days</span>
         </div>
       </div>
     ),

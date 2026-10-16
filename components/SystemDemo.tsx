@@ -177,21 +177,21 @@ export function SystemDemo() {
   return (
     <div ref={wrap} className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:gap-6">
       {/* ─────────────────── the conversation ─────────────────── */}
-      <div className="panel flex h-[540px] flex-col overflow-hidden lg:h-auto lg:min-h-[580px]">
-        <div className="flex items-center gap-3 border-b border-line bg-ink-3 px-4 py-3">
-          <span className="grid h-9 w-9 place-items-center rounded-full bg-amber font-mono text-[0.7rem] font-semibold text-[#17110a]">
+      <div className="border border-stone-2 bg-paper flex h-[540px] flex-col overflow-hidden lg:h-auto lg:min-h-[580px]">
+        <div className="flex items-center gap-3 border-b border-stone-2 bg-paper-2 px-4 py-3">
+          <span className="grid h-9 w-9 place-items-center rounded-full bg-ink font-grotesk text-[0.7rem] font-semibold text-paper">
             KA
           </span>
           <div className="min-w-0 flex-1">
-            <div className="truncate text-[0.9rem] font-medium text-ivory">Kivu Auto Garage</div>
-            <div className="flex items-center gap-1.5 font-mono text-[0.66rem] text-live">
-              <span className="dot-live" aria-hidden />
+            <div className="truncate text-[0.9rem] font-medium text-ink">Kivu Auto Garage</div>
+            <div className="flex items-center gap-1.5 font-grotesk text-[0.66rem] text-vermilion">
+              <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-vermilion" />
               online · replies in 5s
             </div>
           </div>
           <button
             onClick={restart}
-            className="flex min-h-[38px] items-center gap-1.5 rounded-lg border border-line px-2.5 font-mono text-[0.66rem] text-muted transition-colors duration-200 hover:border-amber-dim hover:text-ivory"
+            className="flex min-h-[38px] items-center gap-1.5 rounded-lg border border-stone-2 px-2.5 font-grotesk text-[0.66rem] text-ink-80 transition-colors duration-200 hover:border-ink hover:text-ink"
           >
             <RotateCcw size={12} aria-hidden />
             Replay
@@ -199,14 +199,14 @@ export function SystemDemo() {
         </div>
 
         {/* absolute scroller inside a relative flex child: the only pattern that
-            scrolls reliably everywhere while letting the panel stretch */}
+            scrolls reliably everywhere while letting the border border-stone-2 bg-paper stretch */}
         <div className="relative min-h-0 flex-1">
         <div
           ref={scroller}
-          className="no-bar absolute inset-0 space-y-2.5 overflow-y-auto bg-[linear-gradient(180deg,#0f0d0c,#0a0908)] px-4 py-4"
+          className="no-bar absolute inset-0 space-y-2.5 overflow-y-auto bg-paper px-4 py-4"
           aria-live="polite"
         >
-          <div className="mx-auto w-max rounded-full bg-ink-3 px-3 py-1 font-mono text-[0.62rem] text-faint">
+          <div className="mx-auto w-max rounded-full bg-paper-2 px-3 py-1 font-grotesk text-[0.62rem] text-stone">
             Tonight · 22:41 · the owner is asleep
           </div>
 
@@ -222,14 +222,14 @@ export function SystemDemo() {
                 <div
                   className={`max-w-[85%] rounded-2xl px-3.5 py-2.5 text-[0.87rem] leading-[1.55] ${
                     m.from === "customer"
-                      ? "rounded-tl-sm bg-ink-3 text-ivory"
-                      : "rounded-tr-sm bg-amber text-[#17110a]"
+                      ? "rounded-tl-sm bg-paper-2 text-ink"
+                      : "rounded-tr-sm bg-ink text-paper"
                   }`}
                 >
                   {m.text}
                   <span
-                    className={`mt-1 block text-right font-mono text-[0.6rem] ${
-                      m.from === "customer" ? "text-faint" : "text-[#6b4a1d]"
+                    className={`mt-1 block text-right font-grotesk text-[0.6rem] ${
+                      m.from === "customer" ? "text-stone" : "text-paper/70"
                     }`}
                   >
                     {m.at}
@@ -241,11 +241,11 @@ export function SystemDemo() {
 
           {typing && (
             <div className="flex justify-end">
-              <div className="flex gap-1 rounded-2xl rounded-tr-sm bg-amber/25 px-3.5 py-3">
+              <div className="flex gap-1 rounded-2xl rounded-tr-sm bg-paper-2 px-3.5 py-3">
                 {[0, 1, 2].map((i) => (
                   <motion.span
                     key={i}
-                    className="h-1.5 w-1.5 rounded-full bg-amber"
+                    className="h-1.5 w-1.5 rounded-full bg-paper"
                     animate={still ? {} : { opacity: [0.3, 1, 0.3] }}
                     transition={{ duration: 1.1, repeat: Infinity, delay: i * 0.16 }}
                   />
@@ -255,25 +255,25 @@ export function SystemDemo() {
           )}
 
           {done && !interrupted && (
-            <div className="mx-auto w-max rounded-full border border-line bg-ink-2 px-3 py-1 font-mono text-[0.62rem] text-live">
+            <div className="mx-auto w-max rounded-full border border-stone-2 bg-paper px-3 py-1 font-grotesk text-[0.62rem] text-vermilion">
               Booked in 3 minutes. The owner found out in the morning.
             </div>
           )}
         </div>
         </div>
 
-        <form onSubmit={send} className="flex items-center gap-2 border-t border-line bg-ink-2 p-3">
+        <form onSubmit={send} className="flex items-center gap-2 border-t border-stone-2 bg-paper p-3">
           <input
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Your turn — ask it anything"
             aria-label="Send a message to the demo agent"
-            className="h-11 min-w-0 flex-1 rounded-xl border border-line bg-ink px-3.5 text-[0.88rem] text-ivory outline-none transition-colors duration-200 placeholder:text-faint focus:border-amber-dim"
+            className="h-11 min-w-0 flex-1 rounded-xl border border-stone-2 bg-paper-2 px-3.5 text-[0.88rem] text-ink outline-none transition-colors duration-200 placeholder:text-meta focus:border-ink"
           />
           <button
             type="submit"
             aria-label="Send message"
-            className="grid h-11 w-11 flex-none place-items-center rounded-xl bg-amber text-[#17110a] transition-transform duration-200 hover:scale-105 active:scale-95"
+            className="grid h-11 w-11 flex-none place-items-center rounded-xl bg-ink text-paper transition-transform duration-200 hover:scale-105 active:scale-95"
           >
             <Send size={16} aria-hidden />
           </button>
@@ -282,12 +282,12 @@ export function SystemDemo() {
 
       {/* ─────────────────── the machine behind it ─────────────────── */}
       <div className="flex flex-col gap-4">
-        <div className="panel p-5 lg:p-6">
+        <div className="border border-stone-2 bg-paper p-5 lg:p-6">
           <div className="flex items-center justify-between gap-3">
-            <span className="font-mono text-[0.66rem] uppercase tracking-[0.18em] text-faint">
+            <span className="font-grotesk text-[0.66rem] uppercase tracking-[0.18em] text-stone">
               What the system is doing
             </span>
-            <span className="font-mono text-[0.66rem] text-faint">
+            <span className="font-grotesk text-[0.66rem] text-stone">
               {Math.max(0, stage + 1)}/{STAGES.length}
             </span>
           </div>
@@ -303,10 +303,10 @@ export function SystemDemo() {
                   {i < STAGES.length - 1 && (
                     <span
                       aria-hidden
-                      className="absolute left-[17px] top-9 h-[calc(100%-22px)] w-px overflow-hidden bg-line"
+                      className="absolute left-[17px] top-9 h-[calc(100%-22px)] w-px overflow-hidden bg-stone-2"
                     >
                       <span
-                        className={`block h-full w-full origin-top bg-amber transition-transform duration-700 [transition-timing-function:var(--ease-out-soft)] ${
+                        className={`block h-full w-full origin-top bg-paper transition-transform duration-700 [transition-timing-function:var(--ease-out-soft)] ${
                           i < stage ? "scale-y-100" : "scale-y-0"
                         }`}
                       />
@@ -315,14 +315,14 @@ export function SystemDemo() {
                   <span
                     className={`relative z-10 grid h-[35px] w-[35px] flex-none place-items-center rounded-xl border transition-colors duration-500 ${
                       active
-                        ? "border-amber-dim bg-amber/12 text-amber"
-                        : "border-line bg-ink-2 text-faint"
+                        ? "border-ink bg-paper-2 text-vermilion"
+                        : "border-stone-2 bg-paper text-stone"
                     }`}
                   >
                     <S size={15} strokeWidth={1.8} aria-hidden />
                     {current && !still && (
                       <motion.span
-                        className="absolute inset-0 rounded-xl border border-amber"
+                        className="absolute inset-0 rounded-xl border border-vermilion"
                         animate={{ opacity: [0.9, 0.15, 0.9] }}
                         transition={{ duration: 1.9, repeat: Infinity }}
                       />
@@ -331,15 +331,15 @@ export function SystemDemo() {
                   <div className="min-w-0 pt-1">
                     <div
                       className={`text-[0.92rem] transition-colors duration-500 ${
-                        active ? "text-ivory" : "text-faint"
+                        active ? "text-ink" : "text-stone"
                       }`}
                     >
                       {s.label}
                     </div>
-                    <div className="font-mono text-[0.68rem] text-faint">{s.note}</div>
+                    <div className="font-grotesk text-[0.68rem] text-stone">{s.note}</div>
                   </div>
                   {active && (
-                    <span className="ml-auto self-start pt-1.5 font-mono text-[0.62rem] text-live">
+                    <span className="ml-auto self-start pt-1.5 font-grotesk text-[0.62rem] text-vermilion">
                       done
                     </span>
                   )}
@@ -350,22 +350,22 @@ export function SystemDemo() {
         </div>
 
         {/* the record it wrote by itself */}
-        <div className="panel flex-1 p-5 lg:p-6">
+        <div className="border border-stone-2 bg-paper flex-1 p-5 lg:p-6">
           <div className="flex items-center justify-between gap-3">
-            <span className="font-mono text-[0.66rem] uppercase tracking-[0.18em] text-faint">
+            <span className="font-grotesk text-[0.66rem] uppercase tracking-[0.18em] text-stone">
               The record it wrote for you
             </span>
-            <span className="rounded-full border border-line px-2 py-0.5 font-mono text-[0.6rem] text-faint">
+            <span className="rounded-full border border-stone-2 px-2 py-0.5 font-grotesk text-[0.6rem] text-stone">
               CRM
             </span>
           </div>
 
-          <dl className="mt-4 divide-y divide-line-soft">
+          <dl className="mt-4 divide-y divide-stone-2">
             {CRM_STEPS.map((row) => {
               const filled = step >= row.at;
               return (
                 <div key={row.field} className="flex items-baseline justify-between gap-4 py-2.5">
-                  <dt className="font-mono text-[0.68rem] uppercase tracking-[0.12em] text-faint">
+                  <dt className="font-grotesk text-[0.68rem] uppercase tracking-[0.12em] text-stone">
                     {row.field}
                   </dt>
                   <dd className="text-right text-[0.88rem]">
@@ -374,12 +374,12 @@ export function SystemDemo() {
                         initial={still ? false : { opacity: 0, x: 8 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.4 }}
-                        className="text-ivory"
+                        className="text-ink"
                       >
                         {row.value}
                       </motion.span>
                     ) : (
-                      <span className="font-mono text-faint">
+                      <span className="font-grotesk text-stone">
                         <span className="animate-caret">_</span>
                       </span>
                     )}
@@ -394,13 +394,13 @@ export function SystemDemo() {
               <motion.div
                 initial={still ? false : { opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="edge-top mt-4 rounded-xl border border-line bg-ink-3 p-3.5"
+                className="mt-4 rounded-xl border border-stone-2 bg-paper-2 p-3.5"
               >
-                <div className="flex items-center gap-2 font-mono text-[0.64rem] uppercase tracking-[0.14em] text-live">
+                <div className="flex items-center gap-2 font-grotesk text-[0.64rem] uppercase tracking-[0.14em] text-vermilion">
                   <BellRing size={12} aria-hidden />
                   Sent to the owner · 07:00
                 </div>
-                <p className="mt-1.5 text-[0.86rem] text-ivory">
+                <p className="mt-1.5 text-[0.86rem] text-ink">
                   New booking while you slept: Eric, RAV4 2018, full service, today 09:00, RWF
                   45,000. Reminder already sent to him.
                 </p>

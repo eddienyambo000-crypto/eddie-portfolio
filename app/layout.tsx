@@ -1,46 +1,39 @@
 import type { Metadata, Viewport } from "next";
-import { Instrument_Serif, Inter, JetBrains_Mono } from "next/font/google";
+import { Archivo, Newsreader } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
-import { Shell } from "@/components/Shell";
+import { SiteFooter, SiteHeader } from "@/components/Chrome";
 import { CITY, EMAIL, NAME, ROLE, SITE_URL, WHATSAPP_PRETTY } from "@/lib/site";
 import "./globals.css";
 
-const instrument = Instrument_Serif({
+const archivo = Archivo({
   subsets: ["latin"],
-  weight: "400",
-  style: ["normal", "italic"],
-  variable: "--font-instrument",
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-archivo",
   display: "swap",
 });
-const inter = Inter({
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
-  variable: "--font-inter",
-  display: "swap",
-});
-const jetbrains = JetBrains_Mono({
+const newsreader = Newsreader({
   subsets: ["latin"],
   weight: ["400", "500"],
-  variable: "--font-jetbrains",
+  style: ["normal", "italic"],
+  variable: "--font-newsreader",
   display: "swap",
 });
 
 const description =
-  "I install the systems that catch your customers, answer them in seconds and book them — websites that sell, WhatsApp AI agents, automatic follow-up. Built in Kigali, live in 14 days.";
+  "Eddie Nyambo builds websites, WhatsApp agents and business automation for companies in Kigali, Rwanda — systems that answer customers and keep working when you are not there.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: `${NAME} — systems that get you customers while you sleep`,
+    default: `${NAME} — ${ROLE}, Kigali`,
     template: `%s — ${NAME}`,
   },
   description,
   keywords: [
-    "AI automation Rwanda",
-    "WhatsApp AI agent Kigali",
-    "website developer Kigali",
+    "web developer Kigali",
+    "WhatsApp AI agent Rwanda",
     "business automation Rwanda",
-    "n8n automation engineer",
+    "software engineer Kigali",
   ],
   authors: [{ name: NAME }],
   creator: NAME,
@@ -49,24 +42,19 @@ export const metadata: Metadata = {
     type: "website",
     url: SITE_URL,
     siteName: NAME,
-    title: `${NAME} — systems that get you customers while you sleep`,
+    title: `${NAME} — ${ROLE}`,
     description,
     locale: "en_RW",
   },
-  twitter: {
-    card: "summary_large_image",
-    title: `${NAME} — ${ROLE}`,
-    description,
-  },
+  twitter: { card: "summary_large_image", title: `${NAME} — ${ROLE}`, description },
   robots: { index: true, follow: true },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0A0908",
-  colorScheme: "dark",
+  themeColor: "#EFECE5",
+  colorScheme: "light",
 };
 
-/** Tells Google this is a real person offering a real service in Kigali. */
 const jsonLd = {
   "@context": "https://schema.org",
   "@graph": [
@@ -80,50 +68,38 @@ const jsonLd = {
       url: SITE_URL,
       address: { "@type": "PostalAddress", addressLocality: "Kigali", addressCountry: "RW" },
       knowsAbout: [
-        "Business process automation",
+        "Web development",
         "WhatsApp Business API",
         "AI agents",
-        "Next.js",
-        "Supabase",
+        "Business process automation",
       ],
     },
     {
       "@type": "ProfessionalService",
       "@id": `${SITE_URL}/#service`,
-      name: `${NAME} — Automation Systems`,
+      name: NAME,
       description,
       url: SITE_URL,
       provider: { "@id": `${SITE_URL}/#eddie` },
       areaServed: { "@type": "Country", name: "Rwanda" },
       address: { "@type": "PostalAddress", addressLocality: "Kigali", addressCountry: "RW" },
-      priceRange: "RWF 450,000+",
     },
   ],
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html
-      lang="en"
-      className={`${instrument.variable} ${inter.variable} ${jetbrains.variable}`}
-    >
+    <html lang="en" className={`${archivo.variable} ${newsreader.variable}`}>
       <body>
-        <div className="bg-field" aria-hidden />
-        <div className="grain" aria-hidden />
-
         <a
           href="#main"
-          className="sr-only rounded-lg bg-amber px-4 py-2 font-medium text-[#17110a] focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100]"
+          className="sr-only bg-ink px-4 py-2 text-paper focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100]"
         >
           Skip to content
         </a>
-
-        <Shell />
-
-        <main id="main" className="relative z-10">
-          {children}
-        </main>
-
+        <SiteHeader />
+        <main id="main">{children}</main>
+        <SiteFooter />
         <script
           type="application/ld+json"
           // eslint-disable-next-line react/no-danger

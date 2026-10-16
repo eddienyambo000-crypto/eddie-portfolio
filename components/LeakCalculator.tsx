@@ -65,10 +65,10 @@ export function LeakCalculator() {
   );
 
   return (
-    <div className="panel grid gap-0 overflow-hidden lg:grid-cols-[minmax(0,1fr)_minmax(0,0.92fr)]">
+    <div className="border border-stone-2 bg-paper grid gap-0 overflow-hidden lg:grid-cols-[minmax(0,1fr)_minmax(0,0.92fr)]">
       {/* ── inputs ── */}
-      <div className="border-b border-line p-6 lg:border-b-0 lg:border-r lg:p-8">
-        <span className="font-mono text-[0.66rem] uppercase tracking-[0.18em] text-faint">
+      <div className="border-b border-stone-2 p-6 lg:border-b-0 lg:border-r lg:p-8">
+        <span className="font-grotesk text-[0.66rem] uppercase tracking-[0.18em] text-stone">
           Your three numbers
         </span>
 
@@ -104,7 +104,7 @@ export function LeakCalculator() {
           </Field>
 
           <fieldset>
-            <legend className="text-[0.92rem] text-ivory">How fast do you usually reply?</legend>
+            <legend className="text-[0.92rem] text-ink">How fast do you usually reply?</legend>
             <div className="mt-3.5 grid grid-cols-2 gap-2">
               {SPEEDS.map((s) => {
                 const on = s.key === speed;
@@ -116,8 +116,8 @@ export function LeakCalculator() {
                     onClick={() => setSpeed(s.key)}
                     className={`min-h-[46px] rounded-xl border px-3 py-2 text-left text-[0.84rem] transition-[background-color,border-color,color,transform] duration-200 active:scale-[0.98] ${
                       on
-                        ? "border-amber-dim bg-amber/12 text-ivory"
-                        : "border-line bg-ink-2 text-muted hover:border-amber-dim hover:text-ivory"
+                        ? "border-ink bg-paper-2 text-ink"
+                        : "border-stone-2 bg-paper text-ink-80 hover:border-ink hover:text-ink"
                     }`}
                   >
                     {s.label}
@@ -130,16 +130,16 @@ export function LeakCalculator() {
       </div>
 
       {/* ── the number that hurts ── */}
-      <div className="relative flex flex-col justify-between bg-[radial-gradient(520px_320px_at_70%_0%,rgba(226,105,79,0.14),transparent_70%)] p-6 lg:p-8">
+      <div className="relative flex flex-col justify-between bg-paper-2 p-6 lg:p-8">
         <div>
-          <span className="flex items-center gap-2 font-mono text-[0.66rem] uppercase tracking-[0.18em] text-alert">
+          <span className="flex items-center gap-2 font-grotesk text-[0.66rem] uppercase tracking-[0.18em] text-vermilion-ink">
             <TrendingDown size={12} aria-hidden />
             Estimated leak
           </span>
 
           {out.isCurrentBest ? (
             <>
-              <p className="mt-6 font-display text-[clamp(1.7rem,4vw,2.3rem)] leading-tight text-ivory">
+              <p className="mt-6 display text-[clamp(1.7rem,4vw,2.3rem)] leading-tight text-ink">
                 You already reply fast. Respect.
               </p>
               <p className="mt-4 text-[0.95rem]">
@@ -154,16 +154,16 @@ export function LeakCalculator() {
                 initial={{ opacity: 0.55, y: 5 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.28 }}
-                className="tnum mt-6 font-display text-[clamp(2.2rem,6.4vw,3.6rem)] leading-none text-ivory"
+                className="tnum mt-6 display text-[clamp(2.2rem,6.4vw,3.6rem)] leading-none text-ink"
               >
                 {rwf(out.monthly)}
               </motion.p>
               <p className="mt-2.5 text-[0.95rem]">
                 walking away every month, on your own numbers. That is{" "}
-                <span className="tnum text-ivory">{rwf(out.yearly)}</span> a year.
+                <span className="tnum text-ink">{rwf(out.yearly)}</span> a year.
               </p>
 
-              <dl className="mt-7 space-y-2.5 border-t border-line pt-5 text-[0.87rem]">
+              <dl className="mt-7 space-y-2.5 border-t border-stone-2 pt-5 text-[0.87rem]">
                 <Row
                   k="Customers you close now"
                   v={`${out.nowCustomers.toFixed(0)} / month`}
@@ -190,7 +190,7 @@ export function LeakCalculator() {
             Show Eddie these numbers
             <ArrowRight size={16} aria-hidden />
           </a>
-          <p className="mt-3 text-center font-mono text-[0.64rem] leading-relaxed text-faint">
+          <p className="mt-3 text-center font-grotesk text-[0.64rem] leading-relaxed text-stone">
             An estimate from your inputs, not a promise. It opens WhatsApp with your numbers
             already written.
           </p>
@@ -209,12 +209,12 @@ export function LeakCalculator() {
         .range::-webkit-slider-runnable-track {
           height: 4px;
           border-radius: 99px;
-          background: var(--color-line);
+          background: var(--color-stone-2);
         }
         .range::-moz-range-track {
           height: 4px;
           border-radius: 99px;
-          background: var(--color-line);
+          background: var(--color-stone-2);
         }
         .range::-webkit-slider-thumb {
           -webkit-appearance: none;
@@ -223,18 +223,18 @@ export function LeakCalculator() {
           height: 24px;
           width: 24px;
           border-radius: 50%;
-          background: var(--color-amber);
-          border: 4px solid var(--color-ink);
-          box-shadow: 0 0 0 1px var(--color-amber-dim), 0 6px 18px -6px rgba(240, 166, 75, 0.7);
+          background: var(--color-ink);
+          border: 4px solid var(--color-paper);
+          box-shadow: 0 0 0 1px var(--color-ink);
           transition: transform 180ms var(--ease-spring);
         }
         .range::-moz-range-thumb {
           height: 24px;
           width: 24px;
           border-radius: 50%;
-          background: var(--color-amber);
-          border: 4px solid var(--color-ink);
-          box-shadow: 0 0 0 1px var(--color-amber-dim);
+          background: var(--color-ink);
+          border: 4px solid var(--color-paper);
+          box-shadow: 0 0 0 1px var(--color-ink);
         }
         .range:active::-webkit-slider-thumb {
           transform: scale(1.12);
@@ -258,10 +258,10 @@ function Field({
   return (
     <div>
       <div className="flex items-baseline justify-between gap-4">
-        <label htmlFor={id} className="text-[0.92rem] text-ivory">
+        <label htmlFor={id} className="text-[0.92rem] text-ink">
           {label}
         </label>
-        <span className="tnum flex-none whitespace-nowrap font-mono text-[0.95rem] text-amber">{display}</span>
+        <span className="tnum flex-none whitespace-nowrap font-grotesk text-[0.95rem] text-vermilion-ink">{display}</span>
       </div>
       <div className="mt-2">{children}</div>
     </div>
@@ -272,7 +272,7 @@ function Row({ k, v, accent = false }: { k: string; v: string; accent?: boolean 
   return (
     <div className="flex items-baseline justify-between gap-4">
       <dt>{k}</dt>
-      <dd className={`tnum flex-none font-mono ${accent ? "text-amber" : "text-ivory"}`}>{v}</dd>
+      <dd className={`tnum flex-none font-grotesk ${accent ? "text-vermilion-ink" : "text-ink"}`}>{v}</dd>
     </div>
   );
 }

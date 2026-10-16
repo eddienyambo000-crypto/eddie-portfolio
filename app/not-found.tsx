@@ -1,41 +1,38 @@
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
-import { DESTINATIONS } from "@/lib/site";
+import { INDEX_ROWS } from "@/lib/site";
+import { Wrap } from "@/components/Page";
 
 export default function NotFound() {
   return (
-    <section className="px-5 pb-28 pt-36 sm:px-8">
-      <div className="mx-auto max-w-[1240px]">
-        <span className="eyebrow">404</span>
-        <h1 className="mt-5 max-w-[16ch] text-[clamp(2.4rem,7vw,4.4rem)] leading-[1]">
-          That door does not <span className="tail">open onto anything.</span>
-        </h1>
-        <p className="mt-6 max-w-lg text-[1.02rem] leading-[1.75]">
-          The page moved or never existed. Here is everything that does exist.
-        </p>
+    <Wrap className="pb-[var(--space-section)] pt-20">
+      <span className="label tnum">404</span>
+      <h1 className="display mt-6 max-w-[14ch] text-[clamp(2.4rem,7.4vw,5rem)] text-ink">
+        That page is not <span className="italic-accent">in the index.</span>
+      </h1>
+      <p className="mt-6 max-w-[46ch] text-[1.02rem] leading-relaxed">
+        It moved, or it never existed. Here is everything that does.
+      </p>
 
-        <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          {DESTINATIONS.map((d) => (
-            <Link
-              key={d.key}
-              href={d.href}
-              className="panel group flex items-center justify-between gap-4 p-5 transition-[transform,border-color] duration-400 [transition-timing-function:var(--ease-spring)] hover:-translate-y-1 hover:border-amber-dim"
+      <nav aria-label="Index" className="mt-12 border-t border-stone-2">
+        {INDEX_ROWS.map((r) => (
+          <Link
+            key={r.no}
+            href={r.href}
+            className="group flex items-baseline gap-5 border-b border-stone-2 py-5"
+          >
+            <span className="label tnum">{r.no}</span>
+            <span className="display flex-1 text-[clamp(1.5rem,3.4vw,2.1rem)] text-ink">
+              {r.label}
+            </span>
+            <span
+              aria-hidden
+              className="text-meta transition-[transform,color] duration-[520ms] [transition-timing-function:var(--ease-out-soft)] group-hover:translate-x-1 group-hover:text-vermilion-ink"
             >
-              <span>
-                <span className="block font-mono text-[0.68rem] text-faint">{d.no}</span>
-                <span className="mt-1.5 block font-display text-[1.2rem] text-ivory">
-                  {d.label}
-                </span>
-              </span>
-              <ArrowRight
-                size={16}
-                aria-hidden
-                className="flex-none text-faint transition-[color,transform] duration-400 group-hover:translate-x-1 group-hover:text-amber"
-              />
-            </Link>
-          ))}
-        </div>
-      </div>
-    </section>
+              &#8594;
+            </span>
+          </Link>
+        ))}
+      </nav>
+    </Wrap>
   );
 }
