@@ -1,86 +1,71 @@
 import type { Metadata } from "next";
 import { ContactForm } from "@/components/ContactForm";
-import { Band, PageIntro, Wrap } from "@/components/Page";
-import { Reveal } from "@/components/ui";
-import { CALENDAR, EMAIL, WA_DEFAULT, WHATSAPP_PRETTY } from "@/lib/site";
-
-export const revalidate = 60;
+import { ArrowUpRight } from "@/components/ui";
+import { EMAIL, WA_HELLO, WHATSAPP_PRETTY } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Contact",
   description:
-    "Tell me what you need. WhatsApp is fastest, or book a thirty-minute call, or send the form and I will come back to you.",
+    "Tell Eddie Nyambo what you're building. WhatsApp is fastest; email works too. Based in Kigali, working with clients anywhere.",
   alternates: { canonical: "/contact" },
 };
 
+const STEPS = [
+  "I read it and reply, usually with two or three questions about how things work today.",
+  "We talk for half an hour. I tell you what I'd build first, and what I wouldn't build at all.",
+  "If it makes sense for both of us, you get a written plan, a price and a date.",
+];
+
 export default function ContactPage() {
   return (
-    <>
-      <PageIntro
-        no="04"
-        title="Have a problem|worth solving?"
-        lead="Tell me how customers reach you today and what keeps breaking. If it is worth building I will quote it, and if it is not I will tell you that instead."
-      >
-        <div className="mt-10 flex flex-wrap items-center gap-3">
-          <a
-            href={WA_DEFAULT}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn btn-primary"
-          >
-            WhatsApp me
-            <span aria-hidden>&#8599;</span>
-          </a>
-          <a
-            href={CALENDAR}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn btn-quiet"
-          >
-            Book 30 minutes
-          </a>
-        </div>
-        <p className="label mt-5">
-          {WHATSAPP_PRETTY} &nbsp;/&nbsp;{" "}
-          <a href={`mailto:${EMAIL}`} className="rule-link">
-            {EMAIL}
-          </a>
-        </p>
-      </PageIntro>
-
-      <Band tight>
-        <Wrap>
-          <div className="grid gap-10 lg:grid-cols-12 lg:gap-14">
-            <div className="lg:col-span-7">
-              <h2 className="label">Or send it in writing</h2>
-              <div className="mt-6">
-                <ContactForm />
-              </div>
-            </div>
-
-            <Reveal className="lg:col-span-4 lg:col-start-9">
-              <h2 className="label">What happens next</h2>
-              <ol className="mt-6">
-                {[
-                  "I reply, usually the same day, with three questions about how customers reach you.",
-                  "We talk for thirty minutes. I map where enquiries fall out of your process.",
-                  "If it is worth building, you get a quote and a date. If not, you keep the map.",
-                ].map((s, i) => (
-                  <li
-                    key={s}
-                    className="flex gap-5 border-b border-stone-2 py-5 last:border-0"
-                  >
-                    <span className="label tnum shrink-0 text-ink">
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
-                    <span className="text-[0.98rem] leading-relaxed">{s}</span>
-                  </li>
-                ))}
-              </ol>
-            </Reveal>
+    <section className="wrap section pt-[clamp(2rem,6vw,4rem)]" aria-labelledby="contact-title">
+      <div className="grid gap-12 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-20">
+        <div>
+          <p className="label">Contact</p>
+          <h1 className="h2 mt-4" id="contact-title">
+            Tell me what you&apos;re building.
+          </h1>
+          <p className="lead mt-5">
+            A few sentences is plenty. If I&apos;m not the right person for it, I&apos;ll say so and
+            point you to someone who is.
+          </p>
+          <div className="mt-10">
+            <ContactForm />
           </div>
-        </Wrap>
-      </Band>
-    </>
+        </div>
+
+        <aside className="lg:pt-24" aria-label="Other ways to reach me">
+          <div className="rounded-[1.75rem] bg-mint p-6 sm:p-8">
+            <p className="label">Fastest</p>
+            <a
+              className="mt-3 inline-flex items-center gap-2 text-[clamp(1.4rem,3vw,1.9rem)] font-bold tracking-[-0.03em]"
+              href={WA_HELLO}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span className="uline">WhatsApp {WHATSAPP_PRETTY}</span>
+              <ArrowUpRight />
+              <span className="sr-only">(opens WhatsApp)</span>
+            </a>
+            <p className="label mt-6">Email</p>
+            <a className="uline mt-2 inline-block break-all font-semibold" href={`mailto:${EMAIL}`}>
+              {EMAIL}
+            </a>
+            <p className="label mt-6">Where</p>
+            <p className="mt-2 font-semibold">Kigali, Rwanda. Remote anywhere.</p>
+          </div>
+
+          <h2 className="label mt-10">What happens next</h2>
+          <ol className="mt-4">
+            {STEPS.map((s, i) => (
+              <li key={s} className="grid grid-cols-[2.25rem_1fr] border-t border-line py-4">
+                <span className="font-mono text-[0.8rem] text-ink-2">{String(i + 1).padStart(2, "0")}</span>
+                <span>{s}</span>
+              </li>
+            ))}
+          </ol>
+        </aside>
+      </div>
+    </section>
   );
 }

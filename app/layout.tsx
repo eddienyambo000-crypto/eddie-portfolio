@@ -1,111 +1,97 @@
 import type { Metadata, Viewport } from "next";
-import { Archivo, Newsreader } from "next/font/google";
-import { Analytics } from "@vercel/analytics/react";
-import { SiteFooter, SiteHeader } from "@/components/Chrome";
-import { CITY, EMAIL, NAME, ROLE, SITE_URL, WHATSAPP_PRETTY } from "@/lib/site";
+import localFont from "next/font/local";
+import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
+import { Reveal } from "@/components/Reveal";
+import { CITY, NAME, ROLES, SITE_URL } from "@/lib/site";
+import { PROJECTS } from "@/lib/projects";
 import "./globals.css";
 
-const archivo = Archivo({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-archivo",
+// Self-hosted (SIL Open Font License), Latin subsets only: 80 KB for all three.
+// Builds never depend on a font CDN, and visitors never wait on one.
+const schibsted = localFont({
+  src: "./fonts/schibsted-grotesk-latin-var.woff2",
+  weight: "400 900",
+  variable: "--font-schibsted",
   display: "swap",
+  fallback: ["ui-sans-serif", "system-ui", "sans-serif"],
 });
-const newsreader = Newsreader({
-  subsets: ["latin"],
-  weight: ["400", "500"],
-  style: ["normal", "italic"],
-  variable: "--font-newsreader",
+const anton = localFont({
+  src: "./fonts/anton-latin-400.woff2",
+  weight: "400",
+  variable: "--font-anton",
   display: "swap",
+  fallback: ["Arial Narrow", "sans-serif"],
+});
+const plexMono = localFont({
+  src: "./fonts/ibm-plex-mono-latin-500.woff2",
+  weight: "500",
+  variable: "--font-plex-mono",
+  display: "swap",
+  preload: false,
+  fallback: ["ui-monospace", "monospace"],
 });
 
 const description =
-  "Eddie Nyambo builds websites, WhatsApp agents and business automation for companies in Kigali, Rwanda — systems that answer customers and keep working when you are not there.";
+  "Eddie Nyambo, full-stack developer and AI engineer in Kigali. Designing, building and running live products for businesses: online shops, a livestock marketplace, a guest house and a support company.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: `${NAME} — ${ROLE}, Kigali`,
-    template: `%s — ${NAME}`,
+    default: `${NAME}: full-stack developer and AI engineer, Kigali`,
+    template: `%s · ${NAME}`,
   },
   description,
-  keywords: [
-    "web developer Kigali",
-    "WhatsApp AI agent Rwanda",
-    "business automation Rwanda",
-    "software engineer Kigali",
-  ],
-  authors: [{ name: NAME }],
-  creator: NAME,
   alternates: { canonical: "/" },
+  authors: [{ name: NAME, url: SITE_URL }],
+  creator: NAME,
   openGraph: {
-    type: "website",
+    type: "profile",
     url: SITE_URL,
     siteName: NAME,
-    title: `${NAME} — ${ROLE}`,
+    title: `${NAME}: full-stack developer and AI engineer`,
     description,
-    locale: "en_RW",
+    locale: "en_GB",
   },
-  twitter: { card: "summary_large_image", title: `${NAME} — ${ROLE}`, description },
+  twitter: { card: "summary_large_image", title: NAME, description },
   robots: { index: true, follow: true },
+  formatDetection: { telephone: false },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#EFECE5",
+  themeColor: "#F7F5F0",
   colorScheme: "light",
 };
 
 const jsonLd = {
   "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "Person",
-      "@id": `${SITE_URL}/#eddie`,
-      name: NAME,
-      jobTitle: ROLE,
-      email: `mailto:${EMAIL}`,
-      telephone: WHATSAPP_PRETTY,
-      url: SITE_URL,
-      address: { "@type": "PostalAddress", addressLocality: "Kigali", addressCountry: "RW" },
-      knowsAbout: [
-        "Web development",
-        "WhatsApp Business API",
-        "AI agents",
-        "Business process automation",
-      ],
-    },
-    {
-      "@type": "ProfessionalService",
-      "@id": `${SITE_URL}/#service`,
-      name: NAME,
-      description,
-      url: SITE_URL,
-      provider: { "@id": `${SITE_URL}/#eddie` },
-      areaServed: { "@type": "Country", name: "Rwanda" },
-      address: { "@type": "PostalAddress", addressLocality: "Kigali", addressCountry: "RW" },
-    },
-  ],
+  "@type": "Person",
+  "@id": `${SITE_URL}/#eddie`,
+  name: NAME,
+  url: SITE_URL,
+  image: `${SITE_URL}/eddie/portrait.webp`,
+  jobTitle: "Full-stack developer and AI engineer",
+  address: { "@type": "PostalAddress", addressLocality: "Kigali", addressCountry: "RW" },
+  homeLocation: CITY,
+  knowsAbout: [...ROLES, "Next.js", "TypeScript", "Supabase", "PostgreSQL", "n8n", "WhatsApp Business API"],
+  workExample: PROJECTS.map((p) => ({ "@type": "CreativeWork", name: p.name, url: p.url })),
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${archivo.variable} ${newsreader.variable}`}>
-      <body>
-        <a
-          href="#main"
-          className="sr-only bg-ink px-4 py-2 text-paper focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100]"
-        >
+    <html lang="en" className={`${schibsted.variable} ${anton.variable} ${plexMono.variable}`}>
+      <body id="top">
+        <a className="skip" href="#main">
           Skip to content
         </a>
-        <SiteHeader />
+        <Header />
         <main id="main">{children}</main>
-        <SiteFooter />
+        <Footer />
+        <Reveal />
         <script
           type="application/ld+json"
-          // eslint-disable-next-line react/no-danger
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
         />
-        <Analytics />
       </body>
     </html>
   );

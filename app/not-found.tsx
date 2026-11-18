@@ -1,38 +1,37 @@
+import type { Metadata } from "next";
 import Link from "next/link";
-import { INDEX_ROWS } from "@/lib/site";
-import { Wrap } from "@/components/Page";
+import { PROJECTS } from "@/lib/projects";
+import { ArrowRight } from "@/components/ui";
+
+export const metadata: Metadata = {
+  title: "Page not found",
+  robots: { index: false, follow: true },
+};
 
 export default function NotFound() {
   return (
-    <Wrap className="pb-[var(--space-section)] pt-20">
-      <span className="label tnum">404</span>
-      <h1 className="display mt-6 max-w-[14ch] text-[clamp(2.4rem,7.4vw,5rem)] text-ink">
-        That page is not <span className="italic-accent">in the index.</span>
+    <section className="wrap section" aria-labelledby="nf-title">
+      <p className="label">404</p>
+      <h1 className="h2 mt-4 max-w-[14ch]" id="nf-title">
+        This page isn&apos;t here.
       </h1>
-      <p className="mt-6 max-w-[46ch] text-[1.02rem] leading-relaxed">
-        It moved, or it never existed. Here is everything that does.
-      </p>
-
-      <nav aria-label="Index" className="mt-12 border-t border-stone-2">
-        {INDEX_ROWS.map((r) => (
-          <Link
-            key={r.no}
-            href={r.href}
-            className="group flex items-baseline gap-5 border-b border-stone-2 py-5"
-          >
-            <span className="label tnum">{r.no}</span>
-            <span className="display flex-1 text-[clamp(1.5rem,3.4vw,2.1rem)] text-ink">
-              {r.label}
-            </span>
-            <span
-              aria-hidden
-              className="text-meta transition-[transform,color] duration-[520ms] [transition-timing-function:var(--ease-out-soft)] group-hover:translate-x-1 group-hover:text-vermilion-ink"
+      <p className="lead mt-5">It may have moved when the site was rebuilt. These are all live:</p>
+      <ul className="mt-10 border-b border-line">
+        {PROJECTS.map((p) => (
+          <li key={p.slug}>
+            <Link
+              href={`/work/${p.slug}`}
+              className="group flex min-h-[3.5rem] items-center justify-between gap-4 border-t border-line py-4 text-[clamp(1.4rem,3vw,2rem)] font-bold tracking-[-0.03em]"
             >
-              &#8594;
-            </span>
-          </Link>
+              {p.name}
+              <ArrowRight className="transition-transform duration-300 group-hover:translate-x-1" />
+            </Link>
+          </li>
         ))}
-      </nav>
-    </Wrap>
+      </ul>
+      <Link className="btn btn-primary mt-10" href="/">
+        Back to the start
+      </Link>
+    </section>
   );
 }

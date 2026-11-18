@@ -1,201 +1,148 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getContent } from "@/lib/content";
-import { slugify, type Project } from "@/lib/site";
-import { Band, NextStep, Wrap } from "@/components/Page";
-import { Reveal } from "@/components/ui";
-
-export const revalidate = 60;
-export const dynamicParams = true;
+import { WalkArrival } from "@/components/Walk";
+import { ArrowLeft, ArrowRight, ArrowUpRight, Browser, Duo, Phone } from "@/components/ui";
+import { PROJECTS, getProject } from "@/lib/projects";
 
 type Params = { params: Promise<{ slug: string }> };
 
-async function find(slug: string): Promise<{ p: Project; all: Project[] } | null> {
-  const d = await getContent();
-  const p = d.projects.find((x) => slugify(x.title) === slug);
-  return p ? { p, all: d.projects } : null;
-}
+export const dynamicParams = false;
 
-export async function generateStaticParams() {
-  const d = await getContent();
-  return d.projects.map((p) => ({ slug: slugify(p.title) }));
+export function generateStaticParams() {
+  return PROJECTS.map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { slug } = await params;
-  const hit = await find(slug);
-  if (!hit) return { title: "Not found" };
+  const p = getProject(slug);
+  if (!p) return {};
+  const title = `${p.name}: ${p.kind}`;
   return {
-    title: hit.p.title,
-    description: hit.p.blurb,
-    alternates: { canonical: `/work/${slug}` },
+    title,
+    description: p.summary,
+    alternates: { canonical: `/work/${p.slug}` },
     openGraph: {
-      title: hit.p.title,
-      description: hit.p.blurb,
-      images: hit.p.cover_url ? [hit.p.cover_url] : undefined,
+      title,
+      description: p.summary,
+      images: [{ url: `/work/${p.slug}-desktop.webp`, width: 1600, height: 1000, alt: `${p.name}, the live site` }],
     },
   };
 }
 
+const TONE_BG: Record<string, string> = {
+  mint: "bg-mint",
+  burgundy: "bg-burgundy",
+  cloud: "bg-cloud-2",
+};
+
 export default async function CaseStudy({ params }: Params) {
   const { slug } = await params;
-  const hit = await find(slug);
-  if (!hit) notFound();
+  const p = getProject(slug);
+  if (!p) notFound();
 
-  const { p, all } = hit;
-  const idx = all.findIndex((x) => x.id === p.id);
-  const next = all[(idx + 1) % all.length];
-  const tall = p.shape === "tall";
-
-  const story = [
-    { k: "The challenge", v: p.problem },
-    { k: "The solution", v: p.solution },
-    { k: "The result", v: p.result },
-  ].filter((s) => s.v);
+  const i = PROJECTS.findIndex((x) => x.slug === p.slug);
+  const next = PROJECTS[(i + 1) % PROJECTS.length]!;
 
   return (
-    <>
-      {/* ── masthead ── */}
-      <Wrap className="pt-14 lg:pt-20">
-        <Link href="/work" className="label rule-link">
-          &#8592; Selected Work
+    <article>
+      <WalkArrival />
+
+      <header className="wrap case__head">
+        <Link href="/#work" className="case__back">
+          <ArrowLeft />
+          All work
         </Link>
+        <p className="label mt-6">
+          {String(i + 1).padStart(2, "0")} / {String(PROJECTS.length).padStart(2, "0")} · {p.kind}
+        </p>
+        <h1 className="case__h1">{p.name}</h1>
+        <p className="lead mt-6 text-ink">{p.summary}</p>
 
-        <div className="mt-8 grid gap-6 lg:grid-cols-12 lg:items-end">
-          <div className="lg:col-span-8">
-            <h1 className="display text-[clamp(2.5rem,7.6vw,5.2rem)] text-ink">{p.title}</h1>
-            <p className="mt-5 max-w-[48ch] text-[1.08rem] leading-relaxed">{p.blurb}</p>
-          </div>
-
-          <dl className="lg:col-span-4 lg:justify-self-end lg:text-right">
-            {p.client && (
-              <div className="mb-4">
-                <dt className="label">Client</dt>
-                <dd className="mt-1 text-[0.98rem] text-ink">{p.client}</dd>
-              </div>
-            )}
-            {p.year && (
-              <div className="mb-4">
-                <dt className="label">Year</dt>
-                <dd className="tnum mt-1 text-[0.98rem] text-ink">{p.year}</dd>
-              </div>
-            )}
-            {!!p.tags?.length && (
-              <div>
-                <dt className="label">Built with</dt>
-                <dd className="mt-1 text-[0.98rem] text-ink">{p.tags.join(", ")}</dd>
-              </div>
-            )}
-          </dl>
+        <div className="mt-8 flex flex-wrap items-center gap-3">
+          <a className="btn btn-primary" href={p.url} target="_blank" rel="noopener noreferrer">
+            Open {p.domain}
+            <ArrowUpRight />
+            <span className="sr-only">(opens in a new tab)</span>
+          </a>
         </div>
 
-        {p.live_url && (
-          <a
-            href={p.live_url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn btn-primary mt-9"
-          >
-            Open the live system
-            <span aria-hidden>&#8599;</span>
-          </a>
+        <dl className="case__meta">
+          <div>
+            <dt className="label">My part</dt>
+            <dd>{p.hats.join(", ")}</dd>
+          </div>
+          <div>
+            <dt className="label">Built with</dt>
+            <dd>{p.stack.join(", ")}</dd>
+          </div>
+          <div>
+            <dt className="label">When</dt>
+            <dd>{p.when}</dd>
+          </div>
+        </dl>
+        {p.status && (
+          <p className="case__status">
+            <span className="dot" aria-hidden="true" />
+            {p.status}
+          </p>
         )}
-      </Wrap>
+      </header>
 
-      {/* ── the capture ── */}
-      {p.cover_url && (
-        <Band tight>
-          <Wrap>
-            <Reveal>
-              <figure>
-                <div
-                  className={`relative w-full overflow-hidden bg-paper-2 ${
-                    tall ? "mx-auto aspect-[9/15] max-w-[380px]" : "aspect-[16/9]"
-                  }`}
-                >
-                  <Image
-                    src={p.cover_url}
-                    alt={`${p.title} — screenshot of the live system`}
-                    fill
-                    sizes="(max-width: 1440px) 100vw, 1440px"
-                    priority
-                    className={tall ? "object-contain" : "object-cover object-top"}
-                  />
-                </div>
-                <figcaption className="label mt-3">
-                  Screenshot of the live system, {p.year}
-                </figcaption>
-              </figure>
-            </Reveal>
-          </Wrap>
-        </Band>
-      )}
+      <div className="wrap">
+        <div className={`case__stage ${TONE_BG[p.tone] ?? "bg-cloud-2"}`}>
+          <Duo p={p} priority />
+          {/* phones get the phone first, at a size you can actually read */}
+          <div className="case__mobile">
+            <Phone p={p} walk={false} priority sizes="72vw" />
+            <Browser p={p} sizes="92vw" />
+          </div>
+        </div>
+      </div>
 
-      {/* ── challenge / solution / result ── */}
-      {story.length > 0 && (
-        <Band>
-          <Wrap>
-            <div className="grid gap-10 lg:grid-cols-12">
-              {story.map((s, i) => (
-                <Reveal
-                  key={s.k}
-                  delay={i * 0.08}
-                  className={`lg:col-span-4 ${i === 0 ? "lg:col-start-1" : ""}`}
-                >
-                  <div className="border-t border-ink pt-5">
-                    <h2 className="label text-ink">{s.k}</h2>
-                    <p className="mt-4 text-[1.02rem] leading-[1.75]">{s.v}</p>
-                  </div>
-                </Reveal>
-              ))}
-            </div>
-          </Wrap>
-        </Band>
-      )}
+      <div className="wrap section">
+        <div className="case__body">
+          <h2>The situation</h2>
+          <p className="prose" data-reveal>
+            {p.situation}
+          </p>
 
-      {/* ── verifiable facts only ── */}
-      {!!p.metrics?.length && (
-        <Band tight>
-          <Wrap>
-            <dl className="hairline grid grid-cols-2 gap-8 pt-10 lg:grid-cols-4">
-              {p.metrics.slice(0, 4).map((m, i) => (
-                <Reveal key={m.label + i} delay={i * 0.06}>
-                  <dt className="display text-[clamp(1.6rem,3.4vw,2.4rem)] text-ink">
-                    {m.value}
-                  </dt>
-                  <dd className="label mt-2">{m.label}</dd>
-                </Reveal>
-              ))}
-            </dl>
-          </Wrap>
-        </Band>
-      )}
+          <h2>What I built</h2>
+          <ol className="built" data-reveal>
+            {p.built.map((b, k) => (
+              <li key={b}>
+                <span>{String(k + 1).padStart(2, "0")}</span>
+                {b}
+              </li>
+            ))}
+          </ol>
 
-      {next && next.id !== p.id && (
-        <Band tight>
-          <Wrap>
-            <Link href={`/work/${slugify(next.title)}`} className="group block hairline pt-10">
-              <span className="label">Next project</span>
-              <span className="display mt-2 flex items-baseline gap-4 text-[clamp(1.8rem,4.4vw,3rem)] text-ink">
-                {next.title}
-                <span
-                  aria-hidden
-                  className="text-meta transition-[transform,color] duration-[520ms] [transition-timing-function:var(--ease-out-soft)] group-hover:translate-x-2 group-hover:text-vermilion-ink"
-                >
-                  &#8594;
-                </span>
-              </span>
-            </Link>
-          </Wrap>
-        </Band>
-      )}
+          <h2>What I learned</h2>
+          <p className="prose" data-reveal>
+            {p.learned}
+          </p>
 
-      <NextStep
-        title="Have a problem worth solving?"
-        lead="Tell me what is breaking and I will tell you whether it is worth automating."
-      />
-    </>
+          <h2>By the numbers</h2>
+          <dl className="facts" data-reveal>
+            {p.facts.map((f) => (
+              <div key={f.label} className="flex flex-col-reverse">
+                <dt>{f.label}</dt>
+                <dd>{f.value}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </div>
+
+      <div className="wrap">
+        <Link href={`/work/${next.slug}`} className="next">
+          <span className="label">Next project</span>
+          <span className="next__name">
+            {next.name}
+            <ArrowRight />
+          </span>
+        </Link>
+      </div>
+    </article>
   );
 }

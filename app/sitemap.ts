@@ -1,35 +1,17 @@
 import type { MetadataRoute } from "next";
-import { getContent } from "@/lib/content";
-import { SITE_URL, slugify } from "@/lib/site";
+import { PROJECTS } from "@/lib/projects";
+import { SITE_URL } from "@/lib/site";
 
-export const revalidate = 3600;
-
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const d = await getContent();
-  const now = new Date();
-
-  const routes: [string, MetadataRoute.Sitemap[number]["changeFrequency"], number][] = [
-    ["", "weekly", 1],
-    ["/system", "monthly", 0.9],
-    ["/services", "monthly", 0.9],
-    ["/work", "weekly", 0.8],
-    ["/about", "yearly", 0.6],
-    ["/contact", "yearly", 0.7],
-  ];
-  const pages: MetadataRoute.Sitemap = routes.map(([path, changeFrequency, priority]) => ({
-    url: `${SITE_URL}${path}`,
-    lastModified: now,
-    changeFrequency,
-    priority,
-  }));
-
+export default function sitemap(): MetadataRoute.Sitemap {
+  const lastModified = new Date("2026-11-17");
   return [
-    ...pages,
-    ...d.projects.map((p) => ({
-      url: `${SITE_URL}/work/${slugify(p.title)}`,
-      lastModified: now,
+    { url: SITE_URL, lastModified, changeFrequency: "monthly", priority: 1 },
+    { url: `${SITE_URL}/contact`, lastModified, changeFrequency: "yearly", priority: 0.6 },
+    ...PROJECTS.map((p) => ({
+      url: `${SITE_URL}/work/${p.slug}`,
+      lastModified,
       changeFrequency: "monthly" as const,
-      priority: 0.7,
+      priority: 0.8,
     })),
   ];
 }
