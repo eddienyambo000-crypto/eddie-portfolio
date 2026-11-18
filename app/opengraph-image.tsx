@@ -9,7 +9,13 @@ export const contentType = "image/png";
 
 /** The card that shows up when the link is shared on WhatsApp, LinkedIn or X. */
 export default async function OpenGraphImage() {
-  const portrait = await readFile(join(process.cwd(), "assets/og-portrait.png"));
+  const asset = (p: string) => readFile(join(process.cwd(), "assets", p));
+  // the site's own typeface; the renderer reads WOFF/TTF, not the WOFF2 the pages use
+  const [portrait, regular, bold] = await Promise.all([
+    asset("og-portrait.png"),
+    asset("fonts/schibsted-grotesk-latin-400.woff"),
+    asset("fonts/schibsted-grotesk-latin-700.woff"),
+  ]);
   const src = `data:image/png;base64,${portrait.toString("base64")}`;
 
   return new ImageResponse(
@@ -21,6 +27,7 @@ export default async function OpenGraphImage() {
           display: "flex",
           background: "#F7F5F0",
           color: "#1E1517",
+          fontFamily: "Schibsted Grotesk",
           padding: "64px 0 0 72px",
         }}
       >
@@ -29,7 +36,7 @@ export default async function OpenGraphImage() {
             <div style={{ width: 12, height: 12, borderRadius: 12, background: "#6D1A2A" }} />
             Kigali, Rwanda
           </div>
-          <div style={{ marginTop: 34, fontSize: 92, fontWeight: 700, letterSpacing: -4, lineHeight: 1 }}>
+          <div style={{ marginTop: 34, fontSize: 96, fontWeight: 700, letterSpacing: -3.5, lineHeight: 1 }}>
             {NAME}
           </div>
           <div style={{ marginTop: 22, fontSize: 34, lineHeight: 1.3, color: "#5E5254" }}>
@@ -42,6 +49,7 @@ export default async function OpenGraphImage() {
                 background: "#6D1A2A",
                 color: "#BDE6D1",
                 fontSize: 24,
+                fontWeight: 700,
                 padding: "14px 26px",
                 borderRadius: 999,
               }}
@@ -66,6 +74,12 @@ export default async function OpenGraphImage() {
         </div>
       </div>
     ),
-    size
+    {
+      ...size,
+      fonts: [
+        { name: "Schibsted Grotesk", data: regular, weight: 400, style: "normal" },
+        { name: "Schibsted Grotesk", data: bold, weight: 700, style: "normal" },
+      ],
+    }
   );
 }
